@@ -1,0 +1,399 @@
+.heroProfessional {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 0;
+}
+
+/* Стиль для светлой темы */
+.lightMode {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #6B8DD6 100%) !important;
+}
+
+/* Background Animation */
+.heroBgAnimation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.heroOrb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.1;
+  animation: floatOrb 8s infinite ease-in-out;
+}
+
+.orb1 {
+  width: 300px;
+  height: 300px;
+  background: #9B2FFF;
+  top: 10%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.orb2 {
+  width: 200px;
+  height: 200px;
+  background: #667eea;
+  top: 60%;
+  right: 15%;
+  animation-delay: 2s;
+}
+
+.orb3 {
+  width: 150px;
+  height: 150px;
+  background: #f093fb;
+  bottom: 20%;
+  left: 20%;
+  animation-delay: 4s;
+}
+
+.heroGrid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: gridMove 20s linear infinite;
+}
+
+@keyframes floatOrb {
+  0%, 100% { 
+    transform: translate(0, 0) scale(1); 
+  }
+  33% { 
+    transform: translate(30px, -30px) scale(1.1); 
+  }
+  66% { 
+    transform: translate(-20px, 20px) scale(0.9); 
+  }
+}
+
+@keyframes gridMove {
+  0% { 
+    transform: translate(0, 0); 
+  }
+  100% { 
+    transform: translate(50px, 50px); 
+  }
+}
+
+/* Hero Content */
+.heroContentProfessional {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 120px 0 80px;
+}
+
+/* Animated Logo */
+.heroLogo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 60px;
+  position: relative;
+}
+
+.logoShape {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: shapeAppear 0.8s ease forwards;
+}
+
+.shape1 {
+  background: #9B2FFF;
+  animation-delay: 0.2s;
+}
+
+.shape2 {
+  background: #667eea;
+  animation-delay: 0.4s;
+}
+
+.shape3 {
+  background: #f093fb;
+  animation-delay: 0.6s;
+}
+
+.logoText {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: textAppear 0.8s ease 0.8s forwards;
+}
+
+@keyframes shapeAppear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes textAppear {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Heading */
+.heroHeading {
+  margin-bottom: 40px;
+  opacity: 0;
+  animation: fadeInUp 1s ease 1s forwards;
+}
+
+.headingLine {
+  display: block;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: white;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: lineAppear 0.8s ease forwards;
+}
+
+.line1 {
+  animation-delay: 1.2s;
+}
+
+.line2 {
+  animation-delay: 1.6s;
+}
+
+.textGradient {
+  background: linear-gradient(135deg, #9B2FFF, #667eea);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lineAppear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Description */
+.heroDescription {
+  margin-bottom: 50px;
+  opacity: 0;
+  animation: fadeInUp 1s ease 2s forwards;
+}
+
+.heroDescription p {
+  font-size: 1.3rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* CTA Button */
+.heroActions {
+  opacity: 0;
+  animation: fadeInUp 1s ease 2.4s forwards;
+}
+
+.btnHeroPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 36px;
+  background: linear-gradient(135deg, #9B2FFF, #667eea);
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(155, 47, 255, 0.3);
+}
+
+.btnHeroPrimary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(155, 47, 255, 0.4);
+  gap: 16px;
+}
+
+.btnText {
+  position: relative;
+  z-index: 2;
+}
+
+.btnArrow {
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s ease;
+}
+
+.btnHeroPrimary:hover .btnArrow {
+  transform: translateX(4px);
+}
+
+.btnShine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btnHeroPrimary:hover .btnShine {
+  left: 100%;
+}
+
+/* Stats */
+.heroStats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.stat {
+  text-align: center;
+}
+
+.statNumber {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 5px;
+}
+
+.statLabel {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Scroll Indicator */
+.scrollIndicatorHero {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  opacity: 0;
+  animation: fadeInUp 1s ease 3s forwards;
+}
+
+.scrollLine {
+  width: 2px;
+  height: 40px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.8), transparent);
+  margin: 0 auto 10px;
+  animation: scrollLine 2s infinite;
+}
+
+.scrollIndicatorHero span {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 1px;
+}
+
+@keyframes scrollLine {
+  0%, 100% { 
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% { 
+    transform: translateY(10px);
+    opacity: 0.5;
+  }
+}
+
+/* Убедитесь, что текст всегда белый независимо от темы */
+.lightMode .logoText,
+.lightMode .headingLine,
+.lightMode .statNumber,
+.lightMode .heroDescription p,
+.lightMode .statLabel,
+.lightMode .scrollIndicatorHero span {
+  color: white !important;
+}
+
+.lightMode .heroDescription p,
+.lightMode .statLabel,
+.lightMode .scrollIndicatorHero span {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .heroStats {
+    gap: 20px;
+  }
+  
+  .statNumber {
+    font-size: 1.5rem;
+  }
+  
+  .heroDescription p {
+    font-size: 1.1rem;
+    padding: 0 20px;
+  }
+  
+  .btnHeroPrimary {
+    padding: 16px 32px;
+    font-size: 1rem;
+  }
+  
+  .heroContentProfessional {
+    padding: 100px 0 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroStats {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .heroLogo {
+    margin-bottom: 40px;
+  }
+  
+  .headingLine {
+    font-size: 2rem;
+  }
+}

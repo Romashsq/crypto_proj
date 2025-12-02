@@ -1,0 +1,785 @@
+/* Footer.module.css - ОБНОВЛЕННЫЙ ВАРИАНТ С ЛОКАЛЬНЫМИ КЛАССАМИ ТЕМЫ */
+
+.mainFooter {
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  color: #f0f0f0;
+  padding: 100px 0 40px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* Светлая тема - локальный класс, как в Hero */
+.mainFooter.lightMode {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #6B8DD6 100%) !important;
+}
+
+/* Текст в светлой теме */
+.mainFooter.lightMode .footerDescription,
+.mainFooter.lightMode .newsletterText,
+.mainFooter.lightMode .navLink,
+.mainFooter.lightMode .copyrightText,
+.mainFooter.lightMode .license,
+.mainFooter.lightMode .badge span,
+.mainFooter.lightMode .legalLink,
+.mainFooter.lightMode .techTag,
+.mainFooter.lightMode .linkText,
+.mainFooter.lightMode .logoSubtitle {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.mainFooter.lightMode .legalLink:hover {
+  color: white !important;
+}
+
+/* Заголовки */
+.mainFooter.lightMode .columnHeader h3,
+.mainFooter.lightMode .newsletter h4,
+.mainFooter.lightMode .socialTitle span,
+.mainFooter.lightMode .techTitle span {
+  color: white !important;
+}
+
+/* Ховер эффекты */
+.mainFooter.lightMode .navLink:hover .linkText {
+  color: white !important;
+}
+
+/* Фоновые элементы */
+.footerBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.footerOrb {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(155, 47, 255, 0.1) 0%, transparent 70%);
+  top: -200px;
+  right: -200px;
+  filter: blur(40px);
+  animation: orbFloat 20s infinite ease-in-out;
+}
+
+.mainFooter.lightMode .footerOrb {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+}
+
+.footerGrid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.3;
+}
+
+.mainFooter.lightMode .footerGrid {
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+}
+
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(-30px, 30px) rotate(120deg); }
+  66% { transform: translate(30px, -30px) rotate(240deg); }
+}
+
+.footerContent {
+  display: grid;
+  grid-template-columns: 1.2fr 2fr;
+  gap: 60px;
+  margin-bottom: 60px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Бренд секция */
+.footerBrand {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.brandContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.footerLogo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.footerLogo:hover {
+  transform: translateY(-2px);
+}
+
+.logoSVG {
+  width: 50px;
+  height: 50px;
+  filter: drop-shadow(0 4px 12px rgba(155, 47, 255, 0.3));
+  animation: logoPulse 3s infinite ease-in-out;
+}
+
+@keyframes logoPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.logoText {
+  display: flex;
+  flex-direction: column;
+}
+
+.logoMain {
+  font-size: 28px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #9B2FFF, #667eea);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 1px;
+}
+
+.logoSubtitle {
+  font-size: 12px;
+  color: #cccccc;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.tagline {
+  position: relative;
+  display: inline-block;
+}
+
+.taglineText {
+  font-size: 14px;
+  color: #9B2FFF;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.taglineUnderline {
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(90deg, #9B2FFF, transparent);
+  border-radius: 2px;
+}
+
+.footerDescription {
+  color: #aaaaaa;
+  line-height: 1.7;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* Newsletter */
+.newsletter {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+}
+
+.mainFooter.lightMode .newsletter {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.newsletter h4 {
+  color: #f0f0f0;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.newsletterText {
+  color: #aaaaaa;
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+.newsletterForm {
+  display: flex;
+  gap: 8px;
+}
+
+.newsletterInput {
+  flex: 1;
+  padding: 12px 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #f0f0f0;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.mainFooter.lightMode .newsletterInput {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.newsletterInput:focus {
+  outline: none;
+  border-color: #9B2FFF;
+  box-shadow: 0 0 0 2px rgba(155, 47, 255, 0.2);
+}
+
+.newsletterInput::placeholder {
+  color: #aaaaaa;
+}
+
+.mainFooter.lightMode .newsletterInput::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.newsletterButton {
+  width: 46px;
+  height: 46px;
+  background: linear-gradient(135deg, #9B2FFF, #667eea);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.newsletterButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(155, 47, 255, 0.4);
+}
+
+/* Social Links */
+.socialTitle {
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.socialTitle span {
+  color: #f0f0f0;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.titleLine {
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #9B2FFF, transparent);
+  border-radius: 2px;
+}
+
+.socialGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.socialLink {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 16px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.mainFooter.lightMode .socialLink {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.socialLink:hover {
+  transform: translateY(-4px) scale(1.1);
+  box-shadow: 0 8px 20px rgba(155, 47, 255, 0.3);
+  background: rgba(155, 47, 255, 0.1);
+}
+
+.socialTooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.socialTooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 4px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.9) transparent transparent transparent;
+}
+
+.socialLink:hover .socialTooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-12px);
+}
+
+.socialWave {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, #9B2FFF 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 10px;
+}
+
+.socialLink:hover .socialWave {
+  opacity: 0.2;
+}
+
+/* Navigation Links */
+.footerLinks {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+.footerColumn {
+  position: relative;
+}
+
+.columnHeader {
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.columnHeader h3 {
+  color: #f0f0f0;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.columnUnderline {
+  width: 30px;
+  height: 3px;
+  background: linear-gradient(90deg, #9B2FFF, #667eea);
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+}
+
+.columnUnderline::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shine 2s infinite;
+}
+
+@keyframes shine {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.linkItem {
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #aaaaaa;
+  text-decoration: none;
+  padding: 8px 0;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.linkIcon {
+  font-size: 12px;
+  color: #9B2FFF;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.3s ease;
+}
+
+.linkText {
+  position: relative;
+  z-index: 1;
+  transition: color 0.3s ease;
+}
+
+.linkHoverLine {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #9B2FFF, #667eea);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  z-index: 0;
+}
+
+.navLink:hover {
+  color: #f0f0f0;
+  padding-left: 10px;
+}
+
+.navLink:hover .linkIcon {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.navLink:hover .linkHoverLine {
+  width: 100%;
+}
+
+/* Technology Tags */
+.techTags {
+  margin: 50px 0;
+  padding: 30px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  z-index: 1;
+}
+
+.mainFooter.lightMode .techTags {
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.techTitle {
+  text-align: center;
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.techTitle span {
+  color: #f0f0f0;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.tagsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.techTag {
+  background: rgba(155, 47, 255, 0.1);
+  color: #aaaaaa;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(155, 47, 255, 0.2);
+}
+
+.mainFooter.lightMode .techTag {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.techTag:hover {
+  background: rgba(155, 47, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(155, 47, 255, 0.2);
+}
+
+.mainFooter.lightMode .techTag:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.tagGlow {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.techTag:hover .tagGlow {
+  left: 100%;
+}
+
+/* Footer Bottom */
+.footerBottom {
+  padding-top: 30px;
+  position: relative;
+  z-index: 1;
+}
+
+.footerLegal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.copyright {
+  flex: 1;
+}
+
+.copyrightText {
+  color: #aaaaaa;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.highlight {
+  color: #9B2FFF;
+  font-weight: 500;
+}
+
+.license {
+  color: #aaaaaa;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.legalLinks {
+  display: flex;
+  gap: 30px;
+}
+
+.legalLink {
+  color: #aaaaaa;
+  text-decoration: none;
+  font-size: 13px;
+  position: relative;
+  padding: 5px 0;
+  transition: color 0.3s ease;
+}
+
+.legalUnderline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, #9B2FFF, #667eea);
+  transition: width 0.3s ease;
+}
+
+.legalLink:hover {
+  color: #f0f0f0;
+}
+
+.legalLink:hover .legalUnderline {
+  width: 100%;
+}
+
+.footerBadges {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.mainFooter.lightMode .badge {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.badge:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-2px);
+  border-color: rgba(155, 47, 255, 0.3);
+}
+
+.badge i {
+  color: #9B2FFF;
+  font-size: 14px;
+}
+
+.badge span {
+  color: #aaaaaa;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Back to Top Button */
+.backToTop {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #9B2FFF, #667eea);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  box-shadow: 0 8px 25px rgba(155, 47, 255, 0.3);
+}
+
+.backToTop.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.backToTop:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(155, 47, 255, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .footerContent {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .footerLinks {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .mainFooter {
+    padding: 60px 0 30px;
+  }
+  
+  .footerLinks {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .footerLegal {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+  
+  .legalLinks {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .footerBadges {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .socialGrid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  
+  .tagsContainer {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 10px;
+  }
+  
+  .techTag {
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .footerContent {
+    gap: 30px;
+  }
+  
+  .socialGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .newsletterForm {
+    flex-direction: column;
+  }
+  
+  .newsletterButton {
+    width: 100%;
+    height: 46px;
+  }
+  
+  .backToTop {
+    bottom: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+  }
+}

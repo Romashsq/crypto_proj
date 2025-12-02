@@ -1,0 +1,88 @@
+.moreCard {
+  background: var(--white, #FFFFFF);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: var(--shadow, 0 10px 30px rgba(155, 47, 255, 0.15));
+  transition: var(--transition, all 0.3s ease);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Темная тема */
+.moreCard.darkMode {
+  background: var(--dark-card, #1a1a2e);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.moreCard:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(155, 47, 255, 0.2);
+}
+
+.moreCard.darkMode:hover {
+  box-shadow: 0 20px 40px rgba(155, 47, 255, 0.4);
+}
+
+.moreCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(135deg, #9B2FFF, #667eea);
+}
+
+.moreIcon {
+  font-size: 40px;
+  margin-bottom: 20px;
+  color: var(--primary, #9B2FFF);
+}
+
+.moreTitle {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: var(--text-dark, #333);
+  font-weight: 600;
+}
+
+.moreCard.darkMode .moreTitle {
+  color: var(--text-light, #f0f0f0);
+}
+
+.moreDescription {
+  color: var(--text-gray, #666);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+.moreCard.darkMode .moreDescription {
+  color: var(--text-gray-dark, #aaa);
+}
+
+.moreButton {
+  display: inline-block;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #9B2FFF, #667eea);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: var(--transition, all 0.3s ease);
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.moreButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(155, 47, 255, 0.2);
+  opacity: 0.9;
+}
