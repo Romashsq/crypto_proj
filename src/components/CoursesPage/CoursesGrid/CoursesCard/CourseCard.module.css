@@ -1,0 +1,249 @@
+.courseCard {
+  background: var(--white);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(155, 47, 255, 0.15);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.darkMode .courseCard {
+  background: var(--dark-card);
+}
+
+.courseCard:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(155, 47, 255, 0.2);
+}
+
+.courseHeader {
+  padding: 25px 25px 15px;
+  position: relative;
+}
+
+.courseIcon {
+  width: 60px;
+  height: 60px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #9B2FFF, #667eea);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.courseIcon1 {
+  background: linear-gradient(135deg, #f093fb, #f5576c);
+}
+
+.courseIcon2 {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+
+.courseIcon3 {
+  background: linear-gradient(135deg, #43e97b, #38f9d7);
+}
+
+.courseIcon4 {
+  background: linear-gradient(135deg, #fa709a, #fee140);
+}
+
+.courseIcon5 {
+  background: linear-gradient(135deg, #a8edea, #fed6e3);
+}
+
+.courseHeader h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: var(--text-dark);
+}
+
+.darkMode .courseHeader h3 {
+  color: var(--text-light);
+}
+
+.courseHeader p {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+.darkMode .courseHeader p {
+  color: #aaa;
+}
+
+.courseProgress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.progressBar {
+  flex: 1;
+  height: 6px;
+  background: #eee;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-right: 15px;
+}
+
+.darkMode .progressBar {
+  background: #333;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.progressText {
+  font-size: 0.85rem;
+  color: #888;
+  white-space: nowrap;
+}
+
+.darkMode .progressText {
+  color: #777;
+}
+
+.courseLessons {
+  padding: 0 25px 25px;
+}
+
+.lessonItem {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+  transition: all 0.3s ease;
+}
+
+.darkMode .lessonItem {
+  border-bottom-color: #333;
+}
+
+.lessonItem:last-child {
+  border-bottom: none;
+}
+
+.lessonItem:hover {
+  background: rgba(155, 47, 255, 0.05);
+  margin: 0 -15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-radius: 8px;
+}
+
+.lessonNumber {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.darkMode .lessonNumber {
+  background: #333;
+  color: #aaa;
+}
+
+.lessonItem.active .lessonNumber {
+  background: var(--primary);
+  color: white;
+}
+
+.lessonItem.completed .lessonNumber {
+  background: #4CAF50;
+  color: white;
+}
+
+.lessonInfo {
+  flex: 1;
+}
+
+.lessonTitle {
+  font-weight: 500;
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+}
+
+.lessonDuration {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.darkMode .lessonDuration {
+  color: #777;
+}
+
+.lessonStatusIcon {
+  margin-left: 10px;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.lessonItem.locked .lessonStatusIcon {
+  color: #ccc;
+}
+
+.lessonItem.active .lessonStatusIcon {
+  color: var(--primary);
+}
+
+.lessonItem.completed .lessonStatusIcon {
+  color: #4CAF50;
+}
+
+.courseActions {
+  padding: 0 25px 25px;
+}
+
+.btnContinue {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  text-decoration: none;
+}
+
+.btnContinue:hover {
+  background: #7a1fd1;
+  transform: translateY(-2px);
+}
+
+.btnStart {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  text-decoration: none;
+}
+
+.btnStart:hover {
+  background: rgba(155, 47, 255, 0.1);
+}
