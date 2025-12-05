@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { useScrollAnimation } from '../../../hooks/useScrollAnimation';
-import {useTheme} from './../../../context/ThemeContext'
+import {useTheme} from '../../../Context/ThemeContext'
 import styles from './Hero.module.css';
 
 const Hero = () => {

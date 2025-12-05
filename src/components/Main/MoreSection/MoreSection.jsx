@@ -1,6 +1,6 @@
 import React from 'react';
 import MoreCard from './MoreCard/MoreCard';
-import { useTheme } from  '../../../context/ThemeContext'
+import { useTheme } from  '../../../Context/ThemeContext'
 import styles from './MoreSection.module.css';
 
 const MoreSection = () => {

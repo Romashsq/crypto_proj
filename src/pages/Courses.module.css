@@ -1,0 +1,60 @@
+.coursesPage {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  transition: background 0.3s ease;
+}
+
+.coursesLayout {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  display: flex;
+  gap: 40px;
+  position: relative;
+}
+
+.sidebarContainer {
+  flex: 0 0 280px;
+}
+
+.mainContent {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Темная тема */
+.darkTheme {
+  background: var(--dark-bg-primary);
+}
+
+@media (max-width: 1024px) {
+  .coursesLayout {
+    padding: 20px 15px;
+  }
+  
+  .sidebarContainer {
+    position: fixed;
+    top: 0;
+    left: -320px;
+    height: 100vh;
+    z-index: 1000;
+    transition: left 0.3s ease;
+    background: var(--bg-primary);
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  .sidebarContainer.open {
+    left: 0;
+  }
+  
+  .mainContent {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .coursesLayout {
+    padding: 15px;
+  }
+}

@@ -1,160 +1,186 @@
 .sidebar {
-  width: 300px;
-  flex-shrink: 0;
+  width: 280px;
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  height: fit-content;
   position: sticky;
-  top: 120px;
-  max-height: calc(100vh - 140px);
-  overflow-y: auto;
-  transition: all 0.3s ease;
-  background: var(--white);
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(155, 47, 255, 0.15);
-  padding: 20px 0;
-}
-
-.darkMode .sidebar {
-  background: var(--dark-card);
+  top: 20px;
 }
 
 .sidebarSection {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.sidebarSection:last-child {
+  margin-bottom: 0;
+}
+
+.sidebarSection.active {
+  background: rgba(var(--primary-rgb), 0.05);
 }
 
 .sidebarSection h3 {
-  font-size: 1rem;
+  padding: 16px;
   margin: 0;
-  padding: 12px 20px;
-  color: var(--text-dark);
-  font-weight: 600;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   cursor: pointer;
+  user-select: none;
+  border-radius: 12px;
   transition: all 0.3s ease;
-  border-bottom: 1px solid rgba(155, 47, 255, 0.1);
-}
-
-.darkMode .sidebarSection h3 {
-  color: var(--text-light);
-  border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
 .sidebarSection h3:hover {
-  color: var(--primary);
+  background: rgba(var(--primary-rgb), 0.08);
+}
+
+.sidebarSection.active h3 {
+  color: var(--primary-color);
 }
 
 .toggleIcon {
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-  color: #888;
-}
-
-.sidebarSection.active h3 .toggleIcon {
-  transform: rotate(180deg);
-  color: var(--primary);
+  font-size: 12px;
+  transition: transform 0.3s ease;
 }
 
 .sidebarMenu {
   list-style: none;
-  max-height: 0;
+  padding: 0;
+  margin: 0;
+  max-height: 500px;
   overflow: hidden;
-  transition: max-height 0.3s ease;
+  animation: slideDown 0.3s ease;
 }
 
-.sidebarSection.active .sidebarMenu {
-  max-height: 1000px;
+@keyframes slideDown {
+  from {
+    max-height: 0;
+    opacity: 0;
+  }
+  to {
+    max-height: 500px;
+    opacity: 1;
+  }
 }
 
 .sidebarMenu li {
   margin: 0;
 }
 
-.sidebarMenu a {
+.sidebarMenu li a {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  padding: 10px 20px 10px 30px;
+  padding: 12px 16px;
+  color: var(--text-secondary);
   text-decoration: none;
-  color: var(--text-dark);
-  transition: all 0.3s ease;
-  font-size: 0.95rem;
-  border-left: 3px solid transparent;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  margin: 4px 0;
+  transition: all 0.2s ease;
   position: relative;
 }
 
-.darkMode .sidebarMenu a {
-  color: var(--text-light);
+.sidebarMenu li a:hover {
+  background: rgba(var(--primary-rgb), 0.05);
+  color: var(--text-primary);
 }
 
-.sidebarMenu a:hover,
-.sidebarMenu a.active {
-  background: rgba(155, 47, 255, 0.05);
-  color: var(--primary);
-  border-left-color: var(--primary);
+.sidebarMenu li a.active {
+  background: rgba(var(--primary-rgb), 0.1);
+  color: var(--primary-color);
+  font-weight: 600;
 }
 
 .lessonStatus {
-  margin-left: auto;
   font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 3px 8px;
-  border-radius: 12px;
+  gap: 4px;
+  margin-left: 8px;
 }
 
-.statusInProgress {
-  background: rgba(255, 165, 0, 0.1);
-  color: #ffa500;
+.status-in-progress {
+  background: rgba(var(--primary-rgb), 0.1);
+  color: var(--primary-color);
 }
 
-.statusCompleted {
-  background: rgba(76, 175, 80, 0.1);
-  color: #4CAF50;
+.status-locked {
+  background: rgba(var(--text-tertiary-rgb), 0.1);
+  color: var(--text-tertiary);
 }
 
-.statusLocked {
-  background: rgba(136, 136, 136, 0.1);
-  color: #888;
+.status-completed {
+  background: rgba(var(--success-rgb), 0.1);
+  color: var(--success-color);
 }
 
 .sidebarSubmenu {
   list-style: none;
-  margin-left: 10px;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
-  border-left: 1px solid rgba(155, 47, 255, 0.1);
-}
-
-.sidebarSubmenu.active {
-  max-height: 1000px;
+  padding-left: 28px;
+  margin: 4px 0 8px;
+  border-left: 2px solid var(--border-light);
+  animation: slideDown 0.3s ease;
 }
 
 .sidebarSubmenu li {
-  margin-bottom: 0;
+  margin: 4px 0;
 }
 
-.sidebarSubmenu a {
-  padding: 8px 20px 8px 40px;
-  font-size: 0.9rem;
-  color: #666;
+.sidebarSubmenu li a {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  color: var(--text-tertiary);
+  display: block;
 }
 
-.darkMode .sidebarSubmenu a {
-  color: #aaa;
+.sidebarSubmenu li a:hover {
+  color: var(--text-primary);
 }
 
-.sidebarSubmenu a:hover {
-  background: rgba(155, 47, 255, 0.05);
-  color: var(--primary);
+/* Темная тема */
+.dark-theme .sidebar {
+  background: var(--dark-card-bg);
+  border-color: var(--dark-border-color);
 }
 
+.dark-theme .sidebarSection.active {
+  background: rgba(var(--primary-rgb), 0.1);
+}
 
-@media (max-width: 992px) {
+.dark-theme .sidebarSection h3:hover {
+  background: rgba(var(--primary-rgb), 0.15);
+}
+
+.dark-theme .sidebarMenu li a:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+@media (max-width: 1024px) {
   .sidebar {
-    width: 100%;
-    position: static;
-    max-height: none;
-    margin-bottom: 40px;
+    position: fixed;
+    top: 0;
+    left: -320px;
+    height: 100vh;
+    z-index: 1000;
+    border-radius: 0;
+    padding-top: 80px;
+    transition: left 0.3s ease;
+    overflow-y: auto;
+  }
+  
+  .sidebar.open {
+    left: 0;
   }
 }

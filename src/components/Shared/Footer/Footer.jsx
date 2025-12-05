@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styles from './Footer.module.css';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../Context/ThemeContext';
 
 const Footer = () => {
   const { theme } = useTheme();

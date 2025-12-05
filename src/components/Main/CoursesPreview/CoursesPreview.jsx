@@ -116,7 +116,7 @@ const CoursesPreview = () => {
   return (
     <section className={styles.courses} id="courses-section" ref={sectionRef}>
       <div className="container">
-        <a href="courses.html" className={styles.coursesTitleLink}>
+        <a href="Courses.jsx" className={styles.coursesTitleLink}>
           <h2 className={styles.sectionTitle}>Our <span>Courses</span></h2>
         </a>
         

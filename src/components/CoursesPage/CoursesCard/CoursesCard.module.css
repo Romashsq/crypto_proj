@@ -1,0 +1,192 @@
+.courseCard {
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.courseCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.courseHeader {
+  margin-bottom: 20px;
+}
+
+.courseIcon {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  color: white;
+  font-size: 24px;
+}
+
+.courseHeader h3 {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.courseHeader p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+.courseProgress {
+  margin-top: 16px;
+}
+
+.progressBar {
+  height: 6px;
+  background: var(--progress-bg);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.progressText {
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+  text-align: right;
+}
+
+.courseLessons {
+  flex-grow: 1;
+  margin-bottom: 24px;
+}
+
+.lessonItem {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-light);
+  opacity: 0.7;
+}
+
+.lessonItem:last-child {
+  border-bottom: none;
+}
+
+.lessonItem.active {
+  opacity: 1;
+  color: var(--text-primary);
+}
+
+.lessonItem.locked {
+  opacity: 0.5;
+}
+
+.lessonNumber {
+  width: 32px;
+  height: 32px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.lessonItem.active .lessonNumber {
+  background: var(--primary-color);
+  color: white;
+}
+
+.lessonInfo {
+  flex-grow: 1;
+}
+
+.lessonTitle {
+  font-weight: 500;
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+}
+
+.lessonDuration {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.lessonStatusIcon {
+  color: var(--text-tertiary);
+  font-size: 14px;
+}
+
+.lessonItem.active .lessonStatusIcon {
+  color: var(--primary-color);
+}
+
+.courseActions {
+  margin-top: auto;
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  padding: 14px 0;
+  text-align: center;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.btnContinue {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+}
+
+.btnContinue:hover {
+  background: linear-gradient(135deg, var(--primary-dark), var(--secondary-dark));
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(var(--primary-rgb), 0.3);
+}
+
+.btnStart {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.btnStart:hover {
+  background: var(--bg-tertiary);
+  transform: translateY(-2px);
+}
+
+/* Темная тема */
+.dark-theme .courseCard {
+  background: var(--dark-card-bg);
+  border-color: var(--dark-border-color);
+}
+
+.dark-theme .btnStart {
+  background: var(--dark-bg-secondary);
+  color: var(--dark-text-primary);
+}
+
+.dark-theme .btnStart:hover {
+  background: var(--dark-bg-tertiary);
+}

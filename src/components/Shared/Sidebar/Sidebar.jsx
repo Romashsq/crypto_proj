@@ -1,13 +1,26 @@
 import React, { useState } from 'react';
-import styles from './Sidebar.module.css';
+import styles from './Sidebar.module.css'
 
-const Sidebar = ({ activeSection, onSectionChange }) => {
-  const [expandedSections, setExpandedSections] = useState(['CRYPTO']);
-  const [activeItem, setActiveItem] = useState('sol');
+const Sidebar = () => {
+  const [expandedSections, setExpandedSections] = useState({
+    crypto: true,
+    scams: false,
+    memecoins: false,
+    etc: false,
+    security: false,
+    additional: false
+  });
 
-  const sidebarData = [
+  const toggleSection = (section) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
+
+  const sidebarSections = [
     {
-      id: 'CRYPTO',
+      id: 'crypto',
       title: 'CRYPTO',
       items: [
         { id: 'sol', name: 'SOL', status: 'in-progress' },
@@ -19,7 +32,7 @@ const Sidebar = ({ activeSection, onSectionChange }) => {
       ]
     },
     {
-      id: 'SCAMS',
+      id: 'scams',
       title: 'SCAMS',
       items: [
         { id: 'pump-dump', name: 'PUMP n DUMP', status: 'locked' },
@@ -30,7 +43,7 @@ const Sidebar = ({ activeSection, onSectionChange }) => {
       ]
     },
     {
-      id: 'MEMECOINS',
+      id: 'memecoins',
       title: 'MEMECOINS',
       items: [
         { id: 'create-memecoins', name: 'How to create', status: 'locked' },
@@ -40,7 +53,16 @@ const Sidebar = ({ activeSection, onSectionChange }) => {
       ]
     },
     {
-      id: 'SECURITY',
+      id: 'etc',
+      title: 'ETC',
+      items: [
+        { id: 'news', name: 'NEWS', status: 'locked' },
+        { id: 'socials', name: 'SOCIALS', status: 'locked' },
+        { id: 'slang', name: 'SLANG', status: 'locked' },
+      ]
+    },
+    {
+      id: 'security',
       title: 'SECURITY',
       items: [
         { id: 'avoid-larped', name: 'How to avoid being larped', status: 'locked' },
@@ -49,14 +71,14 @@ const Sidebar = ({ activeSection, onSectionChange }) => {
       ]
     },
     {
-      id: 'ADDITIONAL',
+      id: 'additional',
       title: 'ADDITIONAL COURSES',
       items: [
         { 
           id: 'defi', 
           name: 'DeFi & Staking', 
           status: 'locked',
-          subitems: [
+          subItems: [
             { id: 'what-is-defi', name: 'What is DeFi?' },
             { id: 'staking-basics', name: 'Staking basics' },
             { id: 'yield-farming', name: 'Yield farming' },
@@ -67,7 +89,7 @@ const Sidebar = ({ activeSection, onSectionChange }) => {
           id: 'nft', 
           name: 'NFT & Digital Art', 
           status: 'locked',
-          subitems: [
+          subItems: [
             { id: 'what-are-nfts', name: 'What are NFTs?' },
             { id: 'creating-nfts', name: 'Creating NFTs' },
             { id: 'nft-marketplaces', name: 'NFT marketplaces' },
@@ -78,86 +100,64 @@ const Sidebar = ({ activeSection, onSectionChange }) => {
     }
   ];
 
-  const toggleSection = (sectionId) => {
-    if (expandedSections.includes(sectionId)) {
-      setExpandedSections(expandedSections.filter(id => id !== sectionId));
-    } else {
-      setExpandedSections([...expandedSections, sectionId]);
-    }
-  };
-
-  const handleItemClick = (itemId, e) => {
-    e.preventDefault();
-    setActiveItem(itemId);
-    if (onSectionChange) {
-      onSectionChange(itemId);
-    }
-  };
-
-  const getStatusClass = (status) => {
-    switch(status) {
-      case 'in-progress': return styles.statusInProgress;
-      case 'completed': return styles.statusCompleted;
-      case 'locked': return styles.statusLocked;
-      default: return '';
-    }
-  };
-
   const getStatusIcon = (status) => {
     switch(status) {
-      case 'in-progress': return 'fas fa-hourglass-half';
-      case 'completed': return 'fas fa-check-circle';
-      case 'locked': return 'fas fa-lock';
-      default: return 'fas fa-circle';
+      case 'in-progress': return 'fa-hourglass-half';
+      case 'locked': return 'fa-lock';
+      default: return 'fa-check';
+    }
+  };
+
+  const getStatusText = (status) => {
+    switch(status) {
+      case 'in-progress': return 'In Progress';
+      case 'locked': return 'Locked';
+      default: return 'Completed';
     }
   };
 
   return (
     <aside className={styles.sidebar}>
-      {sidebarData.map((section) => (
+      {sidebarSections.map(section => (
         <div 
-          key={section.id}
-          className={`${styles.sidebarSection} ${expandedSections.includes(section.id) ? styles.active : ''}`}
+          key={section.id} 
+          className={`${styles.sidebarSection} ${
+            expandedSections[section.id] ? styles.active : ''
+          }`}
         >
           <h3 onClick={() => toggleSection(section.id)}>
             {section.title}
-            <i className={`fas fa-chevron-down ${styles.toggleIcon}`}></i>
+            <i className={`fas fa-chevron-${expandedSections[section.id] ? 'up' : 'down'} ${styles.toggleIcon}`}></i>
           </h3>
           
-          <ul className={styles.sidebarMenu}>
-            {section.items.map((item) => (
-              <li key={item.id}>
-                <a 
-                  href={`#${item.id}`}
-                  className={activeItem === item.id ? styles.active : ''}
-                  onClick={(e) => handleItemClick(item.id, e)}
-                >
-                  {item.name}
-                  <span className={`${styles.lessonStatus} ${getStatusClass(item.status)}`}>
-                    <i className={getStatusIcon(item.status)}></i>
-                    {item.status === 'in-progress' ? ' In Progress' : 
-                     item.status === 'completed' ? ' Completed' : ' Locked'}
-                  </span>
-                </a>
-                
-                {/* Submenu */}
-                {item.subitems && (
-                  <ul className={`${styles.sidebarSubmenu} ${expandedSections.includes(section.id) ? styles.active : ''}`}>
-                    {item.subitems.map((subitem) => (
-                      <li key={subitem.id}>
-                        <a 
-                          href={`#${subitem.id}`}
-                          onClick={(e) => handleItemClick(subitem.id, e)}
-                        >
-                          {subitem.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </li>
-            ))}
-          </ul>
+          {expandedSections[section.id] && (
+            <ul className={styles.sidebarMenu}>
+              {section.items.map(item => (
+                <li key={item.id}>
+                  <a 
+                    href={`#${item.id}`} 
+                    className={item.status === 'in-progress' ? styles.active : ''}
+                  >
+                    {item.name}
+                    <span className={`${styles.lessonStatus} ${styles[`status-${item.status}`]}`}>
+                      <i className={`fas ${getStatusIcon(item.status)}`}></i>
+                      {getStatusText(item.status)}
+                    </span>
+                  </a>
+                  
+                  {item.subItems && (
+                    <ul className={styles.sidebarSubmenu}>
+                      {item.subItems.map(subItem => (
+                        <li key={subItem.id}>
+                          <a href={`#${subItem.id}`}>{subItem.name}</a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       ))}
     </aside>
