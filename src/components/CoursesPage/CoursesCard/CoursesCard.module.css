@@ -1,192 +1,352 @@
 .courseCard {
-  background: var(--card-bg);
+  background: var(--background);
   border-radius: 20px;
-  padding: 24px;
-  transition: all 0.3s ease;
-  border: 1px solid var(--border-color);
+  overflow: hidden;
+  box-shadow: var(--shadow-glow);
+  transition: var(--transition);
+  position: relative;
+  border: 1px solid var(--border);
+  height: 100%;
   display: flex;
   flex-direction: column;
-  height: 100%;
 }
 
 .courseCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-glow-hover);
+  border-color: var(--purple);
 }
 
 .courseHeader {
-  margin-bottom: 20px;
+  padding: 25px 25px 15px;
+  position: relative;
 }
 
 .courseIcon {
-  width: 56px;
-  height: 56px;
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-  border-radius: 12px;
+  width: 60px;
+  height: 60px;
+  border-radius: 15px;
+  background: var(--card-gradient-1);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 16px;
   color: white;
   font-size: 24px;
+  margin-bottom: 15px;
+  box-shadow: 0 8px 20px rgba(155, 47, 255, 0.3);
+  transition: var(--transition);
+}
+
+.courseCard:hover .courseIcon {
+  transform: rotate(15deg) scale(1.1);
+}
+
+/* Different icons for each course */
+.courseCard:nth-child(2) .courseIcon {
+  background: var(--card-gradient-2);
+}
+
+.courseCard:nth-child(3) .courseIcon {
+  background: var(--card-gradient-3);
+}
+
+.courseCard:nth-child(4) .courseIcon {
+  background: var(--card-gradient-4);
+}
+
+.courseCard:nth-child(5) .courseIcon {
+  background: var(--card-gradient-5);
+}
+
+.courseCard:nth-child(6) .courseIcon {
+  background: var(--card-gradient-6);
 }
 
 .courseHeader h3 {
-  font-size: 1.5rem;
-  margin-bottom: 12px;
+  font-size: 1.4rem;
+  margin-bottom: 10px;
   color: var(--text-primary);
+  font-weight: 700;
 }
 
 .courseHeader p {
   color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 20px;
   font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 15px;
 }
 
 .courseProgress {
-  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 15px;
 }
 
 .progressBar {
+  flex: 1;
   height: 6px;
-  background: var(--progress-bg);
+  background: var(--border-light);
   border-radius: 3px;
   overflow: hidden;
-  margin-bottom: 8px;
+  margin-right: 15px;
 }
 
 .progressFill {
   height: 100%;
-  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+  background: var(--gradient-purple);
   border-radius: 3px;
   transition: width 0.5s ease;
+  position: relative;
+}
+
+.progressFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.4) 50%, 
+    transparent 100%);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 .progressText {
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   color: var(--text-tertiary);
-  text-align: right;
+  white-space: nowrap;
+  font-weight: 600;
 }
 
 .courseLessons {
-  flex-grow: 1;
-  margin-bottom: 24px;
+  padding: 0 25px 25px;
+  flex: 1;
 }
 
 .lessonItem {
   display: flex;
   align-items: center;
   padding: 12px 0;
-  border-bottom: 1px solid var(--border-light);
-  opacity: 0.7;
+  border-bottom: 1px solid var(--border);
+  transition: var(--transition);
+  position: relative;
 }
 
 .lessonItem:last-child {
   border-bottom: none;
 }
 
+.lessonItem:hover {
+  background: rgba(155, 47, 255, 0.05);
+  margin: 0 -15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-radius: 8px;
+  border-bottom-color: transparent;
+}
+
 .lessonItem.active {
-  opacity: 1;
-  color: var(--text-primary);
+  background: rgba(155, 47, 255, 0.1);
+  margin: 0 -15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-radius: 8px;
+  border-bottom-color: transparent;
 }
 
 .lessonItem.locked {
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 .lessonNumber {
-  width: 32px;
-  height: 32px;
-  background: var(--bg-secondary);
-  border-radius: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--border-light);
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 0.8rem;
   margin-right: 12px;
+  flex-shrink: 0;
   font-weight: 600;
-  font-size: 0.875rem;
+  color: var(--text-secondary);
 }
 
 .lessonItem.active .lessonNumber {
-  background: var(--primary-color);
+  background: var(--gradient-purple);
+  color: white;
+  box-shadow: 0 4px 10px rgba(155, 47, 255, 0.3);
+}
+
+.lessonItem.completed .lessonNumber {
+  background: var(--status-completed);
   color: white;
 }
 
 .lessonInfo {
-  flex-grow: 1;
+  flex: 1;
+  min-width: 0;
 }
 
 .lessonTitle {
   font-weight: 500;
   font-size: 0.95rem;
   margin-bottom: 4px;
+  color: var(--text-primary);
+}
+
+.lessonTitle strong {
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
 .lessonDuration {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.lessonDuration::before {
+  content: '⏱️';
+  font-size: 0.7rem;
 }
 
 .lessonStatusIcon {
+  margin-left: 10px;
+  font-size: 0.9rem;
+  flex-shrink: 0;
   color: var(--text-tertiary);
-  font-size: 14px;
+  transition: var(--transition);
+}
+
+.lessonItem.locked .lessonStatusIcon {
+  color: #ccc;
+  animation: lockPulse 3s infinite;
+}
+
+@keyframes lockPulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .lessonItem.active .lessonStatusIcon {
-  color: var(--primary-color);
+  color: var(--purple);
+  animation: spinHourglass 2s infinite;
+}
+
+@keyframes spinHourglass {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+}
+
+.lessonItem.completed .lessonStatusIcon {
+  color: var(--status-completed);
 }
 
 .courseActions {
+  padding: 0 25px 25px;
   margin-top: auto;
 }
 
 .btn {
   display: block;
   width: 100%;
-  padding: 14px 0;
+  padding: 14px;
   text-align: center;
-  border-radius: 12px;
+  border-radius: 10px;
   font-weight: 600;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  border: none;
   cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
   font-size: 0.95rem;
+  border: none;
 }
 
 .btnContinue {
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  background: var(--gradient-purple);
   color: white;
+  box-shadow: 0 4px 15px rgba(155, 47, 255, 0.3);
 }
 
 .btnContinue:hover {
-  background: linear-gradient(135deg, var(--primary-dark), var(--secondary-dark));
+  background: var(--purple-dark);
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(var(--primary-rgb), 0.3);
+  box-shadow: 0 6px 20px rgba(155, 47, 255, 0.4);
 }
 
 .btnStart {
-  background: var(--bg-secondary);
-  color: var(--text-primary);
+  background: transparent;
+  color: var(--purple);
+  border: 2px solid var(--purple);
 }
 
 .btnStart:hover {
-  background: var(--bg-tertiary);
+  background: rgba(155, 47, 255, 0.1);
   transform: translateY(-2px);
 }
 
-/* Темная тема */
-.dark-theme .courseCard {
-  background: var(--dark-card-bg);
-  border-color: var(--dark-border-color);
+/* Dark mode styles */
+.dark-mode .courseCard {
+  background: var(--dark-card);
+  border-color: #333;
 }
 
-.dark-theme .btnStart {
-  background: var(--dark-bg-secondary);
-  color: var(--dark-text-primary);
+.dark-mode .courseHeader p {
+  color: #aaa;
 }
 
-.dark-theme .btnStart:hover {
-  background: var(--dark-bg-tertiary);
+.dark-mode .progressBar {
+  background: #333;
+}
+
+.dark-mode .lessonItem {
+  border-bottom-color: #333;
+}
+
+.dark-mode .lessonNumber {
+  background: #333;
+}
+
+.dark-mode .lessonItem:hover,
+.dark-mode .lessonItem.active {
+  background: rgba(155, 47, 255, 0.15);
+}
+
+@media (max-width: 768px) {
+  .courseHeader,
+  .courseLessons,
+  .courseActions {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  
+  .lessonItem:hover,
+  .lessonItem.active {
+    margin: 0 -10px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 }
