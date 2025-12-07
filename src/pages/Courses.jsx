@@ -136,7 +136,7 @@ const Courses = () => {
 
   return (
     <div className={`${styles.coursesPage} ${theme === 'dark' ? styles.darkTheme : ''}`}>
-      {/* Добавляем Header */}
+      {/* Header теперь содержит навигацию */}
       <Header />
       
       <CourseDetails />
@@ -156,7 +156,6 @@ const Courses = () => {
         isSidebarOpen={isSidebarOpen}
       />
       
-      {/* Добавляем Footer */}
       <Footer />
     </div>
   );

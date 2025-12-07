@@ -1,12 +1,14 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { usePhantomScroll } from '../../../hooks/usePhantomScroll';
 import { useScrollAnimation } from '../../../hooks/useScrollAnimation';
+import { useNavigate } from 'react-router-dom';
 import CoursesCard from './CourseCard';
 import styles from './CoursesPreview.module.css';
 
 const CoursesPreview = () => {
   const sectionRef = useRef(null);
   const scrollContainerRef = useRef(null);
+  const navigate = useNavigate();
   
   useScrollAnimation(sectionRef, styles.animated);
   usePhantomScroll(scrollContainerRef);
@@ -77,6 +79,7 @@ const CoursesPreview = () => {
     }
   ];
 
+  // Функции для скролла
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
       const cardWidth = scrollContainerRef.current.querySelector(`.${styles.courseCard}`).offsetWidth + 28;
@@ -113,10 +116,24 @@ const CoursesPreview = () => {
     requestAnimationFrame(animate);
   };
 
+  const handleCardClick = (courseId) => {
+    // Перенаправляем на NotFound при клике на карточку
+    navigate(`/course/${courseId}`);
+  };
+
+  const handleCoursesTitleClick = (e) => {
+    e.preventDefault();
+    navigate('/courses');
+  };
+
   return (
     <section className={styles.courses} id="courses-section" ref={sectionRef}>
       <div className="container">
-        <a href="Courses.jsx" className={styles.coursesTitleLink}>
+        <a 
+          href="/courses" 
+          className={styles.coursesTitleLink}
+          onClick={handleCoursesTitleClick}
+        >
           <h2 className={styles.sectionTitle}>Our <span>Courses</span></h2>
         </a>
         
@@ -127,8 +144,14 @@ const CoursesPreview = () => {
           
           <div className={styles.coursesScrollContainer}>
             <div className={styles.coursesScroll} ref={scrollContainerRef}>
-              {courses.map((course, index) => (
-                <CoursesCard key={course.id} course={course} index={index} />
+              {courses.map((course) => (
+                <div 
+                  key={course.id} 
+                  className={styles.courseCardWrapper}
+                  onClick={() => handleCardClick(course.id)}
+                >
+                  <CoursesCard course={course} index={course.id - 1} />
+                </div>
               ))}
             </div>
           </div>

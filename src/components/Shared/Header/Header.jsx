@@ -1,12 +1,35 @@
+// src/components/Shared/Header/Header.jsx
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../../Context/ThemeContext';
 import { useScrollHeader } from '../../../hooks/useScrollHeader';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './Header.module.css';
 
 const Header = () => {
   const { theme, toggleTheme } = useTheme();
   const isHeaderHidden = useScrollHeader();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogoClick = (e) => {
+    e.preventDefault();
+    if (location.pathname === '/') {
+      window.location.reload(); // Перезагружаем главную страницу
+    } else {
+      navigate('/'); // Переходим на главную
+    }
+  };
+
+  const handleHomeClick = (e) => {
+    e.preventDefault();
+    if (location.pathname === '/') {
+      window.location.reload();
+    } else {
+      navigate('/');
+    }
+    closeMobileMenu();
+  };
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -35,7 +58,7 @@ const Header = () => {
   return (
     <header className={`${styles.header} ${isHeaderHidden ? styles.hidden : ''}`}>
       <div className={`container ${styles.headerContainer}`}>
-        <a href="/" className={styles.logo}>
+        <a href="/" className={styles.logo} onClick={handleLogoClick}>
           <img src="/loogo.png" alt="FLOW Logo" />
           FLOW
         </a>
@@ -45,8 +68,9 @@ const Header = () => {
         
         <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.active : ''}`}>
           <ul>
+            <li><a href="/" onClick={handleHomeClick}>Home</a></li>
             <li><a href="#learning-path" onClick={closeMobileMenu}>Learning Path</a></li>
-            <li><a href="#courses-section" onClick={closeMobileMenu}>Courses</a></li>
+            <li><Link to="/courses" onClick={closeMobileMenu}>Courses</Link></li>
             <li><a href="#more-section" onClick={closeMobileMenu}>More</a></li>
             <li className={styles.dropdown}>
               <a href="#">Resources <i className="fas fa-chevron-down"></i></a>
