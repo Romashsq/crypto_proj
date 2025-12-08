@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // ДОБАВЬ ЭТОТ ИМПОРТ
 import styles from './CoursesCard.module.css';
 
 const CoursesCard = ({ course }) => {
@@ -61,14 +62,15 @@ const CoursesCard = ({ course }) => {
       </div>
       
       <div className={styles.courseActions}>
-        <a 
-          href={buttonLink} 
+        {/* ЗАМЕНИ <a href="..."> НА <Link to="..."> */}
+        <Link 
+          to={buttonLink} 
           className={`${styles.btn} ${
             isStarted ? styles.btnContinue : styles.btnStart
           }`}
         >
           {buttonText}
-        </a>
+        </Link>
       </div>
     </div>
   );

@@ -1,38 +1,60 @@
-// src/router.jsx
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import React from 'react';
+import { ThemeProvider } from './Context/ThemeContext';
 import App from './App';
 import Home from './pages/Home';
 import Courses from './pages/Courses';
+import CryptoCourse from './pages/CoursesCategory/CryptoCourse';
+import ScamsCourse from './pages/CoursesCategory/ScamsCourse';
+import MemecoinsCourse from './pages/CoursesCategory/MemecoinsCourse';
+import SecurityCourse from './pages/CoursesCategory/SecurityCourse';
 import NotFound from './pages/NotFound';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
+
+// Обертка для компонентов (без ThemeProvider, т.к. он уже в App)
+const wrapComponent = (Component) => <Component />;
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <ErrorBoundary>
-        <App />
-      </ErrorBoundary>
-    ),
+    element: <App />, // Главный компонент с Header/Footer
     errorElement: <ErrorBoundary />,
     children: [
       {
         index: true,
-        element: <Home />,
+        element: wrapComponent(Home),
+      },
+      {
+        path: 'home',
+        element: wrapComponent(Home),
       },
       {
         path: 'courses',
-        element: <Courses />,
+        element: wrapComponent(Courses),
+      },
+      {
+        path: 'crypto',
+        element: wrapComponent(CryptoCourse),
+      },
+      {
+        path: 'scams',
+        element: wrapComponent(ScamsCourse),
+      },
+      {
+        path: 'memecoins',
+        element: wrapComponent(MemecoinsCourse),
+      },
+      {
+        path: 'security',
+        element: wrapComponent(SecurityCourse),
       },
       {
         path: '*',
-        element: <NotFound />,
+        element: wrapComponent(NotFound),
       },
     ],
   },
 ]);
 
 export default router;
-
-
-export { useNavigate, useLocation, Link } from 'react-router-dom';
+export { RouterProvider };

@@ -1,31 +1,30 @@
 .sidebar {
-  width: var(--sidebar-width);
+  width: 260px; /* Уменьшили ширину */
   flex-shrink: 0;
   position: sticky;
   top: calc(var(--header-height) + 20px);
   max-height: calc(100vh - var(--header-height) - 40px);
   overflow-y: auto;
   background: var(--background);
-  border-radius: 15px;
-  box-shadow: var(--shadow-glow);
-  padding: 20px 0;
+  border-radius: 12px; /* Уменьшили радиус */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); /* Упростили тень */
+  padding: 15px 0; /* Уменьшили отступы */
   border: 1px solid var(--border);
   transition: var(--transition);
 }
 
 .sidebar:hover {
-  box-shadow: var(--shadow-glow-hover);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .sidebarSection {
-  margin-bottom: 10px;
-  transition: var(--transition);
+  margin-bottom: 8px; /* Уменьшили отступ между секциями */
 }
 
 .sidebarSection h3 {
-  font-size: 1rem;
+  font-size: 0.9rem; /* Уменьшили шрифт */
   margin: 0;
-  padding: 12px 20px;
+  padding: 10px 15px; /* Уменьшили отступы */
   color: var(--text-primary);
   font-weight: 600;
   display: flex;
@@ -33,24 +32,24 @@
   justify-content: space-between;
   cursor: pointer;
   transition: var(--transition);
-  border-bottom: 1px solid rgba(155, 47, 255, 0.1);
+  border-bottom: 1px solid rgba(155, 47, 255, 0.08);
   user-select: none;
 }
 
 .sidebarSection h3:hover {
   color: var(--purple);
-  background: rgba(155, 47, 255, 0.05);
+  background: rgba(155, 47, 255, 0.03);
 }
 
 .sidebarSection.active h3 {
   color: var(--purple);
-  background: rgba(155, 47, 255, 0.1);
+  background: rgba(155, 47, 255, 0.08);
   border-bottom-color: var(--purple);
 }
 
 .toggleIcon {
   transition: var(--transition);
-  font-size: 0.9rem;
+  font-size: 0.8rem; /* Уменьшили иконку */
   color: var(--text-tertiary);
 }
 
@@ -79,56 +78,57 @@
 .sidebarMenu a {
   display: flex;
   align-items: center;
-  padding: 10px 20px 10px 30px;
+  padding: 8px 15px 8px 25px; /* Уменьшили отступы */
   text-decoration: none;
   color: var(--text-primary);
   transition: var(--transition);
-  font-size: 0.95rem;
-  border-left: 3px solid transparent;
+  font-size: 0.85rem; /* Уменьшили шрифт */
+  border-left: 2px solid transparent; /* Уменьшили толщину */
   position: relative;
+  min-height: 32px; /* Фиксированная высота для всех пунктов */
 }
 
 .sidebarMenu a:hover,
 .sidebarMenu a.active {
-  background: rgba(155, 47, 255, 0.05);
+  background: rgba(155, 47, 255, 0.03);
   color: var(--purple);
   border-left-color: var(--purple);
 }
 
 .lessonStatus {
   margin-left: auto;
-  font-size: 0.75rem;
+  font-size: 0.7rem; /* Уменьшили шрифт */
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 4px 10px;
-  border-radius: 12px;
+  gap: 4px;
+  padding: 3px 8px; /* Уменьшили паддинг */
+  border-radius: 10px;
   font-weight: 600;
   white-space: nowrap;
 }
 
 .status-in-progress {
-  background: rgba(255, 165, 0, 0.1);
+  background: rgba(255, 165, 0, 0.08);
   color: var(--status-in-progress);
 }
 
 .status-locked {
-  background: rgba(136, 136, 136, 0.1);
+  background: rgba(136, 136, 136, 0.08);
   color: var(--status-locked);
 }
 
 .status-completed {
-  background: rgba(76, 175, 80, 0.1);
+  background: rgba(76, 175, 80, 0.08);
   color: var(--status-completed);
 }
 
 .sidebarSubmenu {
   list-style: none;
-  margin-left: 10px;
+  margin-left: 8px; /* Уменьшили отступ */
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease;
-  border-left: 1px solid rgba(155, 47, 255, 0.1);
+  border-left: 1px solid rgba(155, 47, 255, 0.08);
 }
 
 .sidebarSubmenu.active {
@@ -140,26 +140,57 @@
 }
 
 .sidebarSubmenu a {
-  padding: 8px 20px 8px 40px;
-  font-size: 0.9rem;
+  padding: 6px 15px 6px 30px; /* Уменьшили отступы */
+  font-size: 0.8rem; /* Уменьшили шрифт */
   color: var(--text-secondary);
   border-left: none;
+  min-height: 28px; /* Меньшая высота для подпунктов */
 }
 
 .sidebarSubmenu a:hover,
 .sidebarSubmenu a.active {
-  background: rgba(155, 47, 255, 0.05);
+  background: rgba(155, 47, 255, 0.03);
   color: var(--purple);
+}
+
+/* Скроллбар - делаем тонким */
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: rgba(155, 47, 255, 0.05);
+  border-radius: 2px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(155, 47, 255, 0.15);
+  border-radius: 2px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(155, 47, 255, 0.25);
+}
+
+/* Для Firefox */
+.sidebar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(155, 47, 255, 0.15) rgba(155, 47, 255, 0.05);
 }
 
 /* Dark mode */
 .dark-mode .sidebar {
   background: var(--dark-card);
-  border-color: #333;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .sidebar:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
 }
 
 .dark-mode .sidebarSection h3 {
-  border-bottom-color: rgba(255, 255, 255, 0.1);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
   color: var(--text-light);
 }
 
@@ -168,47 +199,46 @@
 }
 
 .dark-mode .sidebarSubmenu a {
-  color: #aaa;
+  color: #999;
 }
 
 /* Mobile styles */
-.sidebarToggle {
-  display: none;
-  background: var(--gradient-purple);
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  margin-bottom: 20px;
-  font-weight: 600;
-  transition: var(--transition);
-  width: 100%;
-}
-
-.sidebarToggle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(155, 47, 255, 0.3);
-}
-
 @media (max-width: 1024px) {
   .sidebar {
     position: fixed;
     top: var(--header-height);
     left: -100%;
-    width: var(--sidebar-width);
+    width: 260px; /* Такая же ширина */
     height: calc(100vh - var(--header-height));
     z-index: 999;
     border-radius: 0;
     transition: left 0.3s ease;
-    box-shadow: var(--shadow-xl);
+    box-shadow: 5px 0 30px rgba(0, 0, 0, 0.2);
   }
   
   .sidebar.open {
     left: 0;
   }
+}
+
+/* Еще меньше на очень маленьких экранах */
+@media (max-width: 480px) {
+  .sidebar {
+    width: 240px;
+  }
   
-  .sidebarToggle {
-    display: block;
+  .sidebarSection h3 {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+  
+  .sidebarMenu a {
+    padding: 7px 12px 7px 20px;
+    font-size: 0.8rem;
+  }
+  
+  .sidebarSubmenu a {
+    padding: 5px 12px 5px 25px;
+    font-size: 0.75rem;
   }
 }

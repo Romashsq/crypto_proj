@@ -19,7 +19,7 @@ const coursesData = [
     totalLessons: 6,
     isStarted: true,
     buttonText: "Continue Learning",
-    buttonLink: "/course/crypto-fundamentals",
+    buttonLink: "/crypto", // ИЗМЕНИЛ: было "/course/crypto-fundamentals"
     lessons: [
       { number: 1, title: "SOL - Solana Fundamentals", duration: "45 min", status: "active" },
       { number: 2, title: "BTC - Bitcoin Basics", duration: "35 min", status: "locked" },
@@ -38,7 +38,7 @@ const coursesData = [
     totalLessons: 5,
     isStarted: false,
     buttonText: "Start Course",
-    buttonLink: "#pump-dump",
+    buttonLink: "/scams", // ИЗМЕНИЛ: было "#pump-dump"
     lessons: [
       { number: 1, title: "PUMP n DUMP Schemes", duration: "30 min", status: "available" },
       { number: 2, title: "BUNDLES Scams", duration: "25 min", status: "locked" },
@@ -56,7 +56,7 @@ const coursesData = [
     totalLessons: 4,
     isStarted: false,
     buttonText: "Start Course",
-    buttonLink: "#create-memecoins",
+    buttonLink: "/memecoins", // ИЗМЕНИЛ: было "#create-memecoins"
     lessons: [
       { number: 1, title: "How to Create Memecoins", duration: "40 min", status: "available" },
       { number: 2, title: "How Memecoins Work", duration: "35 min", status: "locked" },
@@ -73,7 +73,7 @@ const coursesData = [
     totalLessons: 3,
     isStarted: false,
     buttonText: "Start Course",
-    buttonLink: "#avoid-larped",
+    buttonLink: "/security", // ИЗМЕНИЛ: было "#avoid-larped"
     lessons: [
       { number: 1, title: "How to Avoid Being Larped", duration: "30 min", status: "available" },
       { number: 2, title: "How to Avoid Being Drowned", duration: "25 min", status: "locked" },
@@ -89,7 +89,7 @@ const coursesData = [
     totalLessons: 3,
     isStarted: false,
     buttonText: "Start Course",
-    buttonLink: "#news",
+    buttonLink: "/additional", // ИЗМЕНИЛ: было "#news" (создашь позже)
     lessons: [
       { number: 1, title: "Crypto NEWS Updates", duration: "20 min", status: "available" },
       { number: 2, title: "SOCIALS Guide", duration: "35 min", status: "locked" },
@@ -105,7 +105,7 @@ const coursesData = [
     totalLessons: 4,
     isStarted: false,
     buttonText: "Start Course",
-    buttonLink: "#defi",
+    buttonLink: "/defi", // ИЗМЕНИЛ: было "#defi" (создашь позже)
     lessons: [
       { number: 1, title: "What is DeFi?", duration: "45 min", status: "available" },
       { number: 2, title: "Staking Basics", duration: "30 min", status: "locked" },
@@ -114,7 +114,6 @@ const coursesData = [
     ]
   }
 ];
-
 const Courses = () => {
   const { theme } = useTheme();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -136,7 +135,7 @@ const Courses = () => {
 
   return (
     <div className={`${styles.coursesPage} ${theme === 'dark' ? styles.darkTheme : ''}`}>
-      {/* Header теперь содержит навигацию */}
+      {/* Добавляем Header */}
       <Header />
       
       <CourseDetails />
@@ -156,6 +155,7 @@ const Courses = () => {
         isSidebarOpen={isSidebarOpen}
       />
       
+      {/* Добавляем Footer */}
       <Footer />
     </div>
   );
