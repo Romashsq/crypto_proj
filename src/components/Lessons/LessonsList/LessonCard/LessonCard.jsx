@@ -7,7 +7,6 @@ const LessonCard = ({
   title, 
   duration, 
   level, 
-  status = 'available', // 'available', 'locked', 'completed'
   isLocked = false,
   isCompleted = false,
   onStartLesson,
@@ -35,7 +34,7 @@ const LessonCard = ({
   };
 
   return (
-    <div className={`${styles.lessonCard} ${isLocked ? styles.locked : ''} ${isCompleted ? styles.completed : ''} ${isActive ? styles.active : ''}`}>
+    <div className={`${styles.lessonCard} ${isLocked ? styles.locked : ''} ${isCompleted ? styles.completed : ''} ${isActive ? styles.active : ''} ${isDarkMode ? styles.darkMode : ''}`}>
       <div className={styles.lessonHeader}>
         <div className={styles.lessonInfo}>
           <div className={styles.lessonNumberContainer}>
@@ -69,7 +68,7 @@ const LessonCard = ({
             <span>Complete Previous Lesson</span>
           </button>
         ) : isCompleted ? (
-          <button className={`${styles.btn} ${styles.btnCompleted}`}>
+          <button className={`${styles.btn} ${styles.btnCompleted}`} onClick={handleClick}>
             <i className="fas fa-redo"></i>
             <span>Review Lesson</span>
           </button>

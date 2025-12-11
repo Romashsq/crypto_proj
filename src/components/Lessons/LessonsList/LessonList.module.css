@@ -221,40 +221,90 @@
   margin-bottom: 40px;
 }
 
-/* Navigation */
-.navigation {
+/* В конец файла добавь или замени эти стили */
+
+.actionsContainer {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* Меняем space-around на space-between */
   align-items: center;
-  padding: 20px 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  margin-top: 40px;
+  padding: 30px;
+  border-top: 1px solid rgba(155, 47, 255, 0.1);
+  border-radius: 16px;
+  background: rgba(155, 47, 255, 0.02);
 }
 
-.darkMode .navigation {
+.darkMode .actionsContainer {
   border-top-color: rgba(255, 255, 255, 0.1);
+  background: rgba(155, 47, 255, 0.05);
 }
 
-.navButton {
+/* Левая кнопка */
+.backToCourses {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 24px;
-  background: rgba(155, 47, 255, 0.1);
-  border: 2px solid rgba(155, 47, 255, 0.2);
+  gap: 12px;
+  padding: 14px 28px;
+  background: linear-gradient(135deg, rgba(155, 47, 255, 0.1) 0%, rgba(155, 47, 255, 0.2) 100%);
   border-radius: 12px;
-  color: var(--primary);
+  color: #9B2FFF;
   text-decoration: none;
   font-weight: 600;
+  font-size: 16px;
   transition: all 0.3s ease;
+  border: 2px solid rgba(155, 47, 255, 0.3);
+  flex: 0 0 auto;
 }
 
-.navButton:hover {
-  background: var(--primary);
+.backToCourses:hover {
+  background: linear-gradient(135deg, #9B2FFF 0%, #8a1fe0 100%);
   color: white;
-  border-color: var(--primary);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(155, 47, 255, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(155, 47, 255, 0.4);
+  border-color: #9B2FFF;
 }
+
+/* Правая кнопка - Reset Progress */
+.resetButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 28px;
+  background: linear-gradient(135deg, rgba(255, 59, 48, 0.1) 0%, rgba(255, 59, 48, 0.2) 100%);
+  border-radius: 12px;
+  color: #FF3B30;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 59, 48, 0.3);
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+
+.resetButton:hover {
+  background: linear-gradient(135deg, #FF3B30 0%, #ff1c1c 100%);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 59, 48, 0.4);
+  border-color: #FF3B30;
+}
+
+/* Иконки */
+.backToCourses i,
+.resetButton i {
+  font-size: 1em;
+  transition: transform 0.3s ease;
+}
+
+.backToCourses:hover i {
+  transform: translateX(-4px);
+}
+
+.resetButton:hover i {
+  transform: rotate(180deg);
+}
+
 
 @media (max-width: 768px) {
   .courseHeader {
@@ -291,5 +341,20 @@
   
   .navButton {
     justify-content: center;
+  }
+
+  .actionsContainer {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+    padding: 20px;
+    margin-top: 30px;
+  }
+  
+  .backToCourses,
+  .resetButton {
+    justify-content: center;
+    width: 100%;
+    padding: 16px 24px;
   }
 }

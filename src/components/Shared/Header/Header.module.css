@@ -1,3 +1,5 @@
+/* Header.module.css - НОРМАЛЬНЫЙ ГРАДИЕНТ БЕЗ ПОЛОСОК */
+
 .header {
   position: fixed;
   top: 0;
@@ -26,24 +28,29 @@
   justify-content: space-between;
   align-items: center;
 }
-
+/* ЛОГОТИП - УПРОЩЕННЫЙ ГРАДИЕНТ */
 .logo {
-  display: flex;
-  align-items: center;
-  font-weight: 700;
-  font-size: 24px;
-  color: #9B2FFF;
+  display: inline-block;
+  cursor: pointer !important;
   text-decoration: none;
+  line-height: 0;
+  position: relative;
+  width: 65px;
+  height: 65px;
+}
+/* САМА КАРТИНКА ЛОГО */
+.logoImage {
+  width: 65px;
+  height: 65px;
+  object-fit: contain;
+  border-radius: 50%;
+  display: block;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
 }
 
-.logoPlaceholder {
-  width: 50px;
-  height: 50px;
-  margin-right: 10px;
-  background: #9B2FFF;
-  border-radius: 8px;
-}
-
+/* ОСТАЛЬНЫЕ СТИЛИ БЕЗ ИЗМЕНЕНИЙ */
 .nav ul {
   display: flex;
   list-style: none;
@@ -58,6 +65,7 @@
   position: relative;
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 :global(.dark-mode) .nav a {
@@ -117,6 +125,7 @@
   padding: 10px 20px;
   display: block;
   color: #333;
+  cursor: pointer;
 }
 
 :global(.dark-mode) .dropdownContent a {

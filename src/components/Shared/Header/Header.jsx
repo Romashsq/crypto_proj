@@ -4,7 +4,7 @@ import { useTheme } from '../../../Context/ThemeContext';
 import { useScrollHeader } from '../../../hooks/useScrollHeader';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './Header.module.css';
-
+import logo from '../../../assets/logo.png'
 const Header = () => {
   const { theme, toggleTheme } = useTheme();
   const isHeaderHidden = useScrollHeader();
@@ -58,10 +58,9 @@ const Header = () => {
   return (
     <header className={`${styles.header} ${isHeaderHidden ? styles.hidden : ''}`}>
       <div className={`container ${styles.headerContainer}`}>
-        <a href="/" className={styles.logo} onClick={handleLogoClick}>
-          <img src="/loogo.png" alt="FLOW Logo" />
-          FLOW
-        </a>
+       <a href="/" className={styles.logo} onClick={handleLogoClick}>
+        <img src={logo} alt="FLOW Logo" className={styles.logoImage} />
+      </a>
         
         <button className={styles.mobileMenuBtn} onClick={toggleMobileMenu}>☰</button>
         <button className={styles.closeMenu} onClick={closeMobileMenu}>✕</button>

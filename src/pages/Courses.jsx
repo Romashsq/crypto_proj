@@ -4,8 +4,6 @@ import CourseDetails from '../components/CoursesPage/CourseDetails/CourseDetails
 import CoursesGrid from '../components/CoursesPage/CoursesGrid/CoursesGrid';
 import Sidebar from '../components/Shared/Sidebar/Sidebar';
 import CoursesSidebarToggle from '../components/CoursesPage/CoursesSidebarToggle/CoursesSidebarToggle';
-import Header from '../components/Shared/Header/Header';
-import Footer from '../components/Shared/Footer/Footer';
 import styles from './Courses.module.css';
 
 // Данные курсов
@@ -136,7 +134,6 @@ const Courses = () => {
   return (
     <div className={`${styles.coursesPage} ${theme === 'dark' ? styles.darkTheme : ''}`}>
       {/* Добавляем Header */}
-      <Header />
       
       <CourseDetails />
       
@@ -155,8 +152,6 @@ const Courses = () => {
         isSidebarOpen={isSidebarOpen}
       />
       
-      {/* Добавляем Footer */}
-      <Footer />
     </div>
   );
 };

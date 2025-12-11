@@ -1,22 +1,26 @@
 .lessonCard {
-  background: var(--white);
+  background: #FFFFFF;
   border-radius: 16px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(155, 47, 255, 0.1);
-  transition: all 0.3s ease;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 30px rgba(155, 47, 255, 0.15);
   overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(155, 47, 255, 0.1);
+}
+
+.lessonCard.darkMode {
+  background: #1a1a2e;
+  border-color: rgba(155, 47, 255, 0.2);
 }
 
 .lessonCard:hover:not(.locked) {
   transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(155, 47, 255, 0.15);
-  border-color: rgba(155, 47, 255, 0.3);
+  box-shadow: 0 15px 40px rgba(155, 47, 255, 0.25);
 }
 
 .lessonCard.locked {
   opacity: 0.6;
-  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .lessonCard.completed {
@@ -24,26 +28,22 @@
 }
 
 .lessonCard.active {
-  border-color: var(--primary);
+  border-color: #9B2FFF;
   box-shadow: 0 0 0 2px rgba(155, 47, 255, 0.2);
 }
 
+/* HEADER */
 .lessonHeader {
-  padding: 24px;
+  padding: 24px 30px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.dark-mode .lessonHeader {
-  border-bottom-color: rgba(255, 255, 255, 0.1);
+  align-items: center;
 }
 
 .lessonInfo {
   display: flex;
-  align-items: flex-start;
-  gap: 16px;
+  align-items: center;
+  gap: 15px;
   flex: 1;
 }
 
@@ -52,17 +52,16 @@
 }
 
 .lessonNumber {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, var(--primary) 0%, #7b1fa2 100%);
+  width: 32px;
+  height: 32px;
+  background: #9B2FFF;
   color: white;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 700;
-  box-shadow: 0 4px 12px rgba(155, 47, 255, 0.25);
+  border-radius: 50%;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .lessonContent {
@@ -70,76 +69,78 @@
 }
 
 .lessonTitle {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 600;
-  color: var(--text-dark);
+  color: #333;
   margin-bottom: 8px;
-  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.dark-mode .lessonTitle {
-  color: var(--text-light);
+.lessonCard.darkMode .lessonTitle {
+  color: #f0f0f0;
 }
 
 .lessonMeta {
   display: flex;
-  gap: 20px;
+  gap: 15px;
   font-size: 0.9rem;
 }
 
 .metaItem {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   color: #666;
 }
 
-.dark-mode .metaItem {
+.lessonCard.darkMode .metaItem {
   color: #aaa;
 }
 
 .metaItem i {
+  color: #9B2FFF;
   font-size: 0.85rem;
-  color: var(--primary);
 }
 
+/* STATUS */
 .lessonStatusContainer {
   flex-shrink: 0;
-  margin-left: 16px;
 }
 
 .lessonStatus {
-  display: inline-block;
+  font-size: 0.9rem;
   padding: 6px 16px;
   border-radius: 20px;
-  font-size: 0.85rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .statusAvailable {
-  background: rgba(155, 47, 255, 0.1);
-  color: var(--primary);
+  background: #9B2FFF;
+  color: white;
 }
 
 .statusLocked {
-  background: rgba(200, 200, 200, 0.2);
-  color: #999;
+  background: #ccc;
+  color: #666;
 }
 
-.dark-mode .statusLocked {
+.lessonCard.darkMode .statusLocked {
   background: rgba(255, 255, 255, 0.1);
   color: #aaa;
 }
 
 .statusCompleted {
-  background: rgba(76, 175, 80, 0.1);
-  color: #4CAF50;
+  background: #4CAF50;
+  color: white;
 }
 
+/* ACTIONS */
 .lessonActions {
-  padding: 20px 24px;
+  padding: 0 30px 24px;
 }
 
 .btn {
@@ -148,7 +149,7 @@
   justify-content: center;
   gap: 8px;
   padding: 12px 24px;
-  border-radius: 10px;
+  border-radius: 8px;
   font-weight: 600;
   font-size: 0.95rem;
   transition: all 0.3s ease;
@@ -160,33 +161,34 @@
 
 .btn:hover:not(:disabled) {
   transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .btn:disabled {
   cursor: not-allowed;
   opacity: 0.6;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .btnPrimary {
-  background: linear-gradient(135deg, var(--primary) 0%, #8a1fe0 100%);
+  background: #9B2FFF;
   color: white;
-  box-shadow: 0 4px 15px rgba(155, 47, 255, 0.3);
 }
 
 .btnPrimary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #8a1fe0 0%, #7b1fa2 100%);
-  box-shadow: 0 6px 20px rgba(155, 47, 255, 0.4);
+  background: #8a1fe0;
+  box-shadow: 0 4px 15px rgba(155, 47, 255, 0.3);
 }
 
 .btnCompleted {
-  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  background: #4CAF50;
   color: white;
-  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
 }
 
 .btnCompleted:hover:not(:disabled) {
-  background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+  background: #45a049;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
 }
 
 .btnDisabled {
@@ -194,28 +196,44 @@
   color: #999;
 }
 
-.dark-mode .btnDisabled {
+.lessonCard.darkMode .btnDisabled {
   background: rgba(255, 255, 255, 0.1);
   color: #aaa;
 }
 
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .lessonHeader {
+    padding: 20px;
     flex-direction: column;
-    gap: 16px;
-  }
-  
-  .lessonInfo {
-    width: 100%;
+    align-items: flex-start;
+    gap: 12px;
   }
   
   .lessonStatusContainer {
     width: 100%;
-    margin-left: 0;
   }
   
   .lessonStatus {
     display: block;
     text-align: center;
+  }
+  
+  .lessonActions {
+    padding: 0 20px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .lessonTitle {
+    font-size: 1.1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .lessonMeta {
+    flex-direction: column;
+    gap: 8px;
   }
 }
