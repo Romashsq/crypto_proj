@@ -10,6 +10,7 @@ import MemecoinsCourse from './pages/CoursesCategory/MemecoinsCourse';
 import SecurityCourse from './pages/CoursesCategory/SecurityCourse';
 import NotFound from './pages/NotFound';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
+import LessonPage from './pages/LessonPage';
 
 // Обертка для компонентов (без ThemeProvider, т.к. он уже в App)
 const wrapComponent = (Component) => <Component />;
@@ -52,6 +53,14 @@ const router = createBrowserRouter([
         path: '*',
         element: wrapComponent(NotFound),
       },
+      {
+        path: 'lesson/:courseId/:lessonId',
+        element: <LessonPage />
+      },
+      {
+        path: 'lesson/:lessonId',
+        element: <LessonPage />
+      }
     ],
   },
 ]);

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // ДОБАВЬ ИМПОРТ
 import { useTheme } from '../../../../Context/ThemeContext';
 import styles from './LessonCard.module.css';
 
@@ -10,7 +11,8 @@ const LessonCard = ({
   isLocked = false,
   isCompleted = false,
   onStartLesson,
-  isActive = false
+  isActive = false,
+  courseId = 'crypto' // ДОБАВЬ ЭТОТ ПРОП
 }) => {
   const { theme } = useTheme();
   const isDarkMode = theme === 'dark';
@@ -68,15 +70,22 @@ const LessonCard = ({
             <span>Complete Previous Lesson</span>
           </button>
         ) : isCompleted ? (
-          <button className={`${styles.btn} ${styles.btnCompleted}`} onClick={handleClick}>
+          <Link 
+            to={`/lesson/${courseId}/${lessonNumber}`} // ИСПОЛЬЗУЕМ Link
+            className={`${styles.btn} ${styles.btnCompleted}`}
+          >
             <i className="fas fa-redo"></i>
             <span>Review Lesson</span>
-          </button>
+          </Link>
         ) : (
-          <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={handleClick}>
+          <Link 
+            to={`/lesson/${courseId}/${lessonNumber}`} // ИСПОЛЬЗУЕМ Link
+            className={`${styles.btn} ${styles.btnPrimary}`}
+            onClick={handleClick} // ВСЕ ЕЩЕ ВЫЗЫВАЕМ handleClick для прогресса
+          >
             <i className="fas fa-play"></i>
             <span>Start Lesson</span>
-          </button>
+          </Link>
         )}
       </div>
     </div>

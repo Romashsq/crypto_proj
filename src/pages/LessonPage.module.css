@@ -1,0 +1,588 @@
+/* LessonPage.module.css */
+:root {
+  --primary: #9B2FFF;
+  --white: #FFFFFF;
+  --gradient: linear-gradient(135deg, var(--white) 0%, var(--primary) 100%);
+  --light-bg: #f9f7ff;
+  --dark-bg: #0f0f23;
+  --dark-card: #1a1a2e;
+  --text-dark: #333;
+  --text-light: #f0f0f0;
+  --shadow: 0 10px 30px rgba(155, 47, 255, 0.15);
+  --transition: all 0.3s ease;
+}
+
+.lessonPage {
+  background-color: var(--white);
+  color: var(--text-dark);
+  overflow-x: hidden;
+  transition: var(--transition);
+}
+
+.lessonPage.darkMode {
+  background-color: var(--dark-bg);
+  color: var(--text-light);
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Lesson Layout */
+.lessonLayout {
+  display: flex;
+  padding: 160px 0 60px;
+  gap: 40px;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 320px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 140px;
+  max-height: calc(100vh - 160px);
+  overflow-y: auto;
+  transition: var(--transition);
+  background: var(--white);
+  border-radius: 15px;
+  box-shadow: var(--shadow);
+  padding: 20px 0;
+}
+
+.lessonPage.darkMode .sidebar {
+  background: var(--dark-card);
+}
+
+.lessonMetaSidebar {
+  padding: 20px;
+  border-bottom: 1px solid rgba(155, 47, 255, 0.1);
+  margin-bottom: 15px;
+}
+
+.metaItemSidebar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.lessonPage.darkMode .metaItemSidebar {
+  color: #aaa;
+}
+
+.metaItemSidebar i {
+  width: 16px;
+  color: var(--primary);
+}
+
+.sidebarSection {
+  margin-bottom: 5px;
+}
+
+.sidebarSection h3 {
+  font-size: 0.95rem;
+  margin: 0;
+  padding: 12px 20px;
+  color: var(--text-dark);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: var(--transition);
+  border-bottom: 1px solid rgba(155, 47, 255, 0.1);
+}
+
+.lessonPage.darkMode .sidebarSection h3 {
+  color: var(--text-light);
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebarSection h3 .toggleIcon {
+  transition: var(--transition);
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.sidebarSection.active h3 .toggleIcon {
+  transform: rotate(180deg);
+  color: var(--primary);
+}
+
+.sidebarMenu {
+  list-style: none;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.sidebarSection.active .sidebarMenu {
+  max-height: 1000px;
+}
+
+.sidebarMenu li {
+  margin: 0;
+}
+
+.sidebarMenu a {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px 10px 30px;
+  text-decoration: none;
+  color: var(--text-dark);
+  transition: var(--transition);
+  font-size: 0.9rem;
+  border-left: 3px solid transparent;
+  position: relative;
+}
+
+.lessonPage.darkMode .sidebarMenu a {
+  color: var(--text-light);
+}
+
+.sidebarMenu a:hover,
+.sidebarMenu a.active {
+  background: rgba(155, 47, 255, 0.05);
+  color: var(--primary);
+  border-left-color: var(--primary);
+}
+
+.lessonStatus {
+  margin-left: auto;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+.statusInProgress {
+  background: rgba(255, 165, 0, 0.1);
+  color: #ffa500;
+}
+
+.statusCompleted {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+}
+
+.statusLocked {
+  background: rgba(136, 136, 136, 0.1);
+  color: #888;
+}
+
+/* Lesson Content */
+.lessonContent {
+  flex: 1;
+}
+
+.lessonHeader {
+  margin-bottom: 40px;
+}
+
+.lessonBreadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.lessonPage.darkMode .lessonBreadcrumb {
+  color: #aaa;
+}
+
+.lessonBreadcrumb a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.lessonBreadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.lessonTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--text-dark);
+}
+
+.lessonPage.darkMode .lessonTitle {
+  color: var(--text-light);
+}
+
+.lessonDescription {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.lessonPage.darkMode .lessonDescription {
+  color: #aaa;
+}
+
+.lessonMeta {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.lessonPage.darkMode .metaItem {
+  color: #777;
+}
+
+/* Video Section */
+.videoSection {
+  margin-bottom: 40px;
+}
+
+.videoContainer {
+  position: relative;
+  width: 100%;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background: #000;
+}
+
+.videoWrapper {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+  height: 0;
+}
+
+.videoWrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Notes Section */
+.notesSection {
+  margin-bottom: 40px;
+}
+
+.notesToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background: var(--white);
+  border-radius: 15px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.lessonPage.darkMode .notesToggle {
+  background: var(--dark-card);
+}
+
+.notesToggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(155, 47, 255, 0.15);
+}
+
+.notesToggle h3 {
+  font-size: 1.2rem;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lessonPage.darkMode .notesToggle h3 {
+  color: var(--text-light);
+}
+
+.notesContent {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background: var(--white);
+  border-radius: 0 0 15px 15px;
+  box-shadow: var(--shadow);
+}
+
+.lessonPage.darkMode .notesContent {
+  background: var(--dark-card);
+}
+
+.notesContent.active {
+  max-height: 1000px;
+}
+
+.notesList {
+  padding: 20px;
+}
+
+.noteItem {
+  padding: 15px;
+  margin-bottom: 15px;
+  background: rgba(155, 47, 255, 0.05);
+  border-radius: 10px;
+  border-left: 4px solid var(--primary);
+}
+
+.noteItem:last-child {
+  margin-bottom: 0;
+}
+
+.noteItem h4 {
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: var(--text-dark);
+}
+
+.lessonPage.darkMode .noteItem h4 {
+  color: var(--text-light);
+}
+
+.noteItem p {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+.lessonPage.darkMode .noteItem p {
+  color: #aaa;
+}
+
+/* Materials Section */
+.materialsSection {
+  margin-bottom: 40px;
+}
+
+.materialsToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background: var(--white);
+  border-radius: 15px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.lessonPage.darkMode .materialsToggle {
+  background: var(--dark-card);
+}
+
+.materialsToggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(155, 47, 255, 0.15);
+}
+
+.materialsToggle h3 {
+  font-size: 1.2rem;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lessonPage.darkMode .materialsToggle h3 {
+  color: var(--text-light);
+}
+
+.materialsContent {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background: var(--white);
+  border-radius: 0 0 15px 15px;
+  box-shadow: var(--shadow);
+}
+
+.lessonPage.darkMode .materialsContent {
+  background: var(--dark-card);
+}
+
+.materialsContent.active {
+  max-height: 1000px;
+}
+
+.materialsList {
+  padding: 20px;
+}
+
+.materialItem {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  margin-bottom: 10px;
+  background: rgba(155, 47, 255, 0.05);
+  border-radius: 10px;
+  transition: var(--transition);
+}
+
+.materialItem:hover {
+  background: rgba(155, 47, 255, 0.1);
+  transform: translateX(5px);
+}
+
+.materialItem:last-child {
+  margin-bottom: 0;
+}
+
+.materialIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.materialInfo {
+  flex: 1;
+}
+
+.materialInfo h4 {
+  font-size: 1rem;
+  margin-bottom: 5px;
+  color: var(--text-dark);
+}
+
+.lessonPage.darkMode .materialInfo h4 {
+  color: var(--text-light);
+}
+
+.materialInfo p {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.lessonPage.darkMode .materialInfo p {
+  color: #aaa;
+}
+
+.materialDownload {
+  color: var(--primary);
+  text-decoration: none;
+  padding: 8px 15px;
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: var(--transition);
+}
+
+.materialDownload:hover {
+  background: var(--primary);
+  color: white;
+}
+
+/* Navigation Buttons */
+.lessonNavigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 50px;
+  padding-top: 30px;
+  border-top: 1px solid #eee;
+}
+
+.lessonPage.darkMode .lessonNavigation {
+  border-top-color: #333;
+}
+
+.navBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 25px;
+  background: var(--primary);
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.navBtn:hover {
+  background: #7a1fd1;
+  transform: translateY(-2px);
+}
+
+.navBtn.prev {
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+
+.navBtn.prev:hover {
+  background: rgba(155, 47, 255, 0.1);
+}
+
+.navBtn.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .lessonLayout {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+    position: static;
+    max-height: none;
+    margin-bottom: 40px;
+  }
+  
+  .lessonTitle {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .lessonLayout {
+    padding: 140px 0 40px;
+  }
+  
+  .lessonTitle {
+    font-size: 1.8rem;
+  }
+  
+  .lessonMeta {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .lessonNavigation {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .navBtn {
+    justify-content: center;
+  }
+}
