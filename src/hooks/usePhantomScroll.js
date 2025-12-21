@@ -164,14 +164,12 @@ export const usePhantomScroll = (ref) => {
         e.preventDefault();
         e.stopPropagation();
         
-        // Применяем инерцию
         if (Math.abs(velocity) > 0.5) {
           animationFrame = requestAnimationFrame(applyMomentum);
         } else {
           snapToNearestCard();
         }
       } else if (isClick && dragDuration < 220 && totalWalk < 5) {
-        // Если был клик, а не драг
         const link = e.target.closest('a');
         if (link && link.href) {
           setTimeout(() => {
@@ -180,7 +178,6 @@ export const usePhantomScroll = (ref) => {
         }
       }
       
-      // Сброс состояния
       isDragging = false;
       startX = null;
       scrollLeft = null;
@@ -189,7 +186,6 @@ export const usePhantomScroll = (ref) => {
       dragStartTime = 0;
     };
 
-    // Touch события
     const handleTouchStart = (e) => {
       if (e.touches.length === 1) {
         handleMouseDown({
@@ -223,7 +219,6 @@ export const usePhantomScroll = (ref) => {
       }
     };
 
-    // Добавляем обработчики
     scrollContainer.addEventListener('mousedown', handleMouseDown);
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
@@ -239,7 +234,6 @@ export const usePhantomScroll = (ref) => {
     scrollContainer.style.scrollBehavior = 'auto';
 
     return () => {
-      // Убираем обработчики
       scrollContainer.removeEventListener('mousedown', handleMouseDown);
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);

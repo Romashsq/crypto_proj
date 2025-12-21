@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import Header from '../../components/Shared/Header/Header';
 import Sidebar from '../../components/Shared/Sidebar/Sidebar';
-import Footer from '../../components/Shared/Footer/Footer';
 import LessonList from '../../components/Lessons/LessonsList/LessonList';
 import styles from './StylesForCategories.module.css'
 
@@ -14,7 +12,6 @@ const SecurityCourse = () => {
 
   return (
     <div className={styles.page}>
-      <Header />
       
       <button 
         className={styles.mobileMenuButton}
@@ -36,7 +33,6 @@ const SecurityCourse = () => {
         </main>
       </div>
       
-      <Footer />
     </div>
   );
 };
