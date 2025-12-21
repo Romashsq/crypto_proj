@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createHashRouter, RouterProvider } from 'react-router-dom'; // ← ИЗМЕНИЛ ТУТ
 import React from 'react';
 import { ThemeProvider } from './Context/ThemeContext';
 import App from './App';
@@ -15,7 +15,7 @@ import LessonPage from './pages/LessonPage';
 // Обертка для компонентов
 const wrapComponent = (Component) => <Component />;
 
-const router = createBrowserRouter([
+const router = createHashRouter([ // ← И ИЗМЕНИЛ ТУТ
   {
     path: '/',
     element: <App />,
@@ -49,12 +49,10 @@ const router = createBrowserRouter([
         path: 'security',
         element: wrapComponent(SecurityCourse),
       },
-      // УРОКИ - ВАЖНО: должен быть после всех курсов
       {
         path: 'lesson/:courseId/:lessonId',
         element: <LessonPage />
       },
-      // Альтернативный путь если нужно
       {
         path: 'lesson/:courseId',
         element: <LessonPage /> 
