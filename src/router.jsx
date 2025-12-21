@@ -12,13 +12,13 @@ import NotFound from './pages/NotFound';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import LessonPage from './pages/LessonPage';
 
-// Обертка для компонентов (без ThemeProvider, т.к. он уже в App)
+// Обертка для компонентов
 const wrapComponent = (Component) => <Component />;
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />, // Главный компонент с Header/Footer
+    element: <App />,
     errorElement: <ErrorBoundary />,
     children: [
       {
@@ -49,17 +49,19 @@ const router = createBrowserRouter([
         path: 'security',
         element: wrapComponent(SecurityCourse),
       },
-      {
-        path: '*',
-        element: wrapComponent(NotFound),
-      },
+      // УРОКИ - ВАЖНО: должен быть после всех курсов
       {
         path: 'lesson/:courseId/:lessonId',
         element: <LessonPage />
       },
+      // Альтернативный путь если нужно
       {
-        path: 'lesson/:lessonId',
-        element: <LessonPage />
+        path: 'lesson/:courseId',
+        element: <LessonPage /> 
+      },
+      {
+        path: '*',
+        element: wrapComponent(NotFound),
       }
     ],
   },

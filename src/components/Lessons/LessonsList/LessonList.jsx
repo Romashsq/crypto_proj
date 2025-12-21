@@ -5,23 +5,29 @@ import LessonCard from './LessonCard/LessonCard';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import ResetProgress from '../ResetProgress/ResetProgress';
 import styles from './LessonList.module.css';
+// ИМПОРТИРУЕМ ЕДИНУЮ СИСТЕМУ ПРОГРЕССА
+import { 
+  getProgress,
+  markLessonCompleted,
+  isLessonCompleted,
+  getCurrentLesson,
+  getCourseProgressPercentage,
+  resetCourseProgress,
+  subscribeToProgressUpdates
+} from '../../../utils/progressStorage';
 
 const LessonList = ({ courseId = "crypto" }) => {
   const { theme } = useTheme();
   
-  // ЖЕСТКИЙ СБРОС ПРИ ЗАГРУЗКЕ - УДАЛЯЕМ ВСЕ СТАРЫЕ ДАННЫЕ
+  // ИСПОЛЬЗУЕМ ЕДИНУЮ СИСТЕМУ ПРОГРЕССА
   const [progress, setProgress] = useState(() => {
-    // СНАЧАЛА ЧИСТИМ localStorage для этого курса
-    const allProgress = JSON.parse(localStorage.getItem('courseProgress') || '{}');
-    delete allProgress[courseId];
-    localStorage.setItem('courseProgress', JSON.stringify(allProgress));
-    
-    // ВОЗВРАЩАЕМ АБСОЛЮТНЫЙ НОЛЬ
-    return {
-      completedLessons: [], // НИ ОДНОГО УРОКА НЕ ПРОЙДЕНО
-      currentLesson: 1, // ТОЛЬКО УРОК 1 ДОСТУПЕН
+    const stored = getProgress();
+    const courseProgress = stored[courseId] || {
+      completedLessons: [],
+      currentLesson: 1,
       totalLessons: 0
     };
+    return courseProgress;
   });
 
   const lessonsData = {
@@ -57,71 +63,87 @@ const LessonList = ({ courseId = "crypto" }) => {
 
   // УСТАНАВЛИВАЕМ totalLessons ПРИ ЗАГРУЗКЕ
   useEffect(() => {
-    setProgress(prev => ({
-      ...prev,
+    const stored = getProgress();
+    const courseProgress = stored[courseId] || {
+      completedLessons: [],
+      currentLesson: 1,
       totalLessons: lessons.length
-    }));
-  }, [lessons.length]);
-
-  // Сохраняем прогресс ТОЛЬКО если есть изменения
-  useEffect(() => {
-    if (progress.totalLessons > 0) {
-      const allProgress = JSON.parse(localStorage.getItem('courseProgress') || '{}');
-      allProgress[courseId] = progress;
-      localStorage.setItem('courseProgress', JSON.stringify(allProgress));
+    };
+    
+    // Обновляем totalLessons если не совпадает
+    if (courseProgress.totalLessons !== lessons.length) {
+      const updatedProgress = {
+        ...courseProgress,
+        totalLessons: lessons.length
+      };
+      
+      // Сохраняем в localStorage
+      const allProgress = { ...stored };
+      allProgress[courseId] = updatedProgress;
+      localStorage.setItem('flow_course_progress', JSON.stringify(allProgress));
+      
+      setProgress(updatedProgress);
+    } else {
+      setProgress(courseProgress);
     }
-  }, [progress, courseId]);
+  }, [courseId, lessons.length]);
 
-  // Обработчик старта урока - ПРОСТО И ЧЕТКО
+  // СЛУШАЕМ ИЗМЕНЕНИЯ ПРОГРЕССА ИЗ LessonPage
+  useEffect(() => {
+    const unsubscribe = subscribeToProgressUpdates(() => {
+      const stored = getProgress();
+      const courseProgress = stored[courseId] || {
+        completedLessons: [],
+        currentLesson: 1,
+        totalLessons: lessons.length
+      };
+      setProgress(courseProgress);
+    });
+    
+    return () => unsubscribe();
+  }, [courseId, lessons.length]);
+
+  // Обработчик старта урока - ОТМЕЧАЕМ УРОК КАК ПРОЙДЕННЫЙ
   const handleStartLesson = (lessonId) => {
     // Проверяем, доступен ли урок
     if (lessonId > progress.currentLesson) {
       return; // Ничего не делаем
     }
 
-    // Отмечаем урок как пройденный
-    if (!progress.completedLessons.includes(lessonId)) {
-      const newCompletedLessons = [...progress.completedLessons, lessonId];
-      
-      // Разблокируем следующий урок если это был текущий
-      let newCurrentLesson = progress.currentLesson;
-      if (lessonId === progress.currentLesson && lessonId < lessons.length) {
-        newCurrentLesson = lessonId + 1;
-      }
-      
-      setProgress({
-        ...progress,
-        completedLessons: newCompletedLessons,
-        currentLesson: newCurrentLesson
-      });
-    }
+    // Отмечаем урок как пройденный через единую систему
+    markLessonCompleted(courseId, lessonId);
+    
+    // Обновляем локальное состояние
+    const stored = getProgress();
+    const updatedProgress = stored[courseId];
+    setProgress(updatedProgress);
   };
 
   const handleResetProgress = () => {
-    const resetData = {
+    resetCourseProgress(courseId);
+    
+    // Обновляем локальное состояние
+    const stored = getProgress();
+    const updatedProgress = stored[courseId] || {
       completedLessons: [],
       currentLesson: 1,
       totalLessons: lessons.length
     };
-    
-    setProgress(resetData);
-    
-    const allProgress = JSON.parse(localStorage.getItem('courseProgress') || '{}');
-    allProgress[courseId] = resetData;
-    localStorage.setItem('courseProgress', JSON.stringify(allProgress));
+    setProgress(updatedProgress);
   };
 
   const getLessonStatus = (lessonId) => {
+    const completed = isLessonCompleted(courseId, lessonId);
+    const current = getCurrentLesson(courseId);
+    
     return {
-      isCompleted: progress.completedLessons.includes(lessonId),
-      isLocked: lessonId > progress.currentLesson,
-      isActive: lessonId === progress.currentLesson
+      isCompleted: completed,
+      isLocked: lessonId > current,
+      isActive: lessonId === current
     };
   };
 
-  const progressPercentage = progress.totalLessons > 0 
-    ? (progress.completedLessons.length / progress.totalLessons) * 100 
-    : 0;
+  const progressPercentage = getCourseProgressPercentage(courseId);
 
   return (
     <div className={`${styles.lessonsContainer} ${theme === 'dark' ? styles.darkMode : ''}`}>

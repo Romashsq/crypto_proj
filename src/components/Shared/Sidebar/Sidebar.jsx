@@ -1,7 +1,15 @@
-import React, { useState } from 'react';
-import styles from './Sidebar.module.css'
+import React, { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { useTheme } from '../../../Context/ThemeContext';
+import { 
+  isLessonCompleted,
+  getCurrentLesson
+} from '../../../utils/progressStorage'
+import styles from './Sidebar.module.css';
 
 const Sidebar = () => {
+  const { theme } = useTheme();
+  const { courseId = 'crypto', lessonId } = useParams();
   const [expandedSections, setExpandedSections] = useState({
     crypto: true,
     scams: false,
@@ -11,6 +19,16 @@ const Sidebar = () => {
     additional: false
   });
 
+  useEffect(() => {
+    // Автоматически раскрываем текущий курс
+    if (courseId && expandedSections[courseId] === false) {
+      setExpandedSections(prev => ({
+        ...prev,
+        [courseId]: true
+      }));
+    }
+  }, [courseId]);
+
   const toggleSection = (section) => {
     setExpandedSections(prev => ({
       ...prev,
@@ -18,84 +36,75 @@ const Sidebar = () => {
     }));
   };
 
+  // Получаем статус урока
+  const getLessonStatus = (course, lessonNumber) => {
+    if (!course || !lessonNumber) return 'locked';
+    
+    // Проверяем, что курс существует
+    const validCourses = ['crypto', 'scams', 'memecoins', 'security'];
+    if (!validCourses.includes(course)) return 'locked';
+    
+    // Проверяем выполнен ли урок
+    try {
+      const completed = isLessonCompleted(course, lessonNumber);
+      if (completed) return 'completed';
+      
+      const current = getCurrentLesson(course);
+      if (lessonNumber === parseInt(lessonId || '1')) return 'in-progress';
+      if (lessonNumber > current) return 'locked';
+      
+      return 'available';
+    } catch (error) {
+      return 'locked';
+    }
+  };
+
+  // Данные для сайдбара
   const sidebarSections = [
     {
       id: 'crypto',
       title: 'CRYPTO',
-      items: [
-        { id: 'sol', name: 'SOL', status: 'in-progress' },
-        { id: 'btc', name: 'BTC', status: 'locked' },
-        { id: 'eth', name: 'ETH', status: 'locked' },
-        { id: 'sui', name: 'SUI', status: 'locked' },
-        { id: 'base', name: 'BASE', status: 'locked' },
-        { id: 'bnb', name: 'BNB', status: 'locked' },
+      path: '/crypto', // Главная страница курса
+      lessons: [
+        { id: 1, title: 'SOL - Solana Fundamentals' },
+        { id: 2, title: 'BTC - Bitcoin Basics' },
+        { id: 3, title: 'ETH - Ethereum Ecosystem' },
+        { id: 4, title: 'SUI - New Generation' },
+        { id: 5, title: 'BASE - Layer 2' },
+        { id: 6, title: 'BNB - Ecosystem' },
       ]
     },
     {
       id: 'scams',
       title: 'SCAMS',
-      items: [
-        { id: 'pump-dump', name: 'PUMP n DUMP', status: 'locked' },
-        { id: 'bundles', name: 'BUNDLES', status: 'locked' },
-        { id: 'rugpull', name: 'RUGPULL', status: 'locked' },
-        { id: 'fishing', name: 'FISHING', status: 'locked' },
-        { id: 'calls', name: 'CALLS', status: 'locked' },
+      path: '/scams',
+      lessons: [
+        { id: 1, title: 'PUMP n DUMP Schemes' },
+        { id: 2, title: 'BUNDLES Scams' },
+        { id: 3, title: 'RUGPULL Identification' },
+        { id: 4, title: 'FISHING Attacks' },
+        { id: 5, title: 'Fake CALLS Protection' },
       ]
     },
     {
       id: 'memecoins',
       title: 'MEMECOINS',
-      items: [
-        { id: 'create-memecoins', name: 'How to create', status: 'locked' },
-        { id: 'work-memecoins', name: 'How does they work', status: 'locked' },
-        { id: 'trade-memecoins', name: 'How to trade', status: 'locked' },
-        { id: 'where-trade-memecoins', name: 'Where to trade', status: 'locked' },
-      ]
-    },
-    {
-      id: 'etc',
-      title: 'ETC',
-      items: [
-        { id: 'news', name: 'NEWS', status: 'locked' },
-        { id: 'socials', name: 'SOCIALS', status: 'locked' },
-        { id: 'slang', name: 'SLANG', status: 'locked' },
+      path: '/memecoins',
+      lessons: [
+        { id: 1, title: 'How to Create Memecoins' },
+        { id: 2, title: 'How Memecoins Work' },
+        { id: 3, title: 'How to Trade Memecoins' },
+        { id: 4, title: 'Where to Trade Memecoins' },
       ]
     },
     {
       id: 'security',
       title: 'SECURITY',
-      items: [
-        { id: 'avoid-larped', name: 'How to avoid being larped', status: 'locked' },
-        { id: 'avoid-drowned', name: 'How to avoid being drowned', status: 'locked' },
-        { id: 'security-options', name: 'Best security options', status: 'locked' },
-      ]
-    },
-    {
-      id: 'additional',
-      title: 'ADDITIONAL COURSES',
-      items: [
-        { 
-          id: 'defi', 
-          name: 'DeFi & Staking', 
-          status: 'locked',
-          subItems: [
-            { id: 'what-is-defi', name: 'What is DeFi?' },
-            { id: 'staking-basics', name: 'Staking basics' },
-            { id: 'yield-farming', name: 'Yield farming' },
-            { id: 'liquidity-pools', name: 'Liquidity pools' },
-          ]
-        },
-        { 
-          id: 'nft', 
-          name: 'NFT & Digital Art', 
-          status: 'locked',
-          subItems: [
-            { id: 'what-are-nfts', name: 'What are NFTs?' },
-            { id: 'creating-nfts', name: 'Creating NFTs' },
-            { id: 'nft-marketplaces', name: 'NFT marketplaces' },
-            { id: 'digital-art-trends', name: 'Digital art trends' },
-          ]
-        },
+      path: '/security',
+      lessons: [
+        { id: 1, title: 'Avoid Being Larped' },
+        { id: 2, title: 'Avoid Being Drowned' },
+        { id: 3, title: 'Best Security Options' },
       ]
     }
   ];
@@ -104,62 +113,111 @@ const Sidebar = () => {
     switch(status) {
       case 'in-progress': return 'fa-hourglass-half';
       case 'locked': return 'fa-lock';
-      default: return 'fa-check';
+      case 'completed': return 'fa-check-circle';
+      case 'available': return 'fa-circle';
+      default: return 'fa-circle';
     }
   };
 
-  const getStatusText = (status) => {
+  const getStatusClass = (status) => {
     switch(status) {
-      case 'in-progress': return 'In Progress';
-      case 'locked': return 'Locked';
-      default: return 'Completed';
+      case 'in-progress': return styles['statusInProgress'];
+      case 'locked': return styles['statusLocked'];
+      case 'completed': return styles['statusCompleted'];
+      default: return styles['statusAvailable'];
     }
   };
 
   return (
-    <aside className={styles.sidebar}>
-      {sidebarSections.map(section => (
-        <div 
-          key={section.id} 
-          className={`${styles.sidebarSection} ${
-            expandedSections[section.id] ? styles.active : ''
-          }`}
-        >
-          <h3 onClick={() => toggleSection(section.id)}>
-            {section.title}
-            <i className={`fas fa-chevron-${expandedSections[section.id] ? 'up' : 'down'} ${styles.toggleIcon}`}></i>
-          </h3>
-          
-          {expandedSections[section.id] && (
-            <ul className={styles.sidebarMenu}>
-              {section.items.map(item => (
-                <li key={item.id}>
-                  <a 
-                    href={`#${item.id}`} 
-                    className={item.status === 'in-progress' ? styles.active : ''}
+    <aside className={`${styles.sidebar} ${theme === 'dark' ? styles.darkMode : ''}`}>
+      {/* Кнопка Back to Courses */}
+      <div className={styles.sidebarHeader}>
+        <Link to="/courses" className={styles.backToCourses}>
+          <i className="fas fa-arrow-left"></i>
+          Back to Courses
+        </Link>
+      </div>
+      
+      {sidebarSections.map(section => {
+        const isActiveSection = expandedSections[section.id];
+        const isCurrentCourse = courseId === section.id;
+        
+        return (
+          <div 
+            key={section.id} 
+            className={`${styles.sidebarSection} ${isActiveSection ? styles.active : ''} ${isCurrentCourse ? styles.currentCourse : ''}`}
+          >
+            <h3 onClick={() => toggleSection(section.id)}>
+              {section.title}
+              <i className={`fas fa-chevron-${isActiveSection ? 'up' : 'down'} ${styles.toggleIcon}`}></i>
+            </h3>
+            
+            {isActiveSection && (
+              <ul className={styles.sidebarMenu}>
+                {/* Ссылка на главную страницу курса */}
+                <li>
+                  <Link 
+                    to={section.path}
+                    className={`${styles.menuLink} ${isCurrentCourse && !lessonId ? styles.active : ''}`}
                   >
-                    {item.name}
-                    <span className={`${styles.lessonStatus} ${styles[`status-${item.status}`]}`}>
-                      <i className={`fas ${getStatusIcon(item.status)}`}></i>
-                      {getStatusText(item.status)}
+                    <span className={styles.lessonName}>{section.title} Overview</span>
+                    <span className={`${styles.lessonStatus} ${styles.statusAvailable}`}>
+                      <i className="fas fa-list"></i>
                     </span>
-                  </a>
-                  
-                  {item.subItems && (
-                    <ul className={styles.sidebarSubmenu}>
-                      {item.subItems.map(subItem => (
-                        <li key={subItem.id}>
-                          <a href={`#${subItem.id}`}>{subItem.name}</a>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                  </Link>
                 </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      ))}
+                
+                {/* Уроки курса */}
+                {section.lessons.map(lesson => {
+                  const status = getLessonStatus(section.id, lesson.id);
+                  const isActive = isCurrentCourse && lesson.id === parseInt(lessonId || '1');
+                  
+                  return (
+                    <li key={`${section.id}-${lesson.id}`}>
+                      <Link 
+                        to={`/lesson/${section.id}/${lesson.id}`}
+                        className={`${styles.menuLink} ${isActive ? styles.active : ''}`}
+                      >
+                        <span className={styles.lessonName}>{lesson.title}</span>
+                        <span className={`${styles.lessonStatus} ${getStatusClass(status)}`}>
+                          <i className={`fas ${getStatusIcon(status)}`}></i>
+                        </span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+        );
+      })}
+      
+      {/* Дополнительные секции (Coming Soon) */}
+      <div className={styles.sidebarSection}>
+        <h3 onClick={() => toggleSection('additional')}>
+          ADDITIONAL
+          <i className={`fas fa-chevron-${expandedSections.additional ? 'up' : 'down'} ${styles.toggleIcon}`}></i>
+        </h3>
+        
+        {expandedSections.additional && (
+          <ul className={styles.sidebarMenu}>
+            <li className={styles.comingSoonItem}>
+              <span className={styles.lessonName}>DeFi & Staking</span>
+              <span className={`${styles.lessonStatus} ${styles.statusLocked}`}>
+                <i className="fas fa-lock"></i>
+                Soon
+              </span>
+            </li>
+            <li className={styles.comingSoonItem}>
+              <span className={styles.lessonName}>NFT & Digital Art</span>
+              <span className={`${styles.lessonStatus} ${styles.statusLocked}`}>
+                <i className="fas fa-lock"></i>
+                Soon
+              </span>
+            </li>
+          </ul>
+        )}
+      </div>
     </aside>
   );
 };

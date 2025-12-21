@@ -1,4 +1,3 @@
-/* LessonPage.module.css */
 :root {
   --primary: #9B2FFF;
   --white: #FFFFFF;
@@ -10,13 +9,17 @@
   --text-light: #f0f0f0;
   --shadow: 0 10px 30px rgba(155, 47, 255, 0.15);
   --transition: all 0.3s ease;
+  --header-height: 80px; /* Добавляем высоту хедера */
 }
 
+/* FIX: Основной отступ от фиксированного хедера */
 .lessonPage {
+  min-height: 100vh;
   background-color: var(--white);
   color: var(--text-dark);
   overflow-x: hidden;
   transition: var(--transition);
+  padding-top: var(--header-height); /* ФИКС: Добавляем отступ для хедера */
 }
 
 .lessonPage.darkMode {
@@ -31,20 +34,22 @@
   padding: 0 20px;
 }
 
-/* Lesson Layout */
+/* FIX: Убираем лишний padding-top */
 .lessonLayout {
   display: flex;
-  padding: 160px 0 60px;
+  padding: 40px 0 60px; /* УБИРАЕМ большой padding-top */
   gap: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-/* Sidebar */
+/* FIX: Сайдбар - опускаем ниже хедера */
 .sidebar {
   width: 320px;
   flex-shrink: 0;
   position: sticky;
-  top: 140px;
-  max-height: calc(100vh - 160px);
+  top: calc(var(--header-height) + 40px); /* ФИКС: Опускаем ниже хедера */
+  max-height: calc(100vh - var(--header-height) - 100px);
   overflow-y: auto;
   transition: var(--transition);
   background: var(--white);
@@ -57,6 +62,36 @@
   background: var(--dark-card);
 }
 
+/* FIX: Header - добавляем отступ сверху */
+.lessonHeader {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: var(--shadow);
+  position: relative;
+  margin-top: 20px;
+  border: 1px solid rgba(155, 47, 255, 0.1);
+}
+
+.lessonPage.darkMode .lessonHeader {
+  background: var(--dark-card);
+  border-color: rgba(155, 47, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+
+
+/* FIX: Toast - опускаем ниже хедера */
+.toast {
+  position: fixed;
+  top: calc(var(--header-height) + 20px); /* ФИКС: Toast ниже хедера */
+  right: 30px;
+  z-index: 9999;
+  animation: slideInRight 0.3s ease;
+}
+
+/* Остальные стили без изменений */
 .lessonMetaSidebar {
   padding: 20px;
   border-bottom: 1px solid rgba(155, 47, 255, 0.1);
@@ -183,10 +218,6 @@
   flex: 1;
 }
 
-.lessonHeader {
-  margin-bottom: 40px;
-}
-
 .lessonBreadcrumb {
   display: flex;
   align-items: center;
@@ -194,6 +225,9 @@
   margin-bottom: 20px;
   font-size: 0.9rem;
   color: #666;
+  flex-wrap: wrap;
+  position: relative;
+  padding-right: 160px; /* Место для кнопки */
 }
 
 .lessonPage.darkMode .lessonBreadcrumb {
@@ -201,7 +235,7 @@
 }
 
 .lessonBreadcrumb a {
-  color: var(--primary);
+  color: var(--white);
   text-decoration: none;
   transition: var(--transition);
 }
@@ -209,6 +243,57 @@
 .lessonBreadcrumb a:hover {
   text-decoration: underline;
 }
+
+.backToLessonsTop {
+  position: absolute;
+  right: 0;
+  top: -5px;
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 25px;
+  text-decoration: none; /* Убираем подчеркивание */
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  border: none; /* Убираем границу если есть */
+}
+
+.lessonBreadcrumb a,
+.backToLessonsTop,
+.navBtn {
+  text-decoration: none !important;
+}
+
+.lessonBreadcrumb a:hover,
+.backToLessonsTop:hover,
+.navBtn:hover {
+  text-decoration: none !important;
+}
+
+/* Убираем подчеркивание при ховере */
+.backToLessonsTop:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+  color: white;
+  text-decoration: none; /* Важно: убираем подчеркивание */
+}
+
+/* Для темной темы */
+.lessonPage.darkMode .backToLessonsTop {
+  background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+.lessonPage.darkMode .backToLessonsTop:hover {
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+  color: white;
+  text-decoration: none; }
 
 .lessonTitle {
   font-size: 2.5rem;
@@ -266,7 +351,7 @@
 
 .videoWrapper {
   position: relative;
-  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+  padding-bottom: 56.25%;
   height: 0;
 }
 
@@ -277,6 +362,68 @@
   width: 100%;
   height: 100%;
   border: none;
+}
+
+.completeButtonContainer {
+  padding: 20px;
+  text-align: center;
+  background: var(--white);
+  border-radius: 0 0 15px 15px;
+}
+
+.lessonPage.darkMode .completeButtonContainer {
+  background: var(--dark-card);
+}
+
+.completeButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+}
+
+.completeButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4);
+}
+
+.completeButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.completeButton.completed {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.completeButton.marking {
+  opacity: 0.8;
+  cursor: wait;
+}
+
+.buttonContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.completedMessage {
+  margin-top: 12px;
+  color: #10b981;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 /* Notes Section */
@@ -499,7 +646,7 @@
   color: white;
 }
 
-/* Navigation Buttons */
+/* Navigation */
 .lessonNavigation {
   display: flex;
   justify-content: space-between;
@@ -540,22 +687,69 @@
   background: rgba(155, 47, 255, 0.1);
 }
 
+.backToLessonsBottom {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  border: none !important;
+  gap: 0 !important; /* removed gap between icon and text for this button */
+  padding: 10px 16px !important; /* slightly tighter padding to match no-gap look */
+}
+
 .navBtn.disabled {
   opacity: 0.5;
   pointer-events: none;
 }
 
-/* Responsive Design */
-@media (max-width: 992px) {
+.toastContent {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 16px 24px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+  animation: fadeIn 0.3s ease;
+}
+
+.toastContent i {
+  font-size: 24px;
+}
+
+/* Dark Mode Support */
+.lessonPage.darkMode .completeButton {
+  box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
   .lessonLayout {
     flex-direction: column;
+    gap: 30px;
+    padding: 30px 20px;
   }
   
   .sidebar {
     width: 100%;
     position: static;
     max-height: none;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
   }
   
   .lessonTitle {
@@ -565,11 +759,22 @@
 
 @media (max-width: 768px) {
   .lessonLayout {
-    padding: 140px 0 40px;
+    padding: 20px 15px;
   }
   
   .lessonTitle {
     font-size: 1.8rem;
+  }
+  
+  .lessonBreadcrumb {
+    padding-right: 0;
+    font-size: 0.8rem;
+  }
+  
+  .backToLessonsTop {
+    position: static;
+    margin-top: 15px;
+    display: inline-flex;
   }
   
   .lessonMeta {
@@ -584,5 +789,10 @@
   
   .navBtn {
     justify-content: center;
+  }
+  
+  .completeButton {
+    padding: 14px 24px;
+    font-size: 14px;
   }
 }
