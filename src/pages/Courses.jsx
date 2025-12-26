@@ -133,7 +133,6 @@ const Courses = () => {
 
   return (
     <div className={`${styles.coursesPage} ${theme === 'dark' ? styles.darkTheme : ''}`}>
-      {/* Добавляем Header */}
       
       <CourseDetails />
       

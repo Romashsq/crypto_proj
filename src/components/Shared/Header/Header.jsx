@@ -1,10 +1,11 @@
-// src/components/Shared/Header/Header.jsx
+// Header.jsx
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../../Context/ThemeContext';
 import { useScrollHeader } from '../../../hooks/useScrollHeader';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './Header.module.css';
-import logo from '../../../assets/logo.png'
+import logo from '../../../assets/logo.png';
+
 const Header = () => {
   const { theme, toggleTheme } = useTheme();
   const isHeaderHidden = useScrollHeader();
@@ -12,19 +13,81 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+const handleNavigation = (e, anchor = null) => {
+  e.preventDefault();
+  
+  if (location.pathname === '/') {
+    if (anchor) {
+      setTimeout(() => {
+        const element = document.getElementById(anchor);
+        if (element) {
+          const scrollToElement = () => {
+            element.scrollIntoView({ 
+              behavior: 'smooth',
+              block: 'start'
+            });
+          };
+          
+          if (element.getBoundingClientRect().top !== 0) {
+            scrollToElement();
+          } else {
+            requestAnimationFrame(scrollToElement);
+          }
+
+          window.location.hash = anchor;
+        }
+      }, 50); 
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.location.hash = '';
+    }
+  } else {
+    navigate('/');
+    
+    let attempts = 0;
+    const maxAttempts = 20;
+    
+    const checkAndScroll = () => {
+      attempts++;
+      
+      if (anchor) {
+        const element = document.getElementById(anchor);
+        if (element) {
+          setTimeout(() => {
+            element.scrollIntoView({ 
+              behavior: 'smooth',
+              block: 'start'
+            });
+            window.location.hash = anchor;
+          }, 100); 
+        } else if (attempts < maxAttempts) {
+          setTimeout(checkAndScroll, 100);
+        } else {
+          window.location.hash = anchor;
+        }
+      }
+    };
+  
+    setTimeout(checkAndScroll, 300);
+  }
+  
+  closeMobileMenu();
+};
   const handleLogoClick = (e) => {
     e.preventDefault();
     if (location.pathname === '/') {
-      window.location.reload(); // Перезагружаем главную страницу
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.location.hash = '';
     } else {
-      navigate('/'); // Переходим на главную
+      navigate('/');
     }
   };
 
   const handleHomeClick = (e) => {
     e.preventDefault();
     if (location.pathname === '/') {
-      window.location.reload();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.location.hash = '';
     } else {
       navigate('/');
     }
@@ -43,8 +106,8 @@ const Header = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      const nav = document.querySelector('nav');
-      const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+      const nav = document.querySelector(`.${styles.nav}`);
+      const mobileMenuBtn = document.querySelector(`.${styles.mobileMenuBtn}`);
       if (isMobileMenuOpen && nav && !nav.contains(event.target) && 
           mobileMenuBtn && !mobileMenuBtn.contains(event.target)) {
         closeMobileMenu();
@@ -58,9 +121,9 @@ const Header = () => {
   return (
     <header className={`${styles.header} ${isHeaderHidden ? styles.hidden : ''}`}>
       <div className={`container ${styles.headerContainer}`}>
-       <a href="/" className={styles.logo} onClick={handleLogoClick}>
-        <img src={logo} alt="FLOW Logo" className={styles.logoImage} />
-      </a>
+        <a href="/" className={styles.logo} onClick={handleLogoClick}>
+          <img src={logo} alt="FLOW Logo" className={styles.logoImage} />
+        </a>
         
         <button className={styles.mobileMenuBtn} onClick={toggleMobileMenu}>☰</button>
         <button className={styles.closeMenu} onClick={closeMobileMenu}>✕</button>
@@ -68,16 +131,30 @@ const Header = () => {
         <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.active : ''}`}>
           <ul>
             <li><a href="/" onClick={handleHomeClick}>Home</a></li>
-            <li><a href="#learning-path" onClick={closeMobileMenu}>Learning Path</a></li>
+            <li>
+              <a 
+                href="#learning-path" 
+                onClick={(e) => handleNavigation(e, 'learning-path')}
+              >
+                Learning Path
+              </a>
+            </li>
             <li><Link to="/courses" onClick={closeMobileMenu}>Courses</Link></li>
-            <li><a href="#more-section" onClick={closeMobileMenu}>More</a></li>
+            <li>
+              <a 
+                href="#more-section" 
+                onClick={(e) => handleNavigation(e, 'more-section')}
+              >
+                More
+              </a>
+            </li>
             <li className={styles.dropdown}>
               <a href="#">Resources <i className="fas fa-chevron-down"></i></a>
               <div className={styles.dropdownContent}>
-                <a href="#crypto-courses" onClick={closeMobileMenu}>Crypto</a>
-                <a href="#scams-courses" onClick={closeMobileMenu}>Scams</a>
-                <a href="#memecoins-courses" onClick={closeMobileMenu}>Memecoins</a>
-                <a href="#security-courses" onClick={closeMobileMenu}>Security</a>
+                <Link to="/crypto" onClick={closeMobileMenu}>Crypto</Link>
+                <Link to="/scams" onClick={closeMobileMenu}>Scams</Link>
+                <Link to="/memecoins" onClick={closeMobileMenu}>Memecoins</Link>
+                <Link to="/security" onClick={closeMobileMenu}>Security</Link>
               </div>
             </li>
           </ul>

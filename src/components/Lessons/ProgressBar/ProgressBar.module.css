@@ -1,0 +1,36 @@
+/* ProgressBar.module.css или добавь в LessonPage.module.css */
+.progressBar {
+  width: 100%;
+  margin: 20px 0;
+}
+
+.progressBarContainer {
+  background: rgba(155, 47, 255, 0.05);
+  border-radius: 10px;
+  padding: 15px 20px;
+  border: 1px solid rgba(155, 47, 255, 0.1);
+}
+
+.lessonPage.darkMode .progressBarContainer {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.progressBarFill {
+  height: 8px;
+  background: linear-gradient(90deg, var(--primary) 0%, #764ba2 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progressBarText {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.lessonPage.darkMode .progressBarText {
+  color: #aaa;
+}

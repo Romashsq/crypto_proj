@@ -1,17 +1,30 @@
 import React, { useRef, useEffect } from 'react';
 import { useScrollAnimation } from '../../../hooks/useScrollAnimation';
-import {useTheme} from '../../../Context/ThemeContext'
+import { useTheme } from '../../../Context/ThemeContext';
 import styles from './Hero.module.css';
+
+let globalStatsAnimated = false;
 
 const Hero = () => {
   const sectionRef = useRef(null);
   const { theme } = useTheme();
   
-  // Передаем ref и класс анимации в хук
   useScrollAnimation(sectionRef, styles.animated);
 
   useEffect(() => {
+    if (globalStatsAnimated) {
+      const stats = document.querySelectorAll(`.${styles.statNumber}`);
+      stats.forEach(stat => {
+        const target = parseInt(stat.getAttribute('data-count'));
+        stat.textContent = target;
+      });
+      return;
+    }
+
     const animateStats = () => {
+      if (globalStatsAnimated) return;
+      globalStatsAnimated = true;
+      
       const stats = document.querySelectorAll(`.${styles.statNumber}`);
       stats.forEach(stat => {
         const target = parseInt(stat.getAttribute('data-count'));
@@ -32,7 +45,7 @@ const Hero = () => {
 
     const heroObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !globalStatsAnimated) {
           setTimeout(animateStats, 500);
           heroObserver.unobserve(entry.target);
         }
@@ -42,50 +55,37 @@ const Hero = () => {
     const heroSection = document.querySelector(`.${styles.heroProfessional}`);
     if (heroSection) heroObserver.observe(heroSection);
 
-    // Cleanup
     return () => {
       if (heroSection) heroObserver.unobserve(heroSection);
     };
-  }, []);
+  }, []); 
 
-  const handleGetStartedClick = (e) => {
-    e.preventDefault();
-    const targetId = e.currentTarget.getAttribute('href');
+const handleGetStartedClick = (e) => {
+  e.preventDefault();
+  const targetId = e.currentTarget.getAttribute('href');
+  
+  const scrollToTarget = () => {
     const targetElement = document.querySelector(targetId);
-    
     if (targetElement) {
-      document.body.style.overflow = 'hidden';
+      const rect = targetElement.getBoundingClientRect();
+      const isVisible = rect.top >= 0 && rect.bottom <= window.innerHeight;
       
-      const targetPosition = targetElement.offsetTop;
-      const startPosition = window.pageYOffset;
-      const distance = targetPosition - startPosition;
-      const duration = 1500;
-      let startTime = null;
-      
-      function animation(currentTime) {
-        if (!startTime) startTime = currentTime;
-        const timeElapsed = currentTime - startTime;
-        const progress = Math.min(timeElapsed / duration, 1);
-        
-        const ease = progress < 0.5 
-          ? 4 * progress * progress * progress 
-          : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-        
-        window.scrollTo(0, startPosition + distance * ease);
-        
-        if (timeElapsed < duration) {
-          requestAnimationFrame(animation);
-        } else {
-          document.body.style.overflow = '';
-        }
+      if (!isVisible) {
+        targetElement.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
       }
       
-      requestAnimationFrame(animation);
-      window.history.pushState(null, null, targetId);
+      window.location.hash = targetId.replace('#', '');
+    } else {
+      setTimeout(scrollToTarget, 50);
     }
   };
+  
+  scrollToTarget();
+};
 
-  // Добавляем класс темы в зависимости от состояния
   const themeClass = theme === 'light' ? styles.lightMode : '';
 
   return (
@@ -121,26 +121,7 @@ const Hero = () => {
               <span className={styles.btnArrow}>→</span>
               <div className={styles.btnShine}></div>
             </a>
-            <div className={styles.heroStats}>
-              <div className={styles.stat}>
-                <span className={styles.statNumber} data-count="50">0</span>
-                <span className={styles.statLabel}>Courses</span>
-              </div>
-              <div className={styles.stat}>
-                <span className={styles.statNumber} data-count="1000">0</span>
-                <span className={styles.statLabel}>Students</span>
-              </div>
-              <div className={styles.stat}>
-                <span className={styles.statNumber} data-count="99">0</span>
-                <span className={styles.statLabel}>% Success</span>
-              </div>
-            </div>
           </div>
-        </div>
-        
-        <div className={styles.scrollIndicatorHero}>
-          <div className={styles.scrollLine}></div>
-          <span>Explore Learning Path</span>
         </div>
       </div>
     </section>

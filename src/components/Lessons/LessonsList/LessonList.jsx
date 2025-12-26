@@ -1,3 +1,4 @@
+// src/components/Main/LessonList/LessonList.jsx
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../../Context/ThemeContext';
 import { Link } from 'react-router-dom';
@@ -5,7 +6,12 @@ import LessonCard from './LessonCard/LessonCard';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import ResetProgress from '../ResetProgress/ResetProgress';
 import styles from './LessonList.module.css';
-// ИМПОРТИРУЕМ ЕДИНУЮ СИСТЕМУ ПРОГРЕССА
+// ИМПОРТИРУЕМ ДАННЫЕ ИЗ НОВОГО ФАЙЛА
+import { 
+  lessonsData, 
+  getTotalLessons 
+} from '../../../components/Lessons/lessonData';
+// ИМПОРТИРУЕМ ПРОГРЕСС
 import { 
   getProgress,
   markLessonCompleted,
@@ -19,49 +25,20 @@ import {
 const LessonList = ({ courseId = "crypto" }) => {
   const { theme } = useTheme();
   
-  // ИСПОЛЬЗУЕМ ЕДИНУЮ СИСТЕМУ ПРОГРЕССА
+  // БЕРЕМ УРОКИ ИЗ НОВОГО ФАЙЛА
+  const lessons = lessonsData[courseId] || [];
+  
+  // ПРОГРЕСС (остается как было)
   const [progress, setProgress] = useState(() => {
     const stored = getProgress();
     const courseProgress = stored[courseId] || {
       completedLessons: [],
       currentLesson: 1,
-      totalLessons: 0
+      totalLessons: lessons.length
     };
     return courseProgress;
   });
 
-  const lessonsData = {
-    crypto: [
-      { id: 1, title: "SOL - Solana Fundamentals", duration: "45 min", level: "Beginner" },
-      { id: 2, title: "BTC - Bitcoin Basics", duration: "35 min", level: "Beginner" },
-      { id: 3, title: "ETH - Ethereum Ecosystem", duration: "50 min", level: "Intermediate" },
-      { id: 4, title: "SUI - New Generation Blockchain", duration: "30 min", level: "Intermediate" },
-      { id: 5, title: "BASE - Coinbase Layer 2", duration: "25 min", level: "Intermediate" },
-      { id: 6, title: "BNB - Binance Ecosystem", duration: "40 min", level: "Intermediate" }
-    ],
-    scams: [
-      { id: 1, title: "PUMP n DUMP Schemes", duration: "30 min", level: "Beginner" },
-      { id: 2, title: "BUNDLES Scams", duration: "25 min", level: "Beginner" },
-      { id: 3, title: "RUGPULL Identification", duration: "35 min", level: "Intermediate" },
-      { id: 4, title: "FISHING Attacks", duration: "20 min", level: "Intermediate" },
-      { id: 5, title: "Fake CALLS Protection", duration: "15 min", level: "Beginner" }
-    ],
-    memecoins: [
-      { id: 1, title: "How to Create Memecoins", duration: "40 min", level: "Beginner" },
-      { id: 2, title: "How Memecoins Work", duration: "35 min", level: "Beginner" },
-      { id: 3, title: "How to Trade Memecoins", duration: "50 min", level: "Intermediate" },
-      { id: 4, title: "Where to Trade Memecoins", duration: "25 min", level: "Intermediate" }
-    ],
-    security: [
-      { id: 1, title: "How to Avoid Being Larped", duration: "30 min", level: "Beginner" },
-      { id: 2, title: "How to Avoid Being Drowned", duration: "25 min", level: "Beginner" },
-      { id: 3, title: "Best Security Options", duration: "40 min", level: "Intermediate" }
-    ]
-  };
-
-  const lessons = lessonsData[courseId] || lessonsData.crypto;
-
-  // УСТАНАВЛИВАЕМ totalLessons ПРИ ЗАГРУЗКЕ
   useEffect(() => {
     const stored = getProgress();
     const courseProgress = stored[courseId] || {
@@ -70,14 +47,12 @@ const LessonList = ({ courseId = "crypto" }) => {
       totalLessons: lessons.length
     };
     
-    // Обновляем totalLessons если не совпадает
     if (courseProgress.totalLessons !== lessons.length) {
       const updatedProgress = {
         ...courseProgress,
         totalLessons: lessons.length
       };
       
-      // Сохраняем в localStorage
       const allProgress = { ...stored };
       allProgress[courseId] = updatedProgress;
       localStorage.setItem('flow_course_progress', JSON.stringify(allProgress));
@@ -88,7 +63,7 @@ const LessonList = ({ courseId = "crypto" }) => {
     }
   }, [courseId, lessons.length]);
 
-  // СЛУШАЕМ ИЗМЕНЕНИЯ ПРОГРЕССА ИЗ LessonPage
+  // СЛУШАЕМ ИЗМЕНЕНИЯ ПРОГРЕССА
   useEffect(() => {
     const unsubscribe = subscribeToProgressUpdates(() => {
       const stored = getProgress();
@@ -103,17 +78,14 @@ const LessonList = ({ courseId = "crypto" }) => {
     return () => unsubscribe();
   }, [courseId, lessons.length]);
 
-  // Обработчик старта урока - ОТМЕЧАЕМ УРОК КАК ПРОЙДЕННЫЙ
+  // Обработчик старта урока
   const handleStartLesson = (lessonId) => {
-    // Проверяем, доступен ли урок
     if (lessonId > progress.currentLesson) {
-      return; // Ничего не делаем
+      return;
     }
 
-    // Отмечаем урок как пройденный через единую систему
     markLessonCompleted(courseId, lessonId);
     
-    // Обновляем локальное состояние
     const stored = getProgress();
     const updatedProgress = stored[courseId];
     setProgress(updatedProgress);
@@ -122,7 +94,6 @@ const LessonList = ({ courseId = "crypto" }) => {
   const handleResetProgress = () => {
     resetCourseProgress(courseId);
     
-    // Обновляем локальное состояние
     const stored = getProgress();
     const updatedProgress = stored[courseId] || {
       completedLessons: [],
@@ -145,6 +116,16 @@ const LessonList = ({ courseId = "crypto" }) => {
 
   const progressPercentage = getCourseProgressPercentage(courseId);
 
+  const getCourseTitle = () => {
+    const titles = {
+      crypto: 'Crypto Fundamentals',
+      scams: 'Scams Protection',
+      memecoins: 'Memecoins',
+      security: 'Security Essentials'
+    };
+    return titles[courseId] || 'Crypto Fundamentals';
+  };
+
   return (
     <div className={`${styles.lessonsContainer} ${theme === 'dark' ? styles.darkMode : ''}`}>
       <div className={styles.courseHeader}>
@@ -154,9 +135,7 @@ const LessonList = ({ courseId = "crypto" }) => {
         </Link>
         
         <h1 className={styles.courseTitle}>
-          {courseId === 'crypto' ? 'Crypto Fundamentals' : 
-           courseId === 'scams' ? 'Scams Protection' :
-           courseId === 'memecoins' ? 'Memecoins' : 'Security Essentials'}
+          {getCourseTitle()}
         </h1>
         
         <div className={styles.courseStats}>
@@ -177,6 +156,7 @@ const LessonList = ({ courseId = "crypto" }) => {
           </div>
         </div>
       </div>
+      
       <ProgressBar progress={progressPercentage} />
 
       <div className={styles.lessonsList}>
@@ -198,6 +178,7 @@ const LessonList = ({ courseId = "crypto" }) => {
           );
         })}
       </div>
+      
       <div className={styles.actionsContainer}>
         <Link to="/courses" className={styles.backToCourses}>
           <i className="fas fa-arrow-left"></i>

@@ -6,11 +6,10 @@ import ProgressBar from '../components/Lessons/ProgressBar/ProgressBar';
 import { 
   markLessonCompleted, 
   isLessonCompleted, 
-  getCurrentLesson,
   getCourseProgressPercentage
 } from '../utils/progressStorage';
 import Sidebar from '../components/Shared/Sidebar/Sidebar';
-import { getLessonData, getTotalLessons, hasNextLesson, getNextLessonTitle } from '../components/Lessons/lessonContent'
+import { getLessonData, getTotalLessons, hasNextLesson, getNextLessonTitle } from '../components/Lessons/lessonData';
 
 const Toast = ({ message, isVisible, duration = 5000 }) => {
   const [visible, setVisible] = useState(isVisible);
@@ -45,6 +44,7 @@ const LessonPage = () => {
   
   const [notesOpen, setNotesOpen] = useState(false);
   const [materialsOpen, setMaterialsOpen] = useState(false);
+  const [detailsOpen, setDetailsOpen] = useState(true);
   
   const [isCompleted, setIsCompleted] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -55,7 +55,6 @@ const LessonPage = () => {
   const nextLessonNum = lessonNum + 1;
   const prevLessonNum = lessonNum - 1;
 
-  // ПОЛУЧАЕМ ДАННЫЕ УРОКА ДИНАМИЧЕСКИ ИЗ ВНЕШНЕГО ФАЙЛА
   const lessonData = getLessonData(courseId, lessonNum);
 
   useEffect(() => {
@@ -108,6 +107,28 @@ const LessonPage = () => {
   const nextLessonExists = hasNextLesson(courseId, lessonNum);
   const nextTitle = getNextLessonTitle(courseId, lessonNum);
 
+  if (!lessonData) {
+    return (
+      <div className={`${styles.lessonPage} ${theme === 'dark' ? styles.darkMode : ''}`}>
+        <div className={styles.lessonLayout}>
+          <div className={styles.sidebarContainer}>
+            <Sidebar />
+          </div>
+          <main className={styles.lessonContent}>
+            <div className={styles.lessonHeader}>
+              <h1>Lesson Not Found</h1>
+              <p>The lesson you're looking for doesn't exist.</p>
+              <Link to={`/${courseId}`} className={styles.backToLessonsTop}>
+                <i className="fas fa-arrow-left"></i>
+                Back to Lessons
+              </Link>
+            </div>
+          </main>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`${styles.lessonPage} ${theme === 'dark' ? styles.darkMode : ''}`}>
       <Toast 
@@ -128,17 +149,20 @@ const LessonPage = () => {
               <i className="fas fa-chevron-right"></i>
               <Link to={`/${courseId}`}>{getCourseTitle()}</Link>
               <i className="fas fa-chevron-right"></i>
-              <span>Lesson {lessonNum}: {lessonData.title}</span>
+              <span>Lesson {lessonNum}</span>
               
-              <Link to={`/${courseId}`} className={styles.backToLessonsTop}>
-                <i className="fas fa-arrow-left"></i>
-                Back to Lessons
-              </Link>
+              <div className={styles.headerRight}>
+                <Link to={`/${courseId}`} className={styles.backToLessonsTop}>
+                  <i className="fas fa-arrow-left"></i>
+                  Back to Lessons
+                </Link>
+              </div>
             </div>
             
-            <h1 className={styles.lessonTitle}>
-              Lesson {lessonNum}: {lessonData.title}
-            </h1>
+            <div className={styles.lessonTitleContainer}>
+              <div className={styles.lessonNumber}>Lesson {lessonNum}</div>
+              <h1 className={styles.lessonTitle}>{lessonData.title}</h1>
+            </div>
             
             <p className={styles.lessonDescription}>
               {lessonData.description}
@@ -150,24 +174,29 @@ const LessonPage = () => {
                 <span>{lessonData.duration}</span>
               </div>
               <div className={styles.metaItem}>
-                <i className="far fa-play-circle"></i>
-                <span>{lessonData.type}</span>
-              </div>
-              <div className={styles.metaItem}>
                 <i className="fas fa-signal"></i>
                 <span>{lessonData.level} Level</span>
               </div>
               <div className={styles.metaItem}>
                 <i className="fas fa-hashtag"></i>
-                <span>Lesson {lessonNum}/{totalLessons}</span>
+                <span>{lessonNum}/{totalLessons} Lessons</span>
               </div>
             </div>
           </div>
 
-          <ProgressBar progress={courseProgress} />
-
+          {/* ВИДЕО */}
           <div className={styles.videoSection}>
             <div className={styles.videoContainer}>
+              <div className={styles.videoHeader}>
+                <h3 className={styles.videoTitle}>
+                  <i className="fas fa-play-circle"></i>
+                  Video Lesson
+                </h3>
+                <div className={styles.videoBadge}>
+                  <i className="fas fa-play"></i>
+                  Watch Now
+                </div>
+              </div>
               <div className={styles.videoWrapper}>
                 <iframe 
                   src={`https://www.youtube.com/embed/${lessonData.youtubeId}`}
@@ -177,7 +206,19 @@ const LessonPage = () => {
                   allowFullScreen
                 ></iframe>
               </div>
-              
+            </div>
+            
+            {/* ПРОГРЕСС БАР */}
+            <div className={styles.progressSection}>
+              <div className={styles.progressHeader}>
+                <h4>Course Progress</h4>
+                <span>{Math.round(courseProgress)}% Complete</span>
+              </div>
+              <ProgressBar progress={courseProgress} />
+            </div>
+            
+            {/* КНОПКА MARK AS COMPLETE */}
+            <div className={styles.completeSection}>
               <div className={styles.completeButtonContainer}>
                 <button 
                   className={`${styles.completeButton} ${
@@ -187,34 +228,76 @@ const LessonPage = () => {
                   disabled={isCompleted || isMarking}
                 >
                   <span className={styles.buttonContent}>
-                    <i className={isCompleted ? "fas fa-check-circle" : "far fa-circle"}></i>
-                    <span>
+                    <span className={styles.buttonIcon}>
+                      {isCompleted ? (
+                        <i className="fas fa-check-circle"></i>
+                      ) : (
+                        <i className="far fa-circle"></i>
+                      )}
+                    </span>
+                    <span className={styles.buttonText}>
                       {isCompleted ? 'Lesson Completed' : 
                        isMarking ? 'Marking...' : 'Mark as Complete'}
                     </span>
                   </span>
                   {!isCompleted && !isMarking && (
-                    <i className="fas fa-arrow-right"></i>
+                    <span className={styles.buttonArrow}>
+                      <i className="fas fa-arrow-right"></i>
+                    </span>
                   )}
                 </button>
                 
                 {isCompleted && (
                   <div className={styles.completedMessage}>
-                    <i className="fas fa-check"></i>
-                    You've completed this lesson
+                    <div className={styles.messageIcon}>
+                      <i className="fas fa-check"></i>
+                    </div>
+                    <div className={styles.messageText}>
+                      <span className={styles.messageTitle}>Great job!</span>
+                      <span className={styles.messageSubtitle}>Lesson marked as complete</span>
+                    </div>
                   </div>
                 )}
               </div>
             </div>
+            
+            {/* LESSON DETAILS */}
+            <div className={styles.lessonDetailsSection}>
+              <div 
+                className={styles.detailsToggle} 
+                onClick={() => setDetailsOpen(!detailsOpen)}
+              >
+                <h3 className={styles.detailsTitle}>
+                  <i className="fas fa-info-circle"></i>
+                  Lesson Details & Key Concepts
+                </h3>
+                <i className={`fas fa-chevron-down ${styles.toggleIcon}`} 
+                   style={{ transform: detailsOpen ? 'rotate(180deg)' : 'rotate(0)' }}
+                ></i>
+              </div>
+              
+              <div className={`${styles.detailsContent} ${detailsOpen ? styles.active : ''}`}>
+                <div className={styles.shortDescription}>
+                  <p>{lessonData.shortDescription}</p>
+                </div>
+                
+                <div className={styles.fullDescription}>
+                  <pre className={styles.descriptionText}>
+                    {lessonData.fullDescription}
+                  </pre>
+                </div>
+              </div>
+            </div>
           </div>
 
+          {/* ЗАМЕТКИ */}
           {lessonData.notes && lessonData.notes.length > 0 && (
             <div className={styles.notesSection}>
               <div 
                 className={styles.notesToggle} 
                 onClick={() => setNotesOpen(!notesOpen)}
               >
-                <h3>
+                <h3 className={styles.notesTitle}>
                   <i className="fas fa-sticky-note"></i>
                   Lesson Notes & Key Takeaways
                 </h3>
@@ -226,8 +309,11 @@ const LessonPage = () => {
                 <div className={styles.notesList}>
                   {lessonData.notes.map(note => (
                     <div key={note.id} className={styles.noteItem}>
-                      <h4>{note.title}</h4>
-                      <p>{note.content}</p>
+                      <div className={styles.noteNumber}>{note.id}</div>
+                      <div className={styles.noteContent}>
+                        <h4>{note.title}</h4>
+                        <p>{note.content}</p>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -235,13 +321,14 @@ const LessonPage = () => {
             </div>
           )}
 
+          {/* МАТЕРИАЛЫ */}
           {lessonData.materials && lessonData.materials.length > 0 && (
             <div className={styles.materialsSection}>
               <div 
                 className={styles.materialsToggle} 
                 onClick={() => setMaterialsOpen(!materialsOpen)}
               >
-                <h3>
+                <h3 className={styles.materialsTitle}>
                   <i className="fas fa-download"></i>
                   Download Materials & Resources
                 </h3>
@@ -258,9 +345,11 @@ const LessonPage = () => {
                       </div>
                       <div className={styles.materialInfo}>
                         <h4>{material.title}</h4>
-                        <p>{material.format} • {material.size}</p>
+                        <p className={styles.materialMeta}>{material.format} • {material.size}</p>
                       </div>
-                      <a href="#" className={styles.materialDownload}>Download</a>
+                      <a href="#" className={styles.materialDownload}>
+                        <i className="fas fa-download"></i>
+                      </a>
                     </div>
                   ))}
                 </div>
@@ -268,6 +357,7 @@ const LessonPage = () => {
             </div>
           )}
 
+          {/* НАВИГАЦИЯ (ВОЗВРАЩАЕМ СТАРЫЕ КНОПКИ) */}
           <div className={styles.lessonNavigation}>
             <Link 
               to={hasPrevLesson() ? `/lesson/${courseId}/${prevLessonNum}` : "#"}

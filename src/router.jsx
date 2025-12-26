@@ -1,4 +1,5 @@
-import { createHashRouter, RouterProvider } from 'react-router-dom'; // ← ИЗМЕНИЛ ТУТ
+// router.js
+import { createHashRouter, RouterProvider } from 'react-router-dom';
 import React from 'react';
 import { ThemeProvider } from './Context/ThemeContext';
 import App from './App';
@@ -12,10 +13,9 @@ import NotFound from './pages/NotFound';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import LessonPage from './pages/LessonPage';
 
-// Обертка для компонентов
 const wrapComponent = (Component) => <Component />;
 
-const router = createHashRouter([ // ← И ИЗМЕНИЛ ТУТ
+const router = createHashRouter([
   {
     path: '/',
     element: <App />,
@@ -59,7 +59,7 @@ const router = createHashRouter([ // ← И ИЗМЕНИЛ ТУТ
       },
       {
         path: '*',
-        element: wrapComponent(NotFound),
+        element: wrapComponent(Home), 
       }
     ],
   },

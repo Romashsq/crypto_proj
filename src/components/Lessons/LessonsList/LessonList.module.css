@@ -39,7 +39,6 @@
 .backButton {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
   padding: 10px 20px;
   background: rgba(155, 47, 255, 0.1);
   border-radius: 10px;
@@ -243,7 +242,6 @@
 .backToCourses {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
   padding: 14px 28px;
   background: linear-gradient(135deg, rgba(155, 47, 255, 0.1) 0%, rgba(155, 47, 255, 0.2) 100%);
   border-radius: 12px;
@@ -268,7 +266,6 @@
 .resetButton {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
   padding: 14px 28px;
   background: linear-gradient(135deg, rgba(255, 59, 48, 0.1) 0%, rgba(255, 59, 48, 0.2) 100%);
   border-radius: 12px;
