@@ -1,7 +1,7 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './Context/ThemeContext';
-import Header from './components/Shared/Header/Header';
+import Header from './components/Shared/Header/Header'
 import Footer from './components/Shared/Footer/Footer';
 import ScrollToTop from './components/Shared/ScrollTop/ScrollToTop';
 import './styles/global.css';
@@ -9,15 +9,26 @@ import './styles/variables.css';
 import './styles/animations.css';
 
 function App() {
+  const location = useLocation();
+  
+  // Список путей без хедера и футера
+  const noLayoutPaths = ['/signup', '/login'];
+  
+  // Проверяем текущий путь
+  const shouldShowLayout = !noLayoutPaths.some(path => 
+    location.pathname === path || 
+    location.pathname.startsWith(path + '/')
+  );
+
   return (
     <ThemeProvider>
       <div className="app">
         <ScrollToTop />
-        <Header />
+        {shouldShowLayout && <Header />}
         <main className="main-content">
           <Outlet />
         </main>
-        <Footer />
+        {shouldShowLayout && <Footer />}
       </div>
     </ThemeProvider>
   );

@@ -114,11 +114,6 @@ const CoursesCard = ({ course, index }) => {
               <i className="fas fa-star"></i> 4.9
             </span>
           </div>
-          
-          <button className={styles.enrollButton}>
-            Enroll Now
-            <i className="fas fa-arrow-right"></i>
-          </button>
         </div>
       </div>
     </div>

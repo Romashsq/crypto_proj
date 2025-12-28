@@ -1,4 +1,17 @@
 /* Header.module.css - НОРМАЛЬНЫЙ ГРАДИЕНТ БЕЗ ПОЛОСОК */
+:root {
+  --primary: #9B2FFF;
+  --white: #FFFFFF;
+  --gradient: linear-gradient(135deg, var(--white) 0%, var(--primary) 100%);
+  --light-bg: #f9f7ff;
+  --dark-bg: #0f0f23;
+  --dark-card: #1a1a2e;
+  --text-dark: #333;
+  --text-light: #f0f0f0;
+  --shadow: 0 10px 30px rgba(155, 47, 255, 0.15);
+  --transition: all 0.3s ease;
+}
+
 
 .header {
   position: fixed;
@@ -137,23 +150,25 @@
 }
 
 .themeToggle {
-  background: none;
+  background: white;
   border: none;
   cursor: pointer;
-  font-size: 20px;
   color: #333;
   transition: all 0.3s ease;
-  margin-left: 20px;
   padding: 8px;
-  border-radius: 8px;
-}
-
-:global(.dark-mode) .themeToggle {
-  color: #f0f0f0;
+  border-radius: 15px;
 }
 
 .themeToggle:hover {
-  background: rgba(155, 47, 255, 0.1);
+  background: linear-gradient(135deg, var(--white) 0%, var(--primary) 30%, var(--primary) 100%);
+}
+
+:global(.dark-mode) .themeToggle:hover {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--white) 30%, var(--white) 100%);
+}
+
+.themeToggle img {
+  color: #FFFFFF;
 }
 
 .mobileMenuBtn,
@@ -223,5 +238,130 @@
 
   .dropdownContent a {
     padding: 8px 0;
+  }
+}
+
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Кнопка Sign Up */
+.signUpBtn {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #9B2FFF, #667eea);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(155, 47, 255, 0.2);
+}
+
+.signUpBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(155, 47, 255, 0.3);
+  background: linear-gradient(135deg, #8a27e6, #5b6ee8);
+}
+
+/* Кнопки-иконки (Help, About, Theme) */
+.iconBtn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(155, 47, 255, 0.1);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-dark);
+}
+
+.dark-mode .iconBtn {
+  background: rgba(155, 47, 255, 0.2);
+  color: var(--text-light);
+}
+
+.iconBtn:hover {
+  background: rgba(155, 47, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(155, 47, 255, 0.15);
+}
+
+.dark-mode .iconBtn:hover {
+  background: rgba(155, 47, 255, 0.3);
+}
+
+.iconBtnIcon {
+  transition: transform 0.3s ease;
+}
+
+.iconBtn:hover .iconBtnIcon {
+  transform: scale(1.1);
+}
+
+/* Специфичные стили для Help и About */
+.helpBtn {
+  color: #9B2FFF;
+}
+
+.aboutBtn {
+  color: #667eea;
+}
+
+/* Переключатель темы */
+.themeToggle {
+  color: var(--text-dark);
+}
+
+.dark-mode .themeToggle {
+  color: var(--text-light);
+}
+
+.themeIcon {
+  transition: transform 0.5s ease;
+}
+
+.themeToggle:hover .themeIcon {
+  transform: rotate(30deg);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .headerActions {
+    gap: 8px;
+  }
+  
+  .signUpBtn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+  
+  .iconBtn {
+    width: 36px;
+    height: 36px;
+  }
+  
+  /* На мобильных скрываем Help и About */
+  .helpBtn,
+  .aboutBtn {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .signUpBtn span {
+    display: none;
+  }
+  
+  .signUpBtn::after {
+    content: 'Sign Up';
   }
 }

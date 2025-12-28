@@ -1,10 +1,11 @@
-// Header.jsx
+// src/components/Shared/Header/Header.jsx
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../../Context/ThemeContext';
 import { useScrollHeader } from '../../../hooks/useScrollHeader';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './Header.module.css';
 import logo from '../../../assets/logo.png';
+import { Moon, Sun, Question, Info } from '../../../assets/Icons'
 
 const Header = () => {
   const { theme, toggleTheme } = useTheme();
@@ -13,66 +14,67 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-const handleNavigation = (e, anchor = null) => {
-  e.preventDefault();
-  
-  if (location.pathname === '/') {
-    if (anchor) {
-      setTimeout(() => {
-        const element = document.getElementById(anchor);
-        if (element) {
-          const scrollToElement = () => {
-            element.scrollIntoView({ 
-              behavior: 'smooth',
-              block: 'start'
-            });
-          };
-          
-          if (element.getBoundingClientRect().top !== 0) {
-            scrollToElement();
-          } else {
-            requestAnimationFrame(scrollToElement);
-          }
-
-          window.location.hash = anchor;
-        }
-      }, 50); 
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      window.location.hash = '';
-    }
-  } else {
-    navigate('/');
+  const handleNavigation = (e, anchor = null) => {
+    e.preventDefault();
     
-    let attempts = 0;
-    const maxAttempts = 20;
-    
-    const checkAndScroll = () => {
-      attempts++;
-      
+    if (location.pathname === '/') {
       if (anchor) {
-        const element = document.getElementById(anchor);
-        if (element) {
-          setTimeout(() => {
-            element.scrollIntoView({ 
-              behavior: 'smooth',
-              block: 'start'
-            });
+        setTimeout(() => {
+          const element = document.getElementById(anchor);
+          if (element) {
+            const scrollToElement = () => {
+              element.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+              });
+            };
+            
+            if (element.getBoundingClientRect().top !== 0) {
+              scrollToElement();
+            } else {
+              requestAnimationFrame(scrollToElement);
+            }
+
             window.location.hash = anchor;
-          }, 100); 
-        } else if (attempts < maxAttempts) {
-          setTimeout(checkAndScroll, 100);
-        } else {
-          window.location.hash = anchor;
-        }
+          }
+        }, 50); 
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.location.hash = '';
       }
-    };
-  
-    setTimeout(checkAndScroll, 300);
-  }
-  
-  closeMobileMenu();
-};
+    } else {
+      navigate('/');
+      
+      let attempts = 0;
+      const maxAttempts = 20;
+      
+      const checkAndScroll = () => {
+        attempts++;
+        
+        if (anchor) {
+          const element = document.getElementById(anchor);
+          if (element) {
+            setTimeout(() => {
+              element.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+              });
+              window.location.hash = anchor;
+            }, 100); 
+          } else if (attempts < maxAttempts) {
+            setTimeout(checkAndScroll, 100);
+          } else {
+            window.location.hash = anchor;
+          }
+        }
+      };
+    
+      setTimeout(checkAndScroll, 300);
+    }
+    
+    closeMobileMenu();
+  };
+
   const handleLogoClick = (e) => {
     e.preventDefault();
     if (location.pathname === '/') {
@@ -104,6 +106,18 @@ const handleNavigation = (e, anchor = null) => {
     document.body.style.overflow = '';
   };
 
+  const handleSignUp = () => {
+    navigate('/signup');
+  };
+
+  const handleHelp = () => {
+    alert('Help/FAQ page would open here');
+  };
+
+  const handleAbout = () => {
+    alert('About page would open here');
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       const nav = document.querySelector(`.${styles.nav}`);
@@ -125,8 +139,18 @@ const handleNavigation = (e, anchor = null) => {
           <img src={logo} alt="FLOW Logo" className={styles.logoImage} />
         </a>
         
-        <button className={styles.mobileMenuBtn} onClick={toggleMobileMenu}>☰</button>
-        <button className={styles.closeMenu} onClick={closeMobileMenu}>✕</button>
+        <button 
+          className={styles.mobileMenuBtn} 
+          onClick={toggleMobileMenu}
+          aria-label={isMobileMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
+          aria-expanded={isMobileMenuOpen}
+        >
+          <span className={styles.menuIcon}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
         
         <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.active : ''}`}>
           <ul>
@@ -149,7 +173,18 @@ const handleNavigation = (e, anchor = null) => {
               </a>
             </li>
             <li className={styles.dropdown}>
-              <a href="#">Resources <i className="fas fa-chevron-down"></i></a>
+              <a href="#">
+                Resources 
+                <svg 
+                  width="12" 
+                  height="12" 
+                  viewBox="0 0 24 24" 
+                  fill="currentColor"
+                  className={styles.dropdownIcon}
+                >
+                  <path d="M7 10l5 5 5-5z"/>
+                </svg>
+              </a>
               <div className={styles.dropdownContent}>
                 <Link to="/crypto" onClick={closeMobileMenu}>Crypto</Link>
                 <Link to="/scams" onClick={closeMobileMenu}>Scams</Link>
@@ -160,9 +195,37 @@ const handleNavigation = (e, anchor = null) => {
           </ul>
         </nav>
         
-        <button className={styles.themeToggle} onClick={toggleTheme}>
-          {theme === 'light' ? '🌙' : '☀️'}
-        </button>
+        <div className={styles.headerActions}>
+          {/* Кнопка Sign Up */}
+          <button 
+            className={styles.signUpBtn}
+            onClick={handleSignUp}
+          >
+            Sign up
+          </button>
+          
+          
+          <button 
+            className={`${styles.themeToggle} ${styles.iconBtn}`} 
+            onClick={toggleTheme}
+            aria-label={`Переключить на ${theme === 'light' ? 'темную' : 'светлую'} тему`}
+            title={`${theme === 'light' ? 'Темная тема' : 'Светлая тема'}`}
+          >
+            {theme === 'light' ? (
+              <Moon 
+                width={22} 
+                height={22} 
+                className={styles.themeIcon}
+              />
+            ) : (
+              <Sun 
+                width={22} 
+                height={22} 
+                className={styles.themeIcon}
+              />
+            )}
+          </button>
+        </div>
       </div>
     </header>
   );

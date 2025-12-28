@@ -1,12 +1,17 @@
+// src/components/Layout/Layout.jsx
 import React from 'react';
-import { Outlet } from 'react-router-dom';
-import { ThemeProvider } from '../../Context/ThemeContext';
+import Header from '../Shared/Header/Header';
+import Footer from '../Shared/Footer/Footer';
 
-const Layout = () => {
+const Layout = ({ children, showHeader = true, showFooter = true }) => {
   return (
-    <ThemeProvider>
-      <Outlet />
-    </ThemeProvider>
+    <div className="layout">
+      {showHeader && <Header />}
+      <main className="main-content">
+        {children}
+      </main>
+      {showFooter && <Footer />}
+    </div>
   );
 };
 

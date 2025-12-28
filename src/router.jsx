@@ -12,6 +12,8 @@ import SecurityCourse from './pages/CoursesCategory/SecurityCourse';
 import NotFound from './pages/NotFound';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import LessonPage from './pages/LessonPage';
+import SignUp from './pages/Sign/SignUp'
+
 
 const wrapComponent = (Component) => <Component />;
 
@@ -56,6 +58,10 @@ const router = createHashRouter([
       {
         path: 'lesson/:courseId',
         element: <LessonPage /> 
+      },
+      {
+        path: 'signup', // Добавь этот маршрут
+        element: <SignUp/>
       },
       {
         path: '*',
