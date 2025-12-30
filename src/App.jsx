@@ -10,11 +10,9 @@ import './styles/animations.css';
 
 function App() {
   const location = useLocation();
-  
-  // Список путей без хедера и футера
+
   const noLayoutPaths = ['/signup', '/login'];
   
-  // Проверяем текущий путь
   const shouldShowLayout = !noLayoutPaths.some(path => 
     location.pathname === path || 
     location.pathname.startsWith(path + '/')

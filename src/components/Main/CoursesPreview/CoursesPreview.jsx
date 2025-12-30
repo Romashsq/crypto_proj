@@ -5,6 +5,19 @@ import { useNavigate } from 'react-router-dom';
 import CoursesCard from './CourseCard';
 import styles from './CoursesPreview.module.css';
 
+// Импортируем ваши иконки
+import { 
+  Ghost,          
+  LockOpen,       
+  LockNoOpen,     
+  Notes,          
+  Schedule,
+  Nft,
+  Rocket,
+  Wallet,
+  Sun // Добавим Sun для Crypto Fundamentals
+} from '../../../assets/Icons'
+
 const CoursesPreview = () => {
   const sectionRef = useRef(null);
   const scrollContainerRef = useRef(null);
@@ -13,6 +26,7 @@ const CoursesPreview = () => {
   useScrollAnimation(sectionRef, styles.animated);
   usePhantomScroll(scrollContainerRef);
 
+  // Массив курсов с вашими иконками
   const courses = [
     {
       id: 1,
@@ -20,7 +34,7 @@ const CoursesPreview = () => {
       description: "Master major cryptocurrencies: SOL, BTC, ETH, SUI, BASE, BNB. Learn about blockchain networks and their unique features.",
       duration: "4.5 hours",
       lessons: "31 lessons",
-      icon: "fas fa-coins",
+      icon: <Wallet />, // Кошелек для крипто
       link: "crypto-courses.html"
     },
     {
@@ -29,7 +43,7 @@ const CoursesPreview = () => {
       description: "Learn to identify and avoid crypto scams: Pump & Dump, Rug Pulls, Phishing, Fake Calls, and Bundle scams.",
       duration: "2.5 hours",
       lessons: "22 lessons",
-      icon: "fas fa-shield-alt",
+      icon: <LockNoOpen />, // Закрытый замок
       link: "scams-courses.html"
     },
     {
@@ -38,7 +52,7 @@ const CoursesPreview = () => {
       description: "Understand memecoin creation, trading strategies, market dynamics, and community culture.",
       duration: "3 hours",
       lessons: "22 lessons",
-      icon: "fas fa-rocket",
+      icon: <Rocket />, // Ракета для мемкоинов
       link: "memecoins-courses.html"
     },
     {
@@ -47,7 +61,7 @@ const CoursesPreview = () => {
       description: "Crypto news, social media guides, slang dictionary, and ongoing market updates.",
       duration: "2 hours",
       lessons: "12 lessons",
-      icon: "fas fa-book",
+      icon: <Notes />, // Заметки
       link: "additional-materials.html"
     },
     {
@@ -56,7 +70,7 @@ const CoursesPreview = () => {
       description: "Advanced security practices, wallet protection, and how to avoid being hacked or scammed.",
       duration: "2 hours",
       lessons: "15 lessons",
-      icon: "fas fa-lock",
+      icon: <LockOpen />, // Открытый замок
       link: "security-courses.html"
     },
     {
@@ -65,7 +79,7 @@ const CoursesPreview = () => {
       description: "Learn about decentralized finance, yield farming, liquidity pools, and staking strategies.",
       duration: "3.5 hours",
       lessons: "25 lessons",
-      icon: "fas fa-chart-line",
+      icon: <Schedule />, // График/расписание
       link: "defi-courses.html"
     },
     {
@@ -74,12 +88,12 @@ const CoursesPreview = () => {
       description: "Explore NFT creation, trading, marketplaces, and the digital art revolution in Web3.",
       duration: "2.5 hours",
       lessons: "18 lessons",
-      icon: "fas fa-palette",
+      icon: <Nft />, // NFT иконка
       link: "nft-courses.html"
     }
   ];
 
-  // Функции для скролла
+  // ВАШИ ФУНКЦИИ
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
       const cardWidth = scrollContainerRef.current.querySelector(`.${styles.courseCard}`).offsetWidth + 28;
@@ -117,7 +131,6 @@ const CoursesPreview = () => {
   };
 
   const handleCardClick = (courseId) => {
-    // Перенаправляем на NotFound при клике на карточку
     navigate(`/course/${courseId}`);
   };
 
@@ -150,7 +163,7 @@ const CoursesPreview = () => {
                   className={styles.courseCardWrapper}
                   onClick={() => handleCardClick(course.id)}
                 >
-                  <CoursesCard course={course} index={course.id - 1} />
+                  <CoursesCard course={course} />
                 </div>
               ))}
             </div>

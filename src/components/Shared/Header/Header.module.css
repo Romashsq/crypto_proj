@@ -365,3 +365,37 @@
     content: 'Sign Up';
   }
 }
+
+.logInBtn {
+  padding: 8px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  backdrop-filter: blur(10px);
+  /* Используйте тот же подход, что и в остальном файле */
+  color: var(--text-dark);
+}
+
+.logInBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.15);
+}
+
+/* ИЗМЕНЕНИЕ: Используйте :global(.dark-mode) вместо .dark-mode */
+:global(.dark-mode) .logInBtn {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--text-light);
+}
+
+:global(.dark-mode) .logInBtn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.4);
+}

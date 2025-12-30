@@ -13,7 +13,7 @@ import NotFound from './pages/NotFound';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import LessonPage from './pages/LessonPage';
 import SignUp from './pages/Sign/SignUp'
-
+import LogIn from './pages/Sign/LogIn'
 
 const wrapComponent = (Component) => <Component />;
 
@@ -60,8 +60,12 @@ const router = createHashRouter([
         element: <LessonPage /> 
       },
       {
-        path: 'signup', // Добавь этот маршрут
+        path: 'signup',
         element: <SignUp/>
+      },
+      {
+        path: 'login',
+        element: <LogIn />
       },
       {
         path: '*',

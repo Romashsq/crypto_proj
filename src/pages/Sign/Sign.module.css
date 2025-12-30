@@ -502,4 +502,91 @@
         padding: 13px;
         font-size: 14px;
     }
+    .logInBtn {
+    display: none;
+  }
 }
+
+.forgotPasswordBtn {
+    background: none;
+    border: none;
+    color: #9B2FFF;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    margin-left: auto;
+    padding: 0;
+    transition: all 0.3s ease;
+}
+
+.forgotPasswordBtn:hover {
+    color: #7a1fd1;
+    text-decoration: underline;
+}
+
+/* Для темной темы */
+.signupPage.darkMode .forgotPasswordBtn {
+    color: #c58aff;
+}
+
+.signupPage.darkMode .forgotPasswordBtn:hover {
+    color: #a855f7;
+}
+
+/* Ссылка на Sign Up (вместо Login Link) */
+.signupLink {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+    color: #666;
+    font-size: 15px;
+}
+
+.signupPage.darkMode .signupLink {
+    border-top-color: #444;
+    color: #aaa;
+}
+
+.signupLink a {
+    color: #9B2FFF;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 5px;
+    position: relative;
+}
+
+.signupLink a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: #9B2FFF;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.signupLink a:hover::after {
+    transform: scaleX(1);
+}
+
+/* Для темной темы */
+.signupPage.darkMode .signupLink a {
+    color: #c58aff;
+}
+
+.signupPage.darkMode .signupLink a::after {
+    background: #c58aff;
+}
+
+
+.checkboxGroup {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 25px 0;
+}
+

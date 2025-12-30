@@ -17,7 +17,9 @@ import teaIcon from './icons/tea.svg';
 import userIcon from './icons/user.svg';
 import questionIcon from './icons/question.svg';
 import infoIcon from './icons/info.svg';
-
+import wallet from './icons/wallet.svg'
+import nft from './icons/nft.svg'
+import rocket from './icons/rocket.svg'
 // Создаем React компоненты-обертки
 export const Attach = ({ width = 24, height = 24, style, className, ...props }) => (
   <img 
@@ -31,9 +33,45 @@ export const Attach = ({ width = 24, height = 24, style, className, ...props }) 
   />
 );
 
+export const Nft = ({ width = 24, height = 24, style, className, ...props }) => (
+  <img 
+    src={nft} 
+    alt="attach" 
+    width={width} 
+    height={height}
+    style={style}
+    className={className}
+    {...props}
+  />
+);
+
+export const Rocket = ({ width = 24, height = 24, style, className, ...props }) => (
+  <img 
+    src={rocket} 
+    alt="attach" 
+    width={width} 
+    height={height}
+    style={style}
+    className={className}
+    {...props}
+  />
+);
+
 export const Download = ({ width = 24, height = 24, style, className, ...props }) => (
   <img 
     src={downloadIcon} 
+    alt="download" 
+    width={width} 
+    height={height}
+    style={style}
+    className={className}
+    {...props}
+  />
+);
+
+export const Wallet = ({ width = 24, height = 24, style, className, ...props }) => (
+  <img 
+    src={wallet} 
     alt="download" 
     width={width} 
     height={height}

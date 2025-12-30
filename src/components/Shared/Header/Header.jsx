@@ -110,6 +110,10 @@ const Header = () => {
     navigate('/signup');
   };
 
+  const handleLogIn = () => {
+    navigate('/login');
+  };
+
   const handleHelp = () => {
     alert('Help/FAQ page would open here');
   };
@@ -196,6 +200,14 @@ const Header = () => {
         </nav>
         
         <div className={styles.headerActions}>
+          {/* Кнопка Log In */}
+          <button 
+            className={styles.logInBtn}
+            onClick={handleLogIn}
+          >
+            Log In
+          </button>
+          
           {/* Кнопка Sign Up */}
           <button 
             className={styles.signUpBtn}
@@ -204,7 +216,7 @@ const Header = () => {
             Sign up
           </button>
           
-          
+          {/* Кнопка смены темы */}
           <button 
             className={`${styles.themeToggle} ${styles.iconBtn}`} 
             onClick={toggleTheme}
