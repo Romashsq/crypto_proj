@@ -1,11 +1,10 @@
-// src/components/Shared/Header/Header.jsx
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../../Context/ThemeContext';
 import { useScrollHeader } from '../../../hooks/useScrollHeader';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './Header.module.css';
 import logo from '../../../assets/logo.png';
-import { Moon, Sun, Question, Info } from '../../../assets/Icons'
+import { Moon, Sun } from '../../../assets/Icons'
 
 const Header = () => {
   const { theme, toggleTheme } = useTheme();
@@ -22,19 +21,10 @@ const Header = () => {
         setTimeout(() => {
           const element = document.getElementById(anchor);
           if (element) {
-            const scrollToElement = () => {
-              element.scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'start'
-              });
-            };
-            
-            if (element.getBoundingClientRect().top !== 0) {
-              scrollToElement();
-            } else {
-              requestAnimationFrame(scrollToElement);
-            }
-
+            element.scrollIntoView({ 
+              behavior: 'smooth',
+              block: 'start'
+            });
             window.location.hash = anchor;
           }
         }, 50); 
@@ -114,14 +104,6 @@ const Header = () => {
     navigate('/login');
   };
 
-  const handleHelp = () => {
-    alert('Help/FAQ page would open here');
-  };
-
-  const handleAbout = () => {
-    alert('About page would open here');
-  };
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       const nav = document.querySelector(`.${styles.nav}`);
@@ -146,7 +128,7 @@ const Header = () => {
         <button 
           className={styles.mobileMenuBtn} 
           onClick={toggleMobileMenu}
-          aria-label={isMobileMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
+          aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={isMobileMenuOpen}
         >
           <span className={styles.menuIcon}>
@@ -200,7 +182,6 @@ const Header = () => {
         </nav>
         
         <div className={styles.headerActions}>
-          {/* Кнопка Log In */}
           <button 
             className={styles.logInBtn}
             onClick={handleLogIn}
@@ -208,7 +189,6 @@ const Header = () => {
             Log In
           </button>
           
-          {/* Кнопка Sign Up */}
           <button 
             className={styles.signUpBtn}
             onClick={handleSignUp}
@@ -216,25 +196,16 @@ const Header = () => {
             Sign up
           </button>
           
-          {/* Кнопка смены темы */}
           <button 
-            className={`${styles.themeToggle} ${styles.iconBtn}`} 
+            className={styles.themeToggle} 
             onClick={toggleTheme}
-            aria-label={`Переключить на ${theme === 'light' ? 'темную' : 'светлую'} тему`}
-            title={`${theme === 'light' ? 'Темная тема' : 'Светлая тема'}`}
+            aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
+            title={`${theme === 'light' ? 'Dark theme' : 'Light theme'}`}
           >
             {theme === 'light' ? (
-              <Moon 
-                width={22} 
-                height={22} 
-                className={styles.themeIcon}
-              />
+              <Moon width={20} height={20} />
             ) : (
-              <Sun 
-                width={22} 
-                height={22} 
-                className={styles.themeIcon}
-              />
+              <Sun width={20} height={20} />
             )}
           </button>
         </div>

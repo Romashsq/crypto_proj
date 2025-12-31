@@ -1,5 +1,7 @@
 import React from 'react';
-import styles from './CoursesPreview.module.css'
+import styles from '../CoursesPreview/CoursesPreview.module.css'
+// Импортируем иконки для мета-информации
+import { Schedule, Lesson, Heart } from '../../../assets/Icons';
 
 const CoursesCard = ({ course }) => {
   return (
@@ -22,14 +24,19 @@ const CoursesCard = ({ course }) => {
           </div>
           
           <div className={styles.courseMeta}>
-            <span>
-              <i className="fas fa-clock"></i> {course.duration}
+            <span className={styles.metaItem}>
+              <Schedule className={styles.metaIcon} />
+              <span className={styles.metaText}>{course.duration}</span>
             </span>
-            <span>
-              <i className="fas fa-book-open"></i> {course.lessons}
+            
+            <span className={styles.metaItem}>
+              <Lesson className={styles.metaIcon} />
+              <span className={styles.metaText}>{course.lessons}</span>
             </span>
-            <span className={styles.rating}>
-              <i className="fas fa-star"></i> 4.9
+            
+            <span className={styles.metaItem}>
+              <Heart className={styles.metaIcon} />
+              <span className={styles.metaText}>4.9</span>
             </span>
           </div>
         </div>

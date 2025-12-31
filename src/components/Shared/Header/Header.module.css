@@ -1,17 +1,13 @@
-/* Header.module.css - НОРМАЛЬНЫЙ ГРАДИЕНТ БЕЗ ПОЛОСОК */
+/* Header.module.css - КОМПАКТНАЯ ВЕРСИЯ */
 :root {
   --primary: #9B2FFF;
   --white: #FFFFFF;
-  --gradient: linear-gradient(135deg, var(--white) 0%, var(--primary) 100%);
   --light-bg: #f9f7ff;
   --dark-bg: #0f0f23;
   --dark-card: #1a1a2e;
   --text-dark: #333;
   --text-light: #f0f0f0;
-  --shadow: 0 10px 30px rgba(155, 47, 255, 0.15);
-  --transition: all 0.3s ease;
 }
-
 
 .header {
   position: fixed;
@@ -19,7 +15,7 @@
   left: 0;
   width: 100%;
   z-index: 1000;
-  padding: 20px 0;
+  padding: 15px 0;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   transition: all 0.4s ease;
@@ -41,44 +37,45 @@
   justify-content: space-between;
   align-items: center;
 }
-/* ЛОГОТИП - УПРОЩЕННЫЙ ГРАДИЕНТ */
+
+/* ЛОГОТИП */
 .logo {
   display: inline-block;
-  cursor: pointer !important;
+  cursor: pointer;
   text-decoration: none;
   line-height: 0;
-  position: relative;
-  width: 65px;
-  height: 65px;
-}
-/* САМА КАРТИНКА ЛОГО */
-.logoImage {
-  width: 65px;
-  height: 65px;
-  object-fit: contain;
-  border-radius: 50%;
-  display: block;
-  transition: all 0.3s ease;
-  position: relative;
-  z-index: 1;
+  width: 50px;
+  height: 50px;
 }
 
-/* ОСТАЛЬНЫЕ СТИЛИ БЕЗ ИЗМЕНЕНИЙ */
+.logoImage {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+/* НАВИГАЦИЯ */
 .nav ul {
   display: flex;
   list-style: none;
-  gap: 30px;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
 }
 
 .nav a {
   text-decoration: none;
   color: #333;
   font-weight: 500;
+  font-size: 15px;
   transition: all 0.3s ease;
   position: relative;
   display: flex;
   align-items: center;
   cursor: pointer;
+  padding: 5px 0;
 }
 
 :global(.dark-mode) .nav a {
@@ -92,7 +89,7 @@
 .nav a::after {
   content: '';
   position: absolute;
-  bottom: -5px;
+  bottom: 0;
   left: 0;
   width: 0;
   height: 2px;
@@ -104,6 +101,7 @@
   width: 100%;
 }
 
+/* DROPDOWN */
 .dropdown {
   position: relative;
 }
@@ -113,10 +111,10 @@
   top: 100%;
   left: 0;
   background: #FFFFFF;
-  min-width: 200px;
+  min-width: 180px;
   box-shadow: 0 10px 30px rgba(155, 47, 255, 0.15);
-  border-radius: 10px;
-  padding: 10px 0;
+  border-radius: 8px;
+  padding: 8px 0;
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px);
@@ -135,10 +133,11 @@
 }
 
 .dropdownContent a {
-  padding: 10px 20px;
+  padding: 8px 16px;
   display: block;
   color: #333;
   cursor: pointer;
+  font-size: 14px;
 }
 
 :global(.dark-mode) .dropdownContent a {
@@ -149,108 +148,48 @@
   background: rgba(155, 47, 255, 0.1);
 }
 
-.themeToggle {
-  background: white;
-  border: none;
-  cursor: pointer;
-  color: #333;
-  transition: all 0.3s ease;
-  padding: 8px;
-  border-radius: 15px;
-}
-
-.themeToggle:hover {
-  background: linear-gradient(135deg, var(--white) 0%, var(--primary) 30%, var(--primary) 100%);
-}
-
-:global(.dark-mode) .themeToggle:hover {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--white) 30%, var(--white) 100%);
-}
-
-.themeToggle img {
-  color: #FFFFFF;
-}
-
-.mobileMenuBtn,
-.closeMenu {
-  display: none;
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #9B2FFF;
-  z-index: 1002;
-}
-
-.closeMenu {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-}
-
-/* Mobile Styles */
-@media (max-width: 768px) {
-  .mobileMenuBtn,
-  .closeMenu {
-    display: block;
-  }
-
-  .nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background: #FFFFFF;
-    padding: 80px 20px 20px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    transform: translateX(-100%);
-    opacity: 0;
-    transition: all 0.3s ease;
-    z-index: 999;
-    overflow-y: auto;
-  }
-
-  :global(.dark-mode) .nav {
-    background: #1a1a2e;
-  }
-
-  .nav.active {
-    transform: translateX(0);
-    opacity: 1;
-  }
-
-  .nav ul {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .dropdownContent {
-    position: static;
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-    box-shadow: none;
-    padding-left: 20px;
-    background: transparent;
-    margin-top: 10px;
-  }
-
-  .dropdownContent a {
-    padding: 8px 0;
-  }
-}
-
-
+/* HEADER ACTIONS */
 .headerActions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
-/* Кнопка Sign Up */
+/* КНОПКИ */
+.logInBtn {
+  padding: 7px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  backdrop-filter: blur(10px);
+  color: var(--text-dark);
+}
+
+.logInBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+}
+
+:global(.dark-mode) .logInBtn {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--text-light);
+}
+
+:global(.dark-mode) .logInBtn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
 .signUpBtn {
-  padding: 8px 16px;
+  padding: 7px 16px;
   background: linear-gradient(135deg, #9B2FFF, #667eea);
   color: white;
   border: none;
@@ -264,15 +203,15 @@
 }
 
 .signUpBtn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(155, 47, 255, 0.3);
   background: linear-gradient(135deg, #8a27e6, #5b6ee8);
 }
 
-/* Кнопки-иконки (Help, About, Theme) */
-.iconBtn {
-  width: 40px;
-  height: 40px;
+/* КНОПКА ТЕМЫ */
+.themeToggle {
+  width: 38px;
+  height: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -282,120 +221,243 @@
   cursor: pointer;
   transition: all 0.3s ease;
   color: var(--text-dark);
+  padding: 0;
 }
 
-.dark-mode .iconBtn {
+:global(.dark-mode) .themeToggle {
   background: rgba(155, 47, 255, 0.2);
   color: var(--text-light);
 }
 
-.iconBtn:hover {
+.themeToggle:hover {
   background: rgba(155, 47, 255, 0.2);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   box-shadow: 0 4px 15px rgba(155, 47, 255, 0.15);
 }
 
-.dark-mode .iconBtn:hover {
+:global(.dark-mode) .themeToggle:hover {
   background: rgba(155, 47, 255, 0.3);
 }
 
-.iconBtnIcon {
-  transition: transform 0.3s ease;
+/* БУРГЕР МЕНЮ */
+.mobileMenuBtn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1002;
+  padding: 8px;
+  width: 40px;
+  height: 40px;
+  position: relative;
 }
 
-.iconBtn:hover .iconBtnIcon {
-  transform: scale(1.1);
+.menuIcon {
+  display: block;
+  position: relative;
+  width: 22px;
+  height: 16px;
+  margin: 0 auto;
 }
 
-/* Специфичные стили для Help и About */
-.helpBtn {
-  color: #9B2FFF;
+.menuIcon span {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: #9B2FFF;
+  border-radius: 2px;
+  transition: all 0.3s ease;
 }
 
-.aboutBtn {
-  color: #667eea;
+:global(.dark-mode) .menuIcon span {
+  background-color: #b366ff;
 }
 
-/* Переключатель темы */
-.themeToggle {
-  color: var(--text-dark);
+.menuIcon span:nth-child(1) {
+  top: 0;
 }
 
-.dark-mode .themeToggle {
-  color: var(--text-light);
+.menuIcon span:nth-child(2) {
+  top: 7px;
 }
 
-.themeIcon {
-  transition: transform 0.5s ease;
+.menuIcon span:nth-child(3) {
+  top: 14px;
 }
 
-.themeToggle:hover .themeIcon {
-  transform: rotate(30deg);
+/* Анимация бургера при открытии */
+.nav.active + .headerActions .mobileMenuBtn .menuIcon span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
 }
 
-/* Адаптивность */
+.nav.active + .headerActions .mobileMenuBtn .menuIcon span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav.active + .headerActions .mobileMenuBtn .menuIcon span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* МОБИЛЬНАЯ ВЕРСИЯ */
 @media (max-width: 768px) {
+  .header {
+    padding: 12px 0;
+  }
+  
+  .logo {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .logoImage {
+    width: 45px;
+    height: 45px;
+  }
+  
+  /* Навигация на десктопе */
+  .nav:not(.active) {
+    display: none;
+  }
+  
+  /* Бургер */
+  .mobileMenuBtn {
+    display: block;
+    margin-left: auto;
+    margin-right: 10px;
+  }
+  
+  /* Мобильное меню */
+  .nav.active {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: #FFFFFF;
+    padding: 80px 20px 30px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    z-index: 999;
+    overflow-y: auto;
+    display: block !important;
+  }
+  
+  :global(.dark-mode) .nav.active {
+    background: #1a1a2e;
+  }
+  
+  .nav.active ul {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .nav.active a {
+    font-size: 16px;
+    padding: 8px 0;
+  }
+  
+  /* Dropdown в мобильном меню */
+  .nav.active .dropdownContent {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    padding-left: 20px;
+    background: transparent;
+    margin-top: 10px;
+  }
+  
+  .nav.active .dropdownContent a {
+    padding: 6px 0;
+  }
+  
+  /* Кнопки на мобильных */
   .headerActions {
     gap: 8px;
   }
   
-  .signUpBtn {
-    padding: 6px 12px;
-    font-size: 13px;
+  .logInBtn {
+    display: none;
   }
   
-  .iconBtn {
+  .signUpBtn {
+    padding: 6px 14px;
+    font-size: 13px;
+    min-width: 70px;
+  }
+  
+  .themeToggle {
     width: 36px;
     height: 36px;
   }
-  
-  /* На мобильных скрываем Help и About */
-  .helpBtn,
-  .aboutBtn {
-    display: none;
-  }
 }
 
+/* МАЛЕНЬКИЕ ТЕЛЕФОНЫ */
 @media (max-width: 480px) {
-  .signUpBtn span {
-    display: none;
+  .header {
+    padding: 10px 0;
   }
   
-  .signUpBtn::after {
-    content: 'Sign Up';
+  .logo {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .logoImage {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .mobileMenuBtn {
+    width: 36px;
+    height: 36px;
+    margin-right: 8px;
+  }
+  
+  .menuIcon {
+    width: 20px;
+    height: 14px;
+  }
+  
+  .menuIcon span {
+    height: 1.5px;
+  }
+  
+  .menuIcon span:nth-child(2) {
+    top: 6px;
+  }
+  
+  .menuIcon span:nth-child(3) {
+    top: 12px;
+  }
+  
+  .headerActions {
+    gap: 6px;
+  }
+  
+  .signUpBtn {
+    padding: 5px 10px;
+    font-size: 12px;
+    min-width: 60px;
+  }
+  
+  .themeToggle {
+    width: 34px;
+    height: 34px;
+  }
+  
+  .themeToggle img {
+    width: 18px;
+    height: 18px;
   }
 }
 
-.logInBtn {
-  padding: 8px 20px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-  backdrop-filter: blur(10px);
-  /* Используйте тот же подход, что и в остальном файле */
-  color: var(--text-dark);
-}
-
-.logInBtn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.15);
-}
-
-/* ИЗМЕНЕНИЕ: Используйте :global(.dark-mode) вместо .dark-mode */
-:global(.dark-mode) .logInBtn {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: var(--text-light);
-}
-
-:global(.dark-mode) .logInBtn:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.4);
+/* ОЧЕНЬ МАЛЕНЬКИЕ ЭКРАНЫ */
+@media (max-width: 360px) {
+  .signUpBtn {
+    padding: 4px 8px;
+    font-size: 11px;
+    min-width: 50px;
+  }
 }

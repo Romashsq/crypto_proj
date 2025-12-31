@@ -20,7 +20,35 @@ import infoIcon from './icons/info.svg';
 import wallet from './icons/wallet.svg'
 import nft from './icons/nft.svg'
 import rocket from './icons/rocket.svg'
+import lesson from './icons/lesson.svg'
+import heart from './icons/heart.svg'
 // Создаем React компоненты-обертки
+
+export const Heart = ({ width = 24, height = 24, style, className, ...props }) => (
+  <img 
+    src={heart} 
+    alt="attach" 
+    width={width} 
+    height={height}
+    style={style}
+    className={className}
+    {...props}
+  />
+);
+
+
+export const Lesson = ({ width = 24, height = 24, style, className, ...props }) => (
+  <img 
+    src={lesson} 
+    alt="attach" 
+    width={width} 
+    height={height}
+    style={style}
+    className={className}
+    {...props}
+  />
+);
+
 export const Attach = ({ width = 24, height = 24, style, className, ...props }) => (
   <img 
     src={attachIcon} 
@@ -253,7 +281,13 @@ export const icons = {
   tea: Tea,
   user: User,
   question: Question,
-  info: Info
+  info: Info,
+  wallet: Wallet,
+  nft: Nft,
+  rocket: Rocket,
+  lesson: Lesson,
+  heart: Heart,
+
 };
 
 // Массив ссылок с иконками
@@ -345,20 +379,45 @@ export const iconLinks = [
     url: '/info',
     icon: Info,
     description: 'Полезная информация'
+  },
+  {
+    id: 12,
+    name: 'wallet',
+    label: 'Wallet',
+    url: '/wallet',
+    icon: Wallet,
+    description: 'Урок по крипте'
+  },
+  {
+    id: 13,
+    name: 'nft',
+    label: 'Нфт',
+    url: '/nft',
+    icon: Nft,
+    description: 'Урок по НФТ'
+  },
+  {
+    id: 14,
+    name: 'lesson',
+    label: 'Уроки',
+    url: '/lesson',
+    icon: Lesson,
+    description: 'Количество уроков'
+  },
+  {
+    id: 15,
+    name: 'heart',
+    label: 'Избранное',
+    url: '/heart',
+    icon: Info,
+    description: 'Избранное'
   }
 ];
 
-// Иконки для темы
-export const themeIcons = {
-  light: Sun,
-  dark: Moon,
-  system: Light
-};
+
 
 export default {
   icons,
-  iconLinks,
-  themeIcons,
   Attach,
   Download,
   Ghost,
@@ -373,5 +432,9 @@ export default {
   Tea,
   User,
   Question,
-  Info
+  Info,
+  Wallet,
+  Nft,
+  Heart,
+  Lesson
 };
