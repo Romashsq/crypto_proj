@@ -1,0 +1,178 @@
+.filterBar {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(155, 47, 255, 0.1);
+}
+
+.darkMode.filterBar {
+  background: #1a1a2e;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.filterSection,
+.sortSection {
+  margin-bottom: 20px;
+}
+
+.filterSection:last-child,
+.sortSection:last-child {
+  margin-bottom: 0;
+}
+
+.filterLabel,
+.sortLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.darkMode .filterLabel,
+.darkMode .sortLabel {
+  color: #f0f0f0;
+}
+
+.filterLabel i,
+.sortLabel i {
+  color: #9B2FFF;
+}
+
+.filterButtons,
+.sortButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filterBtn,
+.sortBtn {
+  padding: 10px 20px;
+  background: rgba(155, 47, 255, 0.1);
+  border: 2px solid rgba(155, 47, 255, 0.2);
+  border-radius: 10px;
+  color: #666;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filterBtn:hover,
+.sortBtn:hover {
+  background: rgba(155, 47, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.filterBtn.active,
+.sortBtn.active {
+  background: #9B2FFF;
+  border-color: #9B2FFF;
+  color: white;
+  font-weight: 600;
+}
+
+.filterCount {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 0.8rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  min-width: 24px;
+  text-align: center;
+}
+
+.filterBtn.active .filterCount {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.filterBtn:not(.active) .filterCount {
+  background: rgba(155, 47, 255, 0.2);
+  color: #9B2FFF;
+}
+
+/* Специфичные цвета для каждого фильтра */
+.filterBtn[data-filter="crypto"].active {
+  background: #9B2FFF;
+  border-color: #9B2FFF;
+}
+
+.filterBtn[data-filter="scams"].active {
+  background: #FF4081;
+  border-color: #FF4081;
+}
+
+.filterBtn[data-filter="memecoins"].active {
+  background: #00BCD4;
+  border-color: #00BCD4;
+}
+
+.filterBtn[data-filter="security"].active {
+  background: #4CAF50;
+  border-color: #4CAF50;
+}
+
+/* Темная тема */
+.darkMode .filterBtn:not(.active),
+.darkMode .sortBtn:not(.active) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #aaa;
+}
+
+.darkMode .filterBtn:not(.active):hover,
+.darkMode .sortBtn:not(.active):hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.darkMode .filterBtn:not(.active) .filterCount {
+  background: rgba(155, 47, 255, 0.3);
+  color: #b366ff;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .filterBar {
+    padding: 20px;
+  }
+  
+  .filterButtons,
+  .sortButtons {
+    gap: 8px;
+  }
+  
+  .filterBtn,
+  .sortBtn {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    flex: 1;
+    min-width: 100px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .filterBar {
+    padding: 16px;
+  }
+  
+  .filterButtons,
+  .sortButtons {
+    flex-direction: column;
+  }
+  
+  .filterBtn,
+  .sortBtn {
+    width: 100%;
+    min-width: auto;
+  }
+}

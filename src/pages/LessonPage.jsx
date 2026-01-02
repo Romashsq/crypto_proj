@@ -10,6 +10,7 @@ import {
 } from '../utils/progressStorage';
 import Sidebar from '../components/Shared/Sidebar/Sidebar';
 import { getLessonData, getTotalLessons, hasNextLesson, getNextLessonTitle } from '../components/Lessons/lessonData';
+import SaveButton from '../components/Shared/SaveButton/SaveButton';
 
 const Toast = ({ message, isVisible, duration = 5000 }) => {
   const [visible, setVisible] = useState(isVisible);
@@ -57,16 +58,30 @@ const LessonPage = () => {
 
   const lessonData = getLessonData(courseId, lessonNum);
 
+  // Объект урока для SaveButton
+  const lessonForSave = {
+    id: lessonNum,
+    courseId: courseId,
+    title: lessonData?.title || '',
+    description: lessonData?.description || '',
+    duration: lessonData?.duration || '',
+    level: lessonData?.level || '',
+    youtubeId: lessonData?.youtubeId || '',
+    shortDescription: lessonData?.shortDescription || '',
+  };
+
   useEffect(() => {
-    const completed = isLessonCompleted(courseId, lessonNum);
-    setIsCompleted(completed);
-    
-    const progress = getCourseProgressPercentage(courseId);
-    setCourseProgress(progress);
-  }, [courseId, lessonNum]);
+    if (lessonData) {
+      const completed = isLessonCompleted(courseId, lessonNum);
+      setIsCompleted(completed);
+      
+      const progress = getCourseProgressPercentage(courseId);
+      setCourseProgress(progress);
+    }
+  }, [courseId, lessonNum, lessonData]);
 
   const handleMarkComplete = () => {
-    if (isCompleted) return;
+    if (isCompleted || !lessonData) return;
     
     setIsMarking(true);
     
@@ -143,60 +158,111 @@ const LessonPage = () => {
         </div>
 
         <main className={styles.lessonContent}>
-          <div className={styles.lessonHeader}>
+         {/* HEADER SECTION - ВЕРСИЯ С БЛОЧКАМИ */}
+        <div className={styles.lessonHeader}>
+          <div className={styles.headerTopRow}>
             <div className={styles.lessonBreadcrumb}>
-              <Link to="/courses">Courses</Link>
+              <Link to="/courses" className={styles.breadcrumbLink}>Courses</Link>
               <i className="fas fa-chevron-right"></i>
-              <Link to={`/${courseId}`}>{getCourseTitle()}</Link>
+              <Link to={`/${courseId}`} className={styles.breadcrumbLink}>{getCourseTitle()}</Link>
               <i className="fas fa-chevron-right"></i>
-              <span>Lesson {lessonNum}</span>
-              
-              <div className={styles.headerRight}>
-                <Link to={`/${courseId}`} className={styles.backToLessonsTop}>
-                  <i className="fas fa-arrow-left"></i>
-                  Back to Lessons
-                </Link>
-              </div>
+              <span className={styles.currentLesson}>Lesson {lessonNum}</span>
             </div>
             
-            <div className={styles.lessonTitleContainer}>
-              <div className={styles.lessonNumber}>Lesson {lessonNum}</div>
-              <h1 className={styles.lessonTitle}>{lessonData.title}</h1>
+            <div className={styles.headerActions}>
+              <SaveButton 
+                lesson={lessonForSave}
+                size="medium"
+                showLabel={true}
+                variant="gradient"
+              />
+              <Link to={`/${courseId}`} className={styles.backToLessonsBtn}>
+                <i className="fas fa-arrow-left"></i>
+                Back to Lessons
+              </Link>
             </div>
-            
+          </div>
+          
+          <div className={styles.lessonMainInfo}>
+            <div className={styles.lessonNumberBadge}>Lesson {lessonNum}</div>
+            <h1 className={styles.lessonTitle}>{lessonData.title}</h1>
             <p className={styles.lessonDescription}>
               {lessonData.description}
             </p>
-            
-            <div className={styles.lessonMeta}>
-              <div className={styles.metaItem}>
+          </div>
+          
+          <div className={styles.infoCardsGrid}>
+            {/* DURATION CARD */}
+            <div className={styles.infoCard}>
+              <div className={styles.cardIcon}>
                 <i className="far fa-clock"></i>
-                <span>{lessonData.duration}</span>
               </div>
-              <div className={styles.metaItem}>
+              <div className={styles.cardContent}>
+                <h4 className={styles.cardTitle}>Duration</h4>
+                <p className={styles.cardValue}>{lessonData.duration}</p>
+              </div>
+            </div>
+            
+            {/* LEVEL CARD */}
+            <div className={styles.infoCard}>
+              <div className={styles.cardIcon}>
                 <i className="fas fa-signal"></i>
-                <span>{lessonData.level} Level</span>
               </div>
-              <div className={styles.metaItem}>
+              <div className={styles.cardContent}>
+                <h4 className={styles.cardTitle}>Level</h4>
+                <p className={styles.cardValue}>{lessonData.level}</p>
+              </div>
+            </div>
+            
+            {/* PROGRESS CARD */}
+            <div className={styles.infoCard}>
+              <div className={styles.cardIcon}>
                 <i className="fas fa-hashtag"></i>
-                <span>{lessonNum}/{totalLessons} Lessons</span>
+              </div>
+              <div className={styles.cardContent}>
+                <h4 className={styles.cardTitle}>Progress</h4>
+                <p className={styles.cardValue}>{lessonNum}/{totalLessons}</p>
+              </div>
+            </div>
+            
+            {/* STATUS CARD */}
+            <div className={styles.infoCard}>
+              <div className={styles.cardIcon}>
+                <i className="fas fa-bookmark"></i>
+              </div>
+              <div className={styles.cardContent}>
+                <h4 className={styles.cardTitle}>Status</h4>
+                <div className={styles.statusContainer}>
+                  <span className={`${styles.statusBadge} ${isCompleted ? styles.completed : styles.pending}`}>
+                    {isCompleted ? 'COMPLETED' : 'IN PROGRESS'}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* ВИДЕО */}
+          {/* VIDEO SECTION */}
           <div className={styles.videoSection}>
-            <div className={styles.videoContainer}>
+            <div className={styles.videoCard}>
               <div className={styles.videoHeader}>
                 <h3 className={styles.videoTitle}>
                   <i className="fas fa-play-circle"></i>
                   Video Lesson
                 </h3>
-                <div className={styles.videoBadge}>
-                  <i className="fas fa-play"></i>
-                  Watch Now
+                <div className={styles.videoActions}>
+                  <SaveButton 
+                    lesson={lessonForSave}
+                    size="small"
+                    showLabel={false}
+                  />
+                  <div className={styles.videoBadge}>
+                    <i className="fas fa-play"></i>
+                    Watch Now
+                  </div>
                 </div>
               </div>
+              
               <div className={styles.videoWrapper}>
                 <iframe 
                   src={`https://www.youtube.com/embed/${lessonData.youtubeId}`}
@@ -204,22 +270,40 @@ const LessonPage = () => {
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
+                  className={styles.videoIframe}
                 ></iframe>
               </div>
             </div>
-            
-            {/* ПРОГРЕСС БАР */}
-            <div className={styles.progressSection}>
+          </div>
+
+          {/* PROGRESS & ACTIONS SECTION */}
+          <div className={styles.actionsSection}>
+            <div className={styles.progressCard}>
               <div className={styles.progressHeader}>
-                <h4>Course Progress</h4>
-                <span>{Math.round(courseProgress)}% Complete</span>
+                <h4 className={styles.progressTitle}>
+                  <i className="fas fa-chart-line"></i>
+                  Course Progress
+                </h4>
+                <span className={styles.progressPercentage}>{Math.round(courseProgress)}% Complete</span>
               </div>
               <ProgressBar progress={courseProgress} />
             </div>
             
-            {/* КНОПКА MARK AS COMPLETE */}
-            <div className={styles.completeSection}>
-              <div className={styles.completeButtonContainer}>
+            <div className={styles.completeCard}>
+              <div className={styles.completeHeader}>
+                <h4 className={styles.completeTitle}>
+                  <i className="fas fa-flag-checkered"></i>
+                  Mark as Complete
+                </h4>
+                <SaveButton 
+                  lesson={lessonForSave}
+                  size="small"
+                  showLabel={true}
+                  className={styles.sideSaveButton}
+                />
+              </div>
+              
+              <div className={styles.completeButtonWrapper}>
                 <button 
                   className={`${styles.completeButton} ${
                     isCompleted ? styles.completed : ''
@@ -231,6 +315,8 @@ const LessonPage = () => {
                     <span className={styles.buttonIcon}>
                       {isCompleted ? (
                         <i className="fas fa-check-circle"></i>
+                      ) : isMarking ? (
+                        <i className="fas fa-spinner fa-spin"></i>
                       ) : (
                         <i className="far fa-circle"></i>
                       )}
@@ -252,7 +338,7 @@ const LessonPage = () => {
                     <div className={styles.messageIcon}>
                       <i className="fas fa-check"></i>
                     </div>
-                    <div className={styles.messageText}>
+                    <div className={styles.messageContent}>
                       <span className={styles.messageTitle}>Great job!</span>
                       <span className={styles.messageSubtitle}>Lesson marked as complete</span>
                     </div>
@@ -260,130 +346,172 @@ const LessonPage = () => {
                 )}
               </div>
             </div>
-            
-            {/* LESSON DETAILS */}
-            <div className={styles.lessonDetailsSection}>
+          </div>
+
+          {/* DETAILS SECTION */}
+          <div className={styles.detailsSection}>
+            <div className={styles.detailsCard}>
               <div 
-                className={styles.detailsToggle} 
+                className={styles.sectionHeader} 
                 onClick={() => setDetailsOpen(!detailsOpen)}
               >
-                <h3 className={styles.detailsTitle}>
+                <div className={styles.sectionTitle}>
                   <i className="fas fa-info-circle"></i>
-                  Lesson Details & Key Concepts
-                </h3>
+                  <h3>Lesson Details & Key Concepts</h3>
+                </div>
                 <i className={`fas fa-chevron-down ${styles.toggleIcon}`} 
                    style={{ transform: detailsOpen ? 'rotate(180deg)' : 'rotate(0)' }}
                 ></i>
               </div>
               
-              <div className={`${styles.detailsContent} ${detailsOpen ? styles.active : ''}`}>
+              <div className={`${styles.sectionContent} ${detailsOpen ? styles.active : ''}`}>
                 <div className={styles.shortDescription}>
-                  <p>{lessonData.shortDescription}</p>
+                  <p className={styles.descriptionText}>{lessonData.shortDescription}</p>
                 </div>
                 
-                <div className={styles.fullDescription}>
-                  <pre className={styles.descriptionText}>
-                    {lessonData.fullDescription}
-                  </pre>
-                </div>
+                {lessonData.fullDescription && (
+                  <div className={styles.fullDescription}>
+                    <h4 className={styles.descriptionTitle}>Detailed Explanation</h4>
+                    <pre className={styles.descriptionPre}>
+                      {lessonData.fullDescription}
+                    </pre>
+                  </div>
+                )}
               </div>
             </div>
           </div>
 
-          {/* ЗАМЕТКИ */}
+          {/* NOTES SECTION */}
           {lessonData.notes && lessonData.notes.length > 0 && (
             <div className={styles.notesSection}>
-              <div 
-                className={styles.notesToggle} 
-                onClick={() => setNotesOpen(!notesOpen)}
-              >
-                <h3 className={styles.notesTitle}>
-                  <i className="fas fa-sticky-note"></i>
-                  Lesson Notes & Key Takeaways
-                </h3>
-                <i className={`fas fa-chevron-down ${styles.toggleIcon}`} 
-                   style={{ transform: notesOpen ? 'rotate(180deg)' : 'rotate(0)' }}
-                ></i>
-              </div>
-              <div className={`${styles.notesContent} ${notesOpen ? styles.active : ''}`}>
-                <div className={styles.notesList}>
-                  {lessonData.notes.map(note => (
-                    <div key={note.id} className={styles.noteItem}>
-                      <div className={styles.noteNumber}>{note.id}</div>
-                      <div className={styles.noteContent}>
-                        <h4>{note.title}</h4>
-                        <p>{note.content}</p>
+              <div className={styles.notesCard}>
+                <div 
+                  className={styles.sectionHeader} 
+                  onClick={() => setNotesOpen(!notesOpen)}
+                >
+                  <div className={styles.sectionTitle}>
+                    <i className="fas fa-sticky-note"></i>
+                    <h3>Lesson Notes & Key Takeaways</h3>
+                  </div>
+                  <i className={`fas fa-chevron-down ${styles.toggleIcon}`} 
+                     style={{ transform: notesOpen ? 'rotate(180deg)' : 'rotate(0)' }}
+                  ></i>
+                </div>
+                
+                <div className={`${styles.sectionContent} ${notesOpen ? styles.active : ''}`}>
+                  <div className={styles.notesList}>
+                    {lessonData.notes.map((note, index) => (
+                      <div key={index} className={styles.noteItem}>
+                        <div className={styles.noteNumber}>{index + 1}</div>
+                        <div className={styles.noteContent}>
+                          <h4 className={styles.noteTitle}>{note.title || `Key Takeaway ${index + 1}`}</h4>
+                          <p className={styles.noteText}>{note.content}</p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
           )}
 
-          {/* МАТЕРИАЛЫ */}
+          {/* MATERIALS SECTION */}
           {lessonData.materials && lessonData.materials.length > 0 && (
             <div className={styles.materialsSection}>
-              <div 
-                className={styles.materialsToggle} 
-                onClick={() => setMaterialsOpen(!materialsOpen)}
-              >
-                <h3 className={styles.materialsTitle}>
-                  <i className="fas fa-download"></i>
-                  Download Materials & Resources
-                </h3>
-                <i className={`fas fa-chevron-down ${styles.toggleIcon}`}
-                   style={{ transform: materialsOpen ? 'rotate(180deg)' : 'rotate(0)' }}
-                ></i>
-              </div>
-              <div className={`${styles.materialsContent} ${materialsOpen ? styles.active : ''}`}>
-                <div className={styles.materialsList}>
-                  {lessonData.materials.map(material => (
-                    <div key={material.id} className={styles.materialItem}>
-                      <div className={styles.materialIcon}>
-                        <i className={`fas fa-${material.icon}`}></i>
+              <div className={styles.materialsCard}>
+                <div 
+                  className={styles.sectionHeader} 
+                  onClick={() => setMaterialsOpen(!materialsOpen)}
+                >
+                  <div className={styles.sectionTitle}>
+                    <i className="fas fa-download"></i>
+                    <h3>Download Materials & Resources</h3>
+                  </div>
+                  <i className={`fas fa-chevron-down ${styles.toggleIcon}`}
+                     style={{ transform: materialsOpen ? 'rotate(180deg)' : 'rotate(0)' }}
+                  ></i>
+                </div>
+                
+                <div className={`${styles.sectionContent} ${materialsOpen ? styles.active : ''}`}>
+                  <div className={styles.materialsList}>
+                    {lessonData.materials.map((material, index) => (
+                      <div key={index} className={styles.materialItem}>
+                        <div className={styles.materialIcon}>
+                          <i className={`fas fa-${material.icon || 'file'}`}></i>
+                        </div>
+                        <div className={styles.materialInfo}>
+                          <h4 className={styles.materialTitle}>{material.title}</h4>
+                          <div className={styles.materialMeta}>
+                            <span className={styles.materialFormat}>{material.format || 'PDF'}</span>
+                            {material.size && (
+                              <>
+                                <span className={styles.materialSeparator}>•</span>
+                                <span className={styles.materialSize}>{material.size}</span>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                        <button className={styles.materialDownload}>
+                          <i className="fas fa-download"></i>
+                        </button>
                       </div>
-                      <div className={styles.materialInfo}>
-                        <h4>{material.title}</h4>
-                        <p className={styles.materialMeta}>{material.format} • {material.size}</p>
-                      </div>
-                      <a href="#" className={styles.materialDownload}>
-                        <i className="fas fa-download"></i>
-                      </a>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
           )}
 
-          {/* НАВИГАЦИЯ (ВОЗВРАЩАЕМ СТАРЫЕ КНОПКИ) */}
-          <div className={styles.lessonNavigation}>
-            <Link 
-              to={hasPrevLesson() ? `/lesson/${courseId}/${prevLessonNum}` : "#"}
-              className={`${styles.navBtn} ${styles.prev} ${
-                !hasPrevLesson() ? styles.disabled : ''
-              }`}
-            >
-              <i className="fas fa-arrow-left"></i>
-              {hasPrevLesson() ? `Lesson ${prevLessonNum}` : 'No Previous'}
-            </Link>
-            
-            <Link to={`/${courseId}`} className={`${styles.navBtn} ${styles.backToLessonsBottom}`}>
-              <i className="fas fa-list"></i>
-              Course Overview
-            </Link>
-            
-            <Link 
-              to={isCompleted && nextLessonExists ? `/lesson/${courseId}/${nextLessonNum}` : "#"}
-              className={`${styles.navBtn} ${
-                !(isCompleted && nextLessonExists) ? styles.disabled : ''
-              }`}
-            >
-              {nextLessonExists ? `Next: ${nextTitle}` : 'Course Complete'}
-              {nextLessonExists && <i className="fas fa-arrow-right"></i>}
-            </Link>
+          {/* NAVIGATION - ИСПРАВЛЕННАЯ ВЕРСИЯ */}
+        <div className={styles.navigationSection}>
+          <div className={styles.navigationContainer}>
+            <div className={styles.navigationGrid}>
+              {/* PREVIOUS BUTTON */}
+              <Link 
+                to={hasPrevLesson() ? `/lesson/${courseId}/${prevLessonNum}` : "#"}
+                className={`${styles.navButton} ${styles.prevButton} ${
+                  !hasPrevLesson() ? styles.disabled : ''
+                }`}
+              >
+                <div className={styles.navButtonInner}>
+                  <div className={styles.navContent}>
+                    <span className={styles.navLabel}>Previous</span>
+                    <span className={styles.navTitle}>
+                      {hasPrevLesson() ? `Lesson ${prevLessonNum}` : 'No Previous'}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+              
+              {/* OVERVIEW BUTTON - CENTER */}
+              <Link to={`/${courseId}`} className={`${styles.navButton} ${styles.overviewButton}`}>
+                <div className={styles.navButtonInner}>
+                  <div className={styles.navContent}>
+                    <span className={styles.navLabel}>Back to</span>
+                    <span className={styles.navTitle}>Course Overview</span>
+                  </div>
+                </div>
+              </Link>
+              
+              {/* NEXT BUTTON */}
+              <Link 
+                to={isCompleted && nextLessonExists ? `/lesson/${courseId}/${nextLessonNum}` : "#"}
+                className={`${styles.navButton} ${styles.nextButton} ${
+                  !(isCompleted && nextLessonExists) ? styles.disabled : ''
+                }`}
+              >
+                <div className={styles.navButtonInner}>
+                  <div className={styles.navContent}>
+                    <span className={styles.navLabel}>Next</span>
+                    <span className={styles.navTitle}>
+                      {nextLessonExists ? nextTitle : 'Course Complete'}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            </div>
           </div>
+        </div>
         </main>
       </div>
     </div>

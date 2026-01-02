@@ -1,4 +1,3 @@
-// router.js
 import { createHashRouter, RouterProvider } from 'react-router-dom';
 import React from 'react';
 import { ThemeProvider } from './Context/ThemeContext';
@@ -12,8 +11,9 @@ import SecurityCourse from './pages/CoursesCategory/SecurityCourse';
 import NotFound from './pages/NotFound';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import LessonPage from './pages/LessonPage';
-import SignUp from './pages/Sign/SignUp'
-import LogIn from './pages/Sign/LogIn'
+import SignUp from './pages/Sign/SignUp';
+import Login from './pages/Sign/Login';
+import YourLessonsPage from './pages/YourLessonsPage/YourLessonsPage';
 
 const wrapComponent = (Component) => <Component />;
 
@@ -65,7 +65,11 @@ const router = createHashRouter([
       },
       {
         path: 'login',
-        element: <LogIn />
+        element: <Login />
+      },
+      {
+        path: 'your-lessons',
+        element: <YourLessonsPage />
       },
       {
         path: '*',

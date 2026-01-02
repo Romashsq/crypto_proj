@@ -164,18 +164,19 @@ const LessonList = ({ courseId = "crypto" }) => {
           const { isCompleted, isLocked, isActive } = getLessonStatus(lesson.id);
           
           return (
-            <LessonCard
-              key={lesson.id}
-              lessonNumber={lesson.id}
-              title={lesson.title}
-              duration={lesson.duration}
-              level={lesson.level}
-              isCompleted={isCompleted}
-              isLocked={isLocked}
-              isActive={isActive}
-              onStartLesson={() => handleStartLesson(lesson.id)}
-            />
-          );
+          <LessonCard
+            key={lesson.id}
+            lessonNumber={lesson.id}
+            title={lesson.title}
+            duration={lesson.duration}
+            level={lesson.level}
+            isCompleted={isCompleted}
+            isLocked={isLocked}
+            isActive={isActive}
+            onStartLesson={() => handleStartLesson(lesson.id)}
+            courseId={courseId}
+          />
+        );
         })}
       </div>
       

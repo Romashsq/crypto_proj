@@ -237,3 +237,36 @@
     gap: 8px;
   }
 }
+
+.lessonTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Или для SaveButton в правом углу */
+.headerRight {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.saveButtonWrapper {
+  margin-top: -4px;
+}
+
+/* Если хотите сделать SaveButton абсолютно позиционированным */
+.lessonCard {
+  position: relative;
+}
+
+.saveButtonAbsolute {
+  position: absolute;
+  top: 24px;
+  right: 30px;
+  z-index: 10;
+}

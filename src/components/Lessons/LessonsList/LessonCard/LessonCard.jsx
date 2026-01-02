@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // ДОБАВЬ ИМПОРТ
+import { Link } from 'react-router-dom';
 import { useTheme } from '../../../../Context/ThemeContext';
+import SaveButton from '../../../Shared/SaveButton/SaveButton'; // ДОБАВЬ ИМПОРТ
 import styles from './LessonCard.module.css';
 
 const LessonCard = ({ 
@@ -12,10 +13,20 @@ const LessonCard = ({
   isCompleted = false,
   onStartLesson,
   isActive = false,
-  courseId = 'crypto' // ДОБАВЬ ЭТОТ ПРОП
+  courseId = 'crypto'
 }) => {
   const { theme } = useTheme();
   const isDarkMode = theme === 'dark';
+
+  // Создаем объект урока для SaveButton
+  const lesson = {
+    id: lessonNumber,
+    courseId: courseId,
+    title: title,
+    duration: duration,
+    level: level,
+    // Добавьте другие поля если есть
+  };
 
   const handleClick = () => {
     if (!isLocked && onStartLesson) {
@@ -43,7 +54,15 @@ const LessonCard = ({
             <span className={styles.lessonNumber}>{lessonNumber}</span>
           </div>
           <div className={styles.lessonContent}>
-            <h3 className={styles.lessonTitle}>{title}</h3>
+            <h3 className={styles.lessonTitle}>
+              {title}
+              {/* Добавляем SaveButton рядом с заголовком */}
+              <SaveButton 
+                lesson={lesson}
+                size="small"
+                showLabel={false}
+              />
+            </h3>
             <div className={styles.lessonMeta}>
               <div className={styles.metaItem}>
                 <i className="far fa-clock"></i>
@@ -71,7 +90,7 @@ const LessonCard = ({
           </button>
         ) : isCompleted ? (
           <Link 
-            to={`/lesson/${courseId}/${lessonNumber}`} // ИСПОЛЬЗУЕМ Link
+            to={`/lesson/${courseId}/${lessonNumber}`}
             className={`${styles.btn} ${styles.btnCompleted}`}
           >
             <i className="fas fa-redo"></i>
@@ -79,9 +98,9 @@ const LessonCard = ({
           </Link>
         ) : (
           <Link 
-            to={`/lesson/${courseId}/${lessonNumber}`} // ИСПОЛЬЗУЕМ Link
+            to={`/lesson/${courseId}/${lessonNumber}`}
             className={`${styles.btn} ${styles.btnPrimary}`}
-            onClick={handleClick} // ВСЕ ЕЩЕ ВЫЗЫВАЕМ handleClick для прогресса
+            onClick={handleClick}
           >
             <i className="fas fa-play"></i>
             <span>Start Lesson</span>

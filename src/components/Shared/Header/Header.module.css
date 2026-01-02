@@ -1,5 +1,8 @@
 /* Header.module.css - КОМПАКТНАЯ ВЕРСИЯ */
 :root {
+  --header-height: 80px;
+  --header-height-mobile: 70px;
+  --header-height-small: 65px;
   --primary: #9B2FFF;
   --white: #FFFFFF;
   --light-bg: #f9f7ff;
@@ -14,6 +17,7 @@
   top: 0;
   left: 0;
   width: 100%;
+  height: var(--header-height);
   z-index: 1000;
   padding: 15px 0;
   background: rgba(255, 255, 255, 0.95);
@@ -22,6 +26,7 @@
   box-shadow: 0 2px 20px rgba(0,0,0,0.1);
   transform: translateY(0);
 }
+
 
 :global(.dark-mode) .header {
   background: rgba(15, 15, 35, 0.95);
@@ -459,5 +464,118 @@
     padding: 4px 8px;
     font-size: 11px;
     min-width: 50px;
+  }
+}
+
+
+.yourLessonsBtn {
+  padding: 7px 16px;
+  background: linear-gradient(135deg, #FF6B9D, #FF4081);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(255, 107, 157, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.yourLessonsBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255, 107, 157, 0.3);
+  background: linear-gradient(135deg, #FF5A8C, #FF2E71);
+}
+
+.yourLessonsBtn img {
+  filter: brightness(0) invert(1);
+}
+
+/* Мобильная версия Your Lessons в меню */
+.mobileYourLessons {
+  display: none;
+}
+
+.mobileYourLessons a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  color: #FF4081;
+  font-weight: 600;
+  border-top: 1px solid rgba(255, 64, 129, 0.1);
+  margin-top: 10px;
+}
+
+.mobileYourLessons a:hover {
+  color: #FF2E71;
+}
+
+:global(.dark-mode) .mobileYourLessons a {
+  color: #FF80AB;
+}
+
+/* МОБИЛЬНАЯ ВЕРСИЯ */
+@media (max-width: 768px) {
+  .headerActions {
+    gap: 8px;
+  }
+
+  .header {
+    padding: 12px 0;
+    height: var(--header-height-mobile);
+  }
+  
+  /* Скрываем кнопку Log In на мобильных */
+  .logInBtn {
+    display: none;
+  }
+  
+  /* Показываем Your Lessons в меню на мобильных */
+  .mobileYourLessons {
+    display: block;
+  }
+  
+  /* Скрываем кнопку Your Lessons в headerActions на мобильных */
+  .yourLessonsBtn {
+    display: none;
+  }
+  
+  .signUpBtn {
+    padding: 6px 14px;
+    font-size: 13px;
+    min-width: 70px;
+  }
+  
+  .themeToggle {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* МАЛЕНЬКИЕ ТЕЛЕФОНЫ */
+@media (max-width: 480px) {
+  .mobileYourLessons a {
+    padding: 10px 0;
+    font-size: 15px;
+  }
+
+  .header {
+    padding: 10px 0;
+    height: var(--header-height-small);
+}}
+
+/* ДЕСКТОПНАЯ ВЕРСИЯ */
+@media (min-width: 769px) {
+  .mobileYourLessons {
+    display: none;
+  }
+  
+  .yourLessonsBtn {
+    display: flex;
   }
 }

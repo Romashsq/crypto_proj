@@ -4,7 +4,7 @@ import { useScrollHeader } from '../../../hooks/useScrollHeader';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './Header.module.css';
 import logo from '../../../assets/logo.png';
-import { Moon, Sun } from '../../../assets/Icons'
+import { Moon, Sun, Heart } from '../../../assets/Icons'; // Импортируем Heart
 
 const Header = () => {
   const { theme, toggleTheme } = useTheme();
@@ -104,6 +104,11 @@ const Header = () => {
     navigate('/login');
   };
 
+  const handleYourLessons = () => {
+    navigate('/your-lessons');
+    closeMobileMenu();
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       const nav = document.querySelector(`.${styles.nav}`);
@@ -178,6 +183,13 @@ const Header = () => {
                 <Link to="/security" onClick={closeMobileMenu}>Security</Link>
               </div>
             </li>
+            {/* Добавляем Your Lessons в мобильное меню */}
+            <li className={styles.mobileYourLessons}>
+              <Link to="/your-lessons" onClick={closeMobileMenu}>
+                <Heart width={16} height={16} />
+                <span>Your Lessons</span>
+              </Link>
+            </li>
           </ul>
         </nav>
         
@@ -187,6 +199,15 @@ const Header = () => {
             onClick={handleLogIn}
           >
             Log In
+          </button>
+          
+          <button 
+            className={styles.yourLessonsBtn}
+            onClick={handleYourLessons}
+            title="Your Saved Lessons"
+          >
+            <Heart width={18} height={18} />
+            <span>Your Lessons</span>
           </button>
           
           <button 
