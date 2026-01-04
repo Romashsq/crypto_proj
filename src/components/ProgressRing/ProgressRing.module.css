@@ -1,0 +1,816 @@
+/* Profile.module.css */
+
+.profilePage {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f9f7ff 0%, #f0ebff 100%);
+  padding: 20px;
+  padding-top: 100px;
+}
+
+.profilePage.darkMode {
+  background: linear-gradient(135deg, #0a0a15 0%, #1a1a2e 100%);
+}
+
+.profileContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 30px;
+  min-height: calc(100vh - 140px);
+}
+
+/* Основной контент */
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Хедер контента */
+.contentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border-radius: 24px;
+  padding: 25px 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  margin-top: 0;
+}
+
+.darkMode .contentHeader {
+  background: #1a1a2e;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.headerTitle h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin-bottom: 5px;
+  cursor: default;
+}
+
+.darkMode .headerTitle h2 {
+  color: #ffffff;
+}
+
+.headerTitle p {
+  color: #666;
+  font-size: 1rem;
+  cursor: default;
+}
+
+.darkMode .headerTitle p {
+  color: #aaaaaa;
+}
+
+.headerActions {
+  display: flex;
+  gap: 15px;
+}
+
+.editProfileBtn {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #9B2FFF, #667eea);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.editProfileBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(155, 47, 255, 0.3);
+}
+
+.themeToggleBtn {
+  width: 48px;
+  height: 48px;
+  background: rgba(155, 47, 255, 0.1);
+  border: 2px solid rgba(155, 47, 255, 0.2);
+  border-radius: 12px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.themeToggleBtn:hover {
+  background: rgba(155, 47, 255, 0.2);
+  transform: rotate(15deg);
+}
+
+/* Сетка статистики */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.statCard {
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.statCard:hover {
+  transform: translateY(-5px);
+}
+
+.darkMode .statCard {
+  background: #1a1a2e;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.statCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.statCardIcon {
+  width: 50px;
+  height: 50px;
+  background: rgba(155, 47, 255, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9B2FFF;
+}
+
+.statCardHeader h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  cursor: default;
+}
+
+.darkMode .statCardHeader h3 {
+  color: #ffffff;
+}
+
+.statCardBody {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.statCardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.statCardValue {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #9B2FFF;
+  cursor: pointer;
+}
+
+.statCardLabel {
+  font-size: 0.9rem;
+  color: #666;
+  cursor: default;
+}
+
+.darkMode .statCardLabel {
+  color: #aaaaaa;
+}
+
+/* Счет */
+.scoreDisplay {
+  text-align: center;
+  cursor: default;
+}
+
+.scoreValue {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #9B2FFF;
+  display: block;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.scoreLabel {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 5px;
+  cursor: default;
+}
+
+.darkMode .scoreLabel {
+  color: #aaaaaa;
+}
+
+.scoreProgress {
+  flex: 1;
+  cursor: default;
+}
+
+.scoreBar {
+  height: 8px;
+  background: rgba(155, 47, 255, 0.1);
+  border-radius: 4px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.darkMode .scoreBar {
+  background: rgba(155, 47, 255, 0.2);
+}
+
+.scoreFill {
+  height: 100%;
+  background: linear-gradient(90deg, #4CAF50, #45a049);
+  border-radius: 4px;
+}
+
+.scoreText {
+  font-size: 0.9rem;
+  color: #4CAF50;
+  font-weight: 600;
+  cursor: default;
+}
+
+/* Время */
+.timeDisplay {
+  text-align: center;
+  margin-bottom: 20px;
+  cursor: default;
+}
+
+.timeValue {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #FF6B9D;
+  display: block;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.timeLabel {
+  font-size: 0.9rem;
+  color: #666;
+  cursor: default;
+}
+
+.darkMode .timeLabel {
+  color: #aaaaaa;
+}
+
+.timeBreakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  cursor: default;
+}
+
+.timeItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+
+.timeItem:hover {
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.darkMode .timeItem {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.darkMode .timeItem:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.timeType {
+  font-size: 0.9rem;
+  color: #666;
+  cursor: pointer;
+}
+
+.darkMode .timeType {
+  color: #aaaaaa;
+}
+
+.timeHours {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  cursor: pointer;
+}
+
+.darkMode .timeHours {
+  color: #ffffff;
+}
+
+/* График */
+.chartCard {
+  background: white;
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  cursor: default;
+}
+
+.darkMode .chartCard {
+  background: #1a1a2e;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.chartHeader h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  cursor: default;
+}
+
+.darkMode .chartHeader h3 {
+  color: #ffffff;
+}
+
+.chartSelect {
+  padding: 10px 16px;
+  background: rgba(155, 47, 255, 0.1);
+  border: 2px solid rgba(155, 47, 255, 0.2);
+  border-radius: 10px;
+  color: #1a1a2e;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.chartSelect:hover {
+  background: rgba(155, 47, 255, 0.15);
+}
+
+.darkMode .chartSelect {
+  background: rgba(155, 47, 255, 0.2);
+  border-color: rgba(155, 47, 255, 0.3);
+  color: #ffffff;
+}
+
+.chartContainer {
+  height: 200px;
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 30px;
+  cursor: default;
+}
+
+.chartGrid {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  width: 100%;
+  height: 100%;
+  gap: 20px;
+}
+
+.chartColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  cursor: pointer;
+}
+
+.chartColumn:hover .chartBar {
+  background: linear-gradient(to top, #b366ff, #d9b3ff);
+}
+
+.chartBarContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.chartBar {
+  width: 100%;
+  background: linear-gradient(to top, #9B2FFF, #b366ff);
+  border-radius: 8px 8px 0 0;
+  transition: height 0.5s ease, background 0.3s ease;
+}
+
+.chartLabel {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 600;
+  cursor: default;
+}
+
+.darkMode .chartLabel {
+  color: #aaaaaa;
+}
+
+.chartValue {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  cursor: pointer;
+}
+
+.darkMode .chartValue {
+  color: #ffffff;
+}
+
+.chartLegend {
+  display: flex;
+  gap: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: default;
+}
+
+.darkMode .chartLegend {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.legendColor {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+/* Нижняя сетка */
+.bottomGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+.goalsCard, .activityCard {
+  background: white;
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  cursor: default;
+}
+
+.darkMode .goalsCard,
+.darkMode .activityCard {
+  background: #1a1a2e;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.cardHeader h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  cursor: default;
+}
+
+.darkMode .cardHeader h3 {
+  color: #ffffff;
+}
+
+.viewAllLink {
+  color: #9B2FFF;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  cursor: pointer;
+}
+
+.viewAllLink:hover {
+  color: #8a1fe0;
+  text-decoration: underline;
+}
+
+/* Цели */
+.goalsList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.goalItem {
+  padding: 20px;
+  background: rgba(155, 47, 255, 0.05);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.goalItem:hover {
+  background: rgba(155, 47, 255, 0.08);
+  transform: translateX(5px);
+}
+
+.darkMode .goalItem {
+  background: rgba(155, 47, 255, 0.1);
+}
+
+.darkMode .goalItem:hover {
+  background: rgba(155, 47, 255, 0.15);
+}
+
+.goalInfo {
+  margin-bottom: 15px;
+}
+
+.goalTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.darkMode .goalTitle {
+  color: #ffffff;
+}
+
+.goalMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #666;
+  cursor: pointer;
+}
+
+.darkMode .goalMeta {
+  color: #aaaaaa;
+}
+
+.goalDeadline {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.goalProgress {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+}
+
+.goalProgressBar {
+  flex: 1;
+  height: 8px;
+  background: rgba(155, 47, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.darkMode .goalProgressBar {
+  background: rgba(155, 47, 255, 0.2);
+}
+
+.goalProgressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #4CAF50, #45a049);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.goalProgressText {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #4CAF50;
+  min-width: 40px;
+  cursor: pointer;
+}
+
+.addGoalBtn {
+  width: 100%;
+  padding: 16px;
+  background: rgba(155, 47, 255, 0.1);
+  border: 2px dashed rgba(155, 47, 255, 0.3);
+  border-radius: 16px;
+  color: #9B2FFF;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.addGoalBtn:hover {
+  background: rgba(155, 47, 255, 0.2);
+  border-color: #9B2FFF;
+  border-style: solid;
+}
+
+/* Активность */
+.activityList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.activityItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 20px;
+  background: rgba(155, 47, 255, 0.05);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.activityItem:hover {
+  background: rgba(155, 47, 255, 0.08);
+  transform: translateX(5px);
+}
+
+.darkMode .activityItem {
+  background: rgba(155, 47, 255, 0.1);
+}
+
+.darkMode .activityItem:hover {
+  background: rgba(155, 47, 255, 0.15);
+}
+
+.activityIcon {
+  width: 45px;
+  height: 45px;
+  background: rgba(155, 47, 255, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9B2FFF;
+  flex-shrink: 0;
+}
+
+.activityContent {
+  flex: 1;
+}
+
+.activityTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.darkMode .activityTitle {
+  color: #ffffff;
+}
+
+.activityCourse {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.darkMode .activityCourse {
+  color: #aaaaaa;
+}
+
+.activityFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.activityTime {
+  font-size: 0.85rem;
+  color: #888;
+  cursor: pointer;
+}
+
+.activityStatus {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+
+.activityStatus.completed,
+.activityStatus.passed,
+.activityStatus.earned {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+}
+
+.activityStatus.enrolled {
+  background: rgba(155, 47, 255, 0.1);
+  color: #9B2FFF;
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+  .profileContainer {
+    grid-template-columns: 280px 1fr;
+  }
+  
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .bottomGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 992px) {
+  .profileContainer {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .profilePage {
+    padding: 15px;
+    padding-top: 90px;
+  }
+  
+  .contentHeader {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+  
+  .headerActions {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .userName {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profileContainer {
+    gap: 15px;
+  }
+  
+  .contentHeader,
+  .statCard,
+  .chartCard,
+  .goalsCard,
+  .activityCard {
+    padding: 20px;
+  }
+  
+  .statCardBody {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+  
+  .activityFooter {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+}

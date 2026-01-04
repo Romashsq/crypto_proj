@@ -3,6 +3,7 @@
   padding-top: 100px;
   min-height: 100vh;
   background: linear-gradient(135deg, #f9f7ff 0%, #f0ebff 100%);
+  transition: background 0.3s ease;
 }
 
 .pageWrapper.darkMode {
@@ -30,9 +31,10 @@
   font-weight: 800;
   color: #1a1a2e;
   margin-bottom: 15px;
+  transition: color 0.3s ease;
 }
 
-.darkMode .pageTitle {
+.pageWrapper.darkMode .pageTitle {
   color: #ffffff;
 }
 
@@ -42,9 +44,10 @@
   max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;
+  transition: color 0.3s ease;
 }
 
-.darkMode .pageSubtitle {
+.pageWrapper.darkMode .pageSubtitle {
   color: #aaaaaa;
 }
 
@@ -67,7 +70,7 @@
   transition: all 0.3s ease;
 }
 
-.darkMode .statCard {
+.pageWrapper.darkMode .statCard {
   background: #1a1a2e;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
@@ -75,6 +78,10 @@
 .statCard:hover {
   transform: translateY(-5px);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+}
+
+.pageWrapper.darkMode .statCard:hover {
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
 }
 
 .statIcon {
@@ -99,9 +106,10 @@
   color: #333;
   margin: 0;
   line-height: 1;
+  transition: color 0.3s ease;
 }
 
-.darkMode .statNumber {
+.pageWrapper.darkMode .statNumber {
   color: #ffffff;
 }
 
@@ -110,9 +118,10 @@
   color: #666;
   margin: 5px 0 0 0;
   font-weight: 600;
+  transition: color 0.3s ease;
 }
 
-.darkMode .statLabel {
+.pageWrapper.darkMode .statLabel {
   color: #aaaaaa;
 }
 
@@ -130,6 +139,10 @@
   margin-top: 60px;
   padding-top: 40px;
   border-top: 2px solid rgba(155, 47, 255, 0.1);
+}
+
+.pageWrapper.darkMode .actionsSection {
+  border-top-color: rgba(255, 255, 255, 0.1);
 }
 
 .exploreCoursesBtn {
@@ -179,9 +192,10 @@
 .loading p {
   color: #666;
   font-size: 1.1rem;
+  transition: color 0.3s ease;
 }
 
-.darkMode .loading p {
+.pageWrapper.darkMode .loading p {
   color: #aaaaaa;
 }
 

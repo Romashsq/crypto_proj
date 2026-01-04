@@ -1,6 +1,7 @@
 // pages/YourLessonsPage/YourLessonsPage.jsx
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useSavedLessons } from '../../hooks/useSavedLessons';
+import { useTheme } from '../../Context/ThemeContext';
 import SavedLessonCard from '../../components/YourLessons/SavedLessonCard/SavedLessonCard';
 import FilterBar from '../../components/YourLessons/FilterBar/FilterBar';
 import EmptyState from '../../components/YourLessons/EmptyState/EmptyState';
@@ -8,10 +9,10 @@ import styles from './YourLessonsPage.module.css';
 
 const YourLessonsPage = () => {
   const { savedLessons, isLoading } = useSavedLessons();
+  const { theme } = useTheme();
   const [filter, setFilter] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
 
-  // Рассчитываем статистику по курсам
   const courseStats = useMemo(() => {
     const stats = {
       crypto: { count: 0, totalProgress: 0 },
@@ -27,7 +28,7 @@ const YourLessonsPage = () => {
       }
     });
 
-    // Добавляем средний прогресс
+
     Object.keys(stats).forEach(key => {
       if (stats[key].count > 0) {
         stats[key].avgProgress = Math.round(stats[key].totalProgress / stats[key].count);
@@ -39,7 +40,6 @@ const YourLessonsPage = () => {
     return stats;
   }, [savedLessons]);
 
-  // Фильтрация и сортировка
   const filteredAndSortedLessons = useMemo(() => {
     let filtered = savedLessons;
     
@@ -47,8 +47,7 @@ const YourLessonsPage = () => {
     if (filter !== 'all') {
       filtered = filtered.filter(lesson => lesson.courseId === filter);
     }
-    
-    // Сортировка
+
     switch(sortBy) {
       case 'newest':
         return [...filtered].sort((a, b) => 
@@ -67,14 +66,13 @@ const YourLessonsPage = () => {
     }
   }, [savedLessons, filter, sortBy]);
 
-  // Общая статистика
   const totalLessons = savedLessons.length;
   const totalProgress = savedLessons.reduce((sum, lesson) => sum + (lesson.progress || 0), 0);
   const avgProgress = totalLessons > 0 ? Math.round(totalProgress / totalLessons) : 0;
 
   if (isLoading) {
     return (
-      <div className={styles.pageWrapper}>
+      <div className={`${styles.pageWrapper} ${theme === 'dark' ? styles.darkMode : ''}`}>
         <div className={styles.container}>
           <div className={styles.loading}>
             <div className={styles.spinner}></div>
@@ -86,9 +84,8 @@ const YourLessonsPage = () => {
   }
 
   return (
-    <div className={styles.pageWrapper}>
+    <div className={`${styles.pageWrapper} ${theme === 'dark' ? styles.darkMode : ''}`}>
       <div className={styles.container}>
-        {/* Хедер с статистикой */}
         <div className={styles.pageHeader}>
           <div className={styles.headerContent}>
             <h1 className={styles.pageTitle}>Your Lessons</h1>
@@ -132,7 +129,6 @@ const YourLessonsPage = () => {
           </div>
         </div>
 
-        {/* Фильтры и сортировка */}
         <FilterBar 
           filter={filter}
           setFilter={setFilter}
@@ -141,7 +137,6 @@ const YourLessonsPage = () => {
           courseStats={courseStats}
         />
 
-        {/* Список уроков или пустое состояние */}
         {filteredAndSortedLessons.length > 0 ? (
           <div className={styles.lessonsGrid}>
             {filteredAndSortedLessons.map(lesson => (
@@ -155,7 +150,6 @@ const YourLessonsPage = () => {
           <EmptyState filter={filter} />
         )}
 
-        {/* Кнопка для перехода к курсам */}
         <div className={styles.actionsSection}>
           <button 
             className={styles.exploreCoursesBtn}

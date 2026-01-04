@@ -14,6 +14,8 @@ import LessonPage from './pages/LessonPage';
 import SignUp from './pages/Sign/SignUp';
 import Login from './pages/Sign/Login';
 import YourLessonsPage from './pages/YourLessonsPage/YourLessonsPage';
+import Profile from './pages/Profile/Profile';
+
 
 const wrapComponent = (Component) => <Component />;
 
@@ -70,6 +72,10 @@ const router = createHashRouter([
       {
         path: 'your-lessons',
         element: <YourLessonsPage />
+      },
+      {
+        path: 'profile',
+        element: <Profile />
       },
       {
         path: '*',

@@ -4,7 +4,8 @@ import { useScrollHeader } from '../../../hooks/useScrollHeader';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './Header.module.css';
 import logo from '../../../assets/logo.png';
-import { Moon, Sun, Heart } from '../../../assets/Icons'; // Импортируем Heart
+import { Moon, Sun, Heart, User } from '../../../assets/Icons'; // Импортируем Heart
+
 
 const Header = () => {
   const { theme, toggleTheme } = useTheme();
@@ -201,6 +202,14 @@ const Header = () => {
             Log In
           </button>
           
+
+          <button 
+            className={styles.signUpBtn}
+            onClick={handleSignUp}
+          >
+            Sign up
+          </button>
+
           <button 
             className={styles.yourLessonsBtn}
             onClick={handleYourLessons}
@@ -209,13 +218,21 @@ const Header = () => {
             <Heart width={18} height={18} />
             <span>Your Lessons</span>
           </button>
-          
-          <button 
-            className={styles.signUpBtn}
-            onClick={handleSignUp}
+
+
+          <Link 
+          to="/profile"
+          className={styles.profileButton}
+          aria-label="Go to profile"
+          title="View your profile"
           >
-            Sign up
-          </button>
+          <div className={styles.profileButtonInner}>
+            <div className={styles.profileIcon}>
+              <User width={20} height={20} />
+            </div>
+          </div>
+        </Link>
+
           
           <button 
             className={styles.themeToggle} 
