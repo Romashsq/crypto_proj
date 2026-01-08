@@ -1,0 +1,272 @@
+.lessonCard {
+  background: #FFFFFF;
+  border-radius: 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 30px rgba(155, 47, 255, 0.15);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(155, 47, 255, 0.1);
+}
+
+.lessonCard.darkMode {
+  background: #1a1a2e;
+  border-color: rgba(155, 47, 255, 0.2);
+}
+
+.lessonCard:hover:not(.locked) {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 40px rgba(155, 47, 255, 0.25);
+}
+
+.lessonCard.locked {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.lessonCard.completed {
+  border-left: 4px solid #4CAF50;
+}
+
+.lessonCard.active {
+  border-color: #9B2FFF;
+  box-shadow: 0 0 0 2px rgba(155, 47, 255, 0.2);
+}
+
+/* HEADER */
+.lessonHeader {
+  padding: 24px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lessonInfo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
+}
+
+.lessonNumberContainer {
+  flex-shrink: 0;
+}
+
+.lessonNumber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #9B2FFF;
+  color: white;
+  border-radius: 50%;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.lessonContent {
+  flex: 1;
+}
+
+.lessonTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lessonCard.darkMode .lessonTitle {
+  color: #f0f0f0;
+}
+
+.lessonMeta {
+  display: flex;
+  gap: 15px;
+  font-size: 0.9rem;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #666;
+}
+
+.lessonCard.darkMode .metaItem {
+  color: #aaa;
+}
+
+.metaItem i {
+  color: #9B2FFF;
+  font-size: 0.85rem;
+}
+
+/* STATUS */
+.lessonStatusContainer {
+  flex-shrink: 0;
+}
+
+.lessonStatus {
+  font-size: 0.9rem;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statusAvailable {
+  background: #9B2FFF;
+  color: white;
+}
+
+.statusLocked {
+  background: #ccc;
+  color: #666;
+}
+
+.lessonCard.darkMode .statusLocked {
+  background: rgba(255, 255, 255, 0.1);
+  color: #aaa;
+}
+
+.statusCompleted {
+  background: #4CAF50;
+  color: white;
+}
+
+/* ACTIONS */
+.lessonActions {
+  padding: 0 30px 24px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.btnPrimary {
+  background: #9B2FFF;
+  color: white;
+}
+
+.btnPrimary:hover:not(:disabled) {
+  background: #8a1fe0;
+  box-shadow: 0 4px 15px rgba(155, 47, 255, 0.3);
+}
+
+.btnCompleted {
+  background: #4CAF50;
+  color: white;
+}
+
+.btnCompleted:hover:not(:disabled) {
+  background: #45a049;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.btnDisabled {
+  background: #f0f0f0;
+  color: #999;
+}
+
+.lessonCard.darkMode .btnDisabled {
+  background: rgba(255, 255, 255, 0.1);
+  color: #aaa;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .lessonHeader {
+    padding: 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .lessonStatusContainer {
+    width: 100%;
+  }
+  
+  .lessonStatus {
+    display: block;
+    text-align: center;
+  }
+  
+  .lessonActions {
+    padding: 0 20px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .lessonTitle {
+    font-size: 1.1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .lessonMeta {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+.lessonTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Или для SaveButton в правом углу */
+.headerRight {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.saveButtonWrapper {
+  margin-top: -4px;
+}
+
+/* Если хотите сделать SaveButton абсолютно позиционированным */
+.lessonCard {
+  position: relative;
+}
+
+.saveButtonAbsolute {
+  position: absolute;
+  top: 24px;
+  right: 30px;
+  z-index: 10;
+}

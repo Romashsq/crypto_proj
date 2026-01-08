@@ -1,0 +1,306 @@
+/* /frontend/styles/CoursesCard.module.css - УПРОЩЕННЫЕ СТИЛИ */
+.courseCard {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #E2E8F0;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.courseCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.courseHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.courseIcon {
+  background: linear-gradient(135deg, #9B2FFF, #6366F1);
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.courseInfo {
+  flex: 1;
+}
+
+.courseTitle {
+  margin: 0 0 6px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1A202C;
+}
+
+.courseDescription {
+  margin: 0;
+  color: #718096;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.saveButton {
+  background: #F7FAFC;
+  border: 2px solid #E2E8F0;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #718096;
+  flex-shrink: 0;
+}
+
+.saveButton:hover:not(:disabled) {
+  background: #EDF2F7;
+  border-color: #9B2FFF;
+  color: #9B2FFF;
+}
+
+.saveButton.saved {
+  background: #9B2FFF;
+  border-color: #9B2FFF;
+  color: white;
+}
+
+.saveButton.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.saveButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Прогресс */
+.courseProgress {
+  margin-bottom: 16px;
+}
+
+.progressBar {
+  height: 6px;
+  background: #EDF2F7;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.progressInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.progressPercentage {
+  font-weight: 700;
+  color: #1A202C;
+}
+
+.progressLessons {
+  color: #718096;
+}
+
+.notStarted {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: #F7FAFC;
+  border-radius: 8px;
+  border: 1px dashed #CBD5E0;
+}
+
+.notStartedBadge {
+  background: #FED7D7;
+  color: #C53030;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.totalLessons {
+  color: #718096;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Сообщения */
+.message {
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.errorMessage {
+  background: #FED7D7;
+  color: #C53030;
+  border-left: 3px solid #C53030;
+}
+
+.successMessage {
+  background: #C6F6D5;
+  color: #276749;
+  border-left: 3px solid #276749;
+}
+
+/* Кнопка действий */
+.courseActions {
+  margin-bottom: 0;
+}
+
+.actionButton {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+}
+
+.startButton {
+  background: linear-gradient(135deg, #9B2FFF, #6366F1);
+  color: white;
+}
+
+.startButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(155, 47, 255, 0.3);
+}
+
+.continueButton {
+  background: #EDF2F7;
+  color: #1A202C;
+}
+
+.continueButton:hover:not(:disabled) {
+  background: #E2E8F0;
+  transform: translateY(-2px);
+}
+
+.disabledButton {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.actionButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.buttonText {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .courseCard {
+    padding: 16px;
+  }
+  
+  .courseHeader {
+    gap: 12px;
+  }
+  
+  .courseIcon {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
+  
+  .courseTitle {
+    font-size: 16px;
+  }
+  
+  .actionButton {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+}
+
+.debugInfo {
+  background: #F7FAFC;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  font-size: 11px;
+  color: #718096;
+  border: 1px solid #E2E8F0;
+}
+
+.debugInfo small {
+  opacity: 0.8;
+}
+
+.dismissButton {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 8px;
+  opacity: 0.7;
+}
+
+.dismissButton:hover {
+  opacity: 1;
+}
+
+.errorCard {
+  background: #FFF5F5;
+  border: 2px dashed #FC8181;
+  border-radius: 16px;
+  padding: 40px 20px;
+  text-align: center;
+  color: #C53030;
+}
+
+.errorIcon {
+  font-size: 40px;
+  margin-bottom: 16px;
+}
+
+.errorCard p {
+  margin: 0;
+  font-weight: 600;
+}

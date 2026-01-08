@@ -1,0 +1,102 @@
+.coursePage {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  transition: background 0.3s ease;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  display: flex;
+  gap: 40px;
+}
+
+.sidebarContainer {
+  flex: 0 0 280px;
+}
+
+.mainContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.courseHeader {
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid rgba(155, 47, 255, 0.1);
+}
+
+.courseHeader h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 15px;
+  color: var(--text-primary);
+}
+
+.courseHeader p {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.mobileMenuButton {
+  display: none;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  background: var(--primary);
+  color: white;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(155, 47, 255, 0.3);
+}
+
+@media (max-width: 1024px) {
+  .container {
+    padding: 20px 15px;
+  }
+  
+  .sidebarContainer {
+    position: fixed;
+    top: 0;
+    left: -320px;
+    height: 100vh;
+    z-index: 999;
+    transition: left 0.3s ease;
+    background: var(--bg-primary);
+    padding: 80px 20px 20px;
+    overflow-y: auto;
+  }
+  
+  .sidebarContainer.open {
+    left: 0;
+  }
+  
+  .mainContent {
+    width: 100%;
+  }
+  
+  .mobileMenuButton {
+    display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .courseHeader h1 {
+    font-size: 2rem;
+  }
+  
+  .courseHeader p {
+    font-size: 1.1rem;
+  }
+}

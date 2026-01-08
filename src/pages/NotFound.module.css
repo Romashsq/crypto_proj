@@ -1,0 +1,497 @@
+/* NotFound.module.css */
+.notFoundPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f9f7ff 0%, #f0ebff 100%);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.notFoundPage.darkMode {
+  background: linear-gradient(135deg, #0a0a15 0%, #1a1a2e 100%);
+}
+
+/* Анимационный фон */
+.backgroundAnimation {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  background: linear-gradient(135deg, rgba(155, 47, 255, 0.1), rgba(102, 126, 234, 0.1));
+  border-radius: 50%;
+  animation: float 15s infinite linear;
+}
+
+.particle:nth-child(1) {
+  width: 80px;
+  height: 80px;
+  top: 10%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.particle:nth-child(2) {
+  width: 120px;
+  height: 120px;
+  top: 60%;
+  right: 10%;
+  animation-delay: -5s;
+}
+
+.particle:nth-child(3) {
+  width: 60px;
+  height: 60px;
+  bottom: 20%;
+  left: 20%;
+  animation-delay: -10s;
+}
+
+.particle:nth-child(4) {
+  width: 100px;
+  height: 100px;
+  top: 30%;
+  right: 20%;
+  animation-delay: -3s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-30px) rotate(120deg);
+  }
+  66% {
+    transform: translateY(30px) rotate(240deg);
+  }
+}
+
+/* Основной контейнер */
+.notFoundContainer {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  width: 100%;
+  padding: 60px 40px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 32px;
+  box-shadow: 0 25px 60px rgba(155, 47, 255, 0.15);
+  border: 1px solid rgba(155, 47, 255, 0.1);
+  text-align: center;
+}
+
+.darkMode .notFoundContainer {
+  background: rgba(26, 26, 46, 0.95);
+  border-color: rgba(155, 47, 255, 0.2);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Число 404 */
+.errorNumber {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 40px;
+  perspective: 1000px;
+}
+
+.number {
+  font-size: 12rem;
+  font-weight: 900;
+  color: #9B2FFF;
+  text-shadow: 0 10px 30px rgba(155, 47, 255, 0.3);
+  animation: numberFloat 3s ease-in-out infinite;
+}
+
+.darkMode .number {
+  color: #b366ff;
+  text-shadow: 0 10px 30px rgba(155, 47, 255, 0.5);
+}
+
+.number:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.number:nth-child(3) {
+  animation-delay: 1.5s;
+}
+
+.zeroContainer {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.zero {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 15px solid #9B2FFF;
+  border-radius: 50%;
+  animation: spin 8s linear infinite;
+  box-shadow: 0 0 40px rgba(155, 47, 255, 0.3);
+}
+
+.darkMode .zero {
+  border-color: #b366ff;
+  box-shadow: 0 0 50px rgba(155, 47, 255, 0.5);
+}
+
+.zeroInner {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  background: linear-gradient(135deg, #9B2FFF, #667eea);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulse 2s ease-in-out infinite alternate;
+}
+
+.darkMode .zeroInner {
+  background: linear-gradient(135deg, #b366ff, #8a63e6);
+}
+
+@keyframes numberFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* Текст */
+.textContent {
+  margin-bottom: 50px;
+}
+
+.title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #1a1a2e;
+  line-height: 1.2;
+}
+
+.darkMode .title {
+  color: #ffffff;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  color: #666;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.darkMode .subtitle {
+  color: #cccccc;
+}
+
+.description {
+  font-size: 1.2rem;
+  color: #888;
+  max-width: 700px;
+  margin: 0 auto 30px;
+  line-height: 1.6;
+}
+
+.darkMode .description {
+  color: #aaaaaa;
+}
+
+/* Коды ошибок */
+.errorCodes {
+  background: rgba(155, 47, 255, 0.05);
+  border-radius: 16px;
+  padding: 25px;
+  margin: 40px auto;
+  max-width: 800px;
+  border-left: 4px solid #9B2FFF;
+}
+
+.darkMode .errorCodes {
+  background: rgba(155, 47, 255, 0.1);
+}
+
+.errorCodes h3 {
+  color: #9B2FFF;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.codeBlock {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.95rem;
+  text-align: left;
+  margin-top: 15px;
+  overflow-x: auto;
+}
+
+.darkMode .codeBlock {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.codeLine {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.darkMode .codeLine {
+  color: #f0f0f0;
+}
+
+.codeLine.error {
+  color: #ff4757;
+}
+
+.codeLine.solution {
+  color: #2ed573;
+}
+
+/* Кнопки действий */
+.actionButtons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 50px;
+}
+
+.primaryButton, .secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 18px 36px;
+  border-radius: 16px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  min-width: 200px;
+  border: none;
+  cursor: pointer;
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, #9B2FFF, #667eea);
+  color: white;
+  box-shadow: 0 8px 25px rgba(155, 47, 255, 0.25);
+}
+
+.primaryButton:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(155, 47, 255, 0.4);
+  background: linear-gradient(135deg, #8a1fe0, #5b6ee8);
+}
+
+.secondaryButton {
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  border: 2px solid rgba(155, 47, 255, 0.2);
+}
+
+.darkMode .secondaryButton {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f0f0f0;
+  border-color: rgba(155, 47, 255, 0.3);
+}
+
+.secondaryButton:hover {
+  transform: translateY(-5px);
+  border-color: #9B2FFF;
+  background: white;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.darkMode .secondaryButton:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Иконки кнопок */
+.buttonIcon {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.primaryButton:hover .buttonIcon {
+  transform: translateX(5px);
+}
+
+.secondaryButton:hover .buttonIcon {
+  transform: rotate(-15deg);
+}
+
+/* Быстрые ссылки */
+.quickLinks {
+  margin-top: 50px;
+  padding-top: 40px;
+  border-top: 2px solid rgba(155, 47, 255, 0.1);
+}
+
+.quickLinks h3 {
+  color: #9B2FFF;
+  margin-bottom: 25px;
+  font-size: 1.5rem;
+}
+
+.linkGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.quickLink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 20px;
+  background: rgba(155, 47, 255, 0.05);
+  border-radius: 12px;
+  color: #333;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.darkMode .quickLink {
+  background: rgba(155, 47, 255, 0.1);
+  color: #f0f0f0;
+}
+
+.quickLink:hover {
+  transform: translateY(-3px);
+  background: white;
+  border-color: #9B2FFF;
+  box-shadow: 0 10px 25px rgba(155, 47, 255, 0.15);
+}
+
+.darkMode .quickLink:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.quickLink i {
+  color: #9B2FFF;
+  font-size: 1.2rem;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .notFoundContainer {
+    padding: 40px 20px;
+    border-radius: 24px;
+  }
+  
+  .errorNumber {
+    gap: 15px;
+  }
+  
+  .number {
+    font-size: 8rem;
+  }
+  
+  .zeroContainer {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .zero {
+    border-width: 10px;
+  }
+  
+  .title {
+    font-size: 2.5rem;
+  }
+  
+  .subtitle {
+    font-size: 1.3rem;
+  }
+  
+  .description {
+    font-size: 1.1rem;
+  }
+  
+  .actionButtons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .primaryButton, .secondaryButton {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .linkGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .number {
+    font-size: 6rem;
+  }
+  
+  .zeroContainer {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+  
+  .subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .description {
+    font-size: 1rem;
+  }
+  
+  .primaryButton, .secondaryButton {
+    padding: 15px 25px;
+    font-size: 1rem;
+  }
+}

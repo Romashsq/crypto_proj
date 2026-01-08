@@ -1,0 +1,660 @@
+/* Header.module.css - КОМПАКТНАЯ ВЕРСИЯ */
+:root {
+  --header-height: 80px;
+  --header-height-mobile: 70px;
+  --header-height-small: 65px;
+  --primary: #9B2FFF;
+  --white: #FFFFFF;
+  --light-bg: #f9f7ff;
+  --dark-bg: #0f0f23;
+  --dark-card: #1a1a2e;
+  --text-dark: #333;
+  --text-light: #f0f0f0;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header-height);
+  z-index: 1000;
+  padding: 15px 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  transition: all 0.4s ease;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+  transform: translateY(0);
+}
+
+
+:global(.dark-mode) .header {
+  background: rgba(15, 15, 35, 0.95);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+}
+
+.header.hidden {
+  transform: translateY(-100%);
+}
+
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ЛОГОТИП */
+.logo {
+  display: inline-block;
+  cursor: pointer;
+  text-decoration: none;
+  line-height: 0;
+  width: 50px;
+  height: 50px;
+}
+
+.logoImage {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+
+
+/* НАВИГАЦИЯ */
+.nav ul {
+  display: flex;
+  list-style: none;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px 0;
+}
+
+:global(.dark-mode) .nav a {
+  color: #f0f0f0;
+}
+
+.nav a:hover {
+  color: #9B2FFF;
+}
+
+.nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #9B2FFF;
+  transition: all 0.3s ease;
+}
+
+.nav a:hover::after {
+  width: 100%;
+}
+
+/* DROPDOWN */
+.dropdown {
+  position: relative;
+}
+
+.dropdownContent {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #FFFFFF;
+  min-width: 180px;
+  box-shadow: 0 10px 30px rgba(155, 47, 255, 0.15);
+  border-radius: 8px;
+  padding: 8px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  z-index: 1001;
+}
+
+:global(.dark-mode) .dropdownContent {
+  background: #1a1a2e;
+}
+
+.dropdown:hover .dropdownContent {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdownContent a {
+  padding: 8px 16px;
+  display: block;
+  color: #333;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+:global(.dark-mode) .dropdownContent a {
+  color: #f0f0f0;
+}
+
+.dropdownContent a:hover {
+  background: rgba(155, 47, 255, 0.1);
+}
+
+/* HEADER ACTIONS */
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* КНОПКИ */
+.logInBtn {
+  padding: 7px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  backdrop-filter: blur(10px);
+  color: var(--text-dark);
+}
+
+.logInBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+}
+
+:global(.dark-mode) .logInBtn {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--text-light);
+}
+
+:global(.dark-mode) .logInBtn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.signUpBtn {
+  padding: 7px 16px;
+  background: linear-gradient(135deg, #9B2FFF, #667eea);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(155, 47, 255, 0.2);
+}
+
+.signUpBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(155, 47, 255, 0.3);
+  background: linear-gradient(135deg, #8a27e6, #5b6ee8);
+}
+
+/* КНОПКА ТЕМЫ */
+/* КНОПКА ТЕМЫ */
+.themeToggle {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(155, 47, 255, 0.1);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-dark);
+  padding: 0;
+}
+
+:global(.dark-mode) .themeToggle {
+  background: rgba(255, 255, 255, 0.676);
+  color: var(--text-dark);
+}
+
+.themeToggle:hover {
+  background: rgba(155, 47, 255, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(155, 47, 255, 0.15);
+}
+
+:global(.dark-mode) .themeToggle:hover {
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15);
+}
+
+/* Profile Button - так же */
+.profileButton {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(155, 47, 255, 0.1);
+  border: none;
+  border-radius: 10px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-dark);
+  padding: 0;
+}
+
+:global(.dark-mode) .profileButton {
+  background: rgba(255, 255, 255, 0.676);
+  color: var(--text-dark);
+}
+
+.profileButton:hover {
+  background: rgba(155, 47, 255, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(155, 47, 255, 0.15);
+}
+
+:global(.dark-mode) .profileButton:hover {
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15);
+}
+
+/* Иконки */
+.profileIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: #9B2FFF;
+  transition: all 0.3s ease;
+}
+
+.profileButton:hover .profileIcon {
+  transform: scale(1.1);
+  color: #8a27e6;
+}
+
+:global(.dark-mode) .profileIcon {
+  color: #333;
+}
+
+:global(.dark-mode) .profileButton:hover .profileIcon {
+  color: #000;
+}
+
+.themeToggle svg {
+  color: #9B2FFF;
+  transition: all 0.3s ease;
+}
+
+.themeToggle:hover svg {
+  transform: scale(1.1);
+  color: #8a27e6;
+}
+
+:global(.dark-mode) .themeToggle svg {
+  color: #333;
+}
+
+:global(.dark-mode) .themeToggle:hover svg {
+  color: #000;
+}
+
+/* БУРГЕР МЕНЮ */
+.mobileMenuBtn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1002;
+  padding: 8px;
+  width: 40px;
+  height: 40px;
+  position: relative;
+}
+
+.menuIcon {
+  display: block;
+  position: relative;
+  width: 22px;
+  height: 16px;
+  margin: 0 auto;
+}
+
+.menuIcon span {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: #9B2FFF;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+:global(.dark-mode) .menuIcon span {
+  background-color: #b366ff;
+}
+
+.menuIcon span:nth-child(1) {
+  top: 0;
+}
+
+.menuIcon span:nth-child(2) {
+  top: 7px;
+}
+
+.menuIcon span:nth-child(3) {
+  top: 14px;
+}
+
+/* Анимация бургера при открытии */
+.nav.active + .headerActions .mobileMenuBtn .menuIcon span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.nav.active + .headerActions .mobileMenuBtn .menuIcon span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav.active + .headerActions .mobileMenuBtn .menuIcon span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* МОБИЛЬНАЯ ВЕРСИЯ */
+@media (max-width: 768px) {
+  .header {
+    padding: 12px 0;
+  }
+  
+  .logo {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .logoImage {
+    width: 45px;
+    height: 45px;
+  }
+  
+  /* Навигация на десктопе */
+  .nav:not(.active) {
+    display: none;
+  }
+  
+  /* Бургер */
+  .mobileMenuBtn {
+    display: block;
+    margin-left: auto;
+    margin-right: 10px;
+  }
+  
+  /* Мобильное меню */
+  .nav.active {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: #FFFFFF;
+    padding: 80px 20px 30px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    z-index: 999;
+    overflow-y: auto;
+    display: block !important;
+  }
+  
+  :global(.dark-mode) .nav.active {
+    background: #1a1a2e;
+  }
+  
+  .nav.active ul {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .nav.active a {
+    font-size: 16px;
+    padding: 8px 0;
+  }
+  
+  /* Dropdown в мобильном меню */
+  .nav.active .dropdownContent {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    padding-left: 20px;
+    background: transparent;
+    margin-top: 10px;
+  }
+  
+  .nav.active .dropdownContent a {
+    padding: 6px 0;
+  }
+  
+  /* Кнопки на мобильных */
+  .headerActions {
+    gap: 8px;
+  }
+  
+  .logInBtn {
+    display: none;
+  }
+  
+  .signUpBtn {
+    padding: 6px 14px;
+    font-size: 13px;
+    min-width: 70px;
+  }
+  
+  .themeToggle {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* МАЛЕНЬКИЕ ТЕЛЕФОНЫ */
+@media (max-width: 480px) {
+  .header {
+    padding: 10px 0;
+  }
+  
+  .logo {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .logoImage {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .mobileMenuBtn {
+    width: 36px;
+    height: 36px;
+    margin-right: 8px;
+  }
+  
+  .menuIcon {
+    width: 20px;
+    height: 14px;
+  }
+  
+  .menuIcon span {
+    height: 1.5px;
+  }
+  
+  .menuIcon span:nth-child(2) {
+    top: 6px;
+  }
+  
+  .menuIcon span:nth-child(3) {
+    top: 12px;
+  }
+  
+  .headerActions {
+    gap: 6px;
+  }
+  
+  .signUpBtn {
+    padding: 5px 10px;
+    font-size: 12px;
+    min-width: 60px;
+  }
+  
+  .themeToggle {
+    width: 34px;
+    height: 34px;
+  }
+  
+  .themeToggle img {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* ОЧЕНЬ МАЛЕНЬКИЕ ЭКРАНЫ */
+@media (max-width: 360px) {
+  .signUpBtn {
+    padding: 4px 8px;
+    font-size: 11px;
+    min-width: 50px;
+  }
+}
+
+
+.yourLessonsBtn {
+  padding: 7px 16px;
+  background: linear-gradient(135deg, #FF6B9D, #FF4081);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(255, 107, 157, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.yourLessonsBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255, 107, 157, 0.3);
+  background: linear-gradient(135deg, #FF5A8C, #FF2E71);
+}
+
+.yourLessonsBtn img {
+  filter: brightness(0) invert(1);
+}
+
+/* Мобильная версия Your Lessons в меню */
+.mobileYourLessons {
+  display: none;
+}
+
+.mobileYourLessons a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  color: #FF4081;
+  font-weight: 600;
+  border-top: 1px solid rgba(255, 64, 129, 0.1);
+  margin-top: 10px;
+}
+
+.mobileYourLessons a:hover {
+  color: #FF2E71;
+}
+
+:global(.dark-mode) .mobileYourLessons a {
+  color: #FF80AB;
+}
+
+/* МОБИЛЬНАЯ ВЕРСИЯ */
+@media (max-width: 768px) {
+  .headerActions {
+    gap: 8px;
+  }
+
+  .header {
+    padding: 12px 0;
+    height: var(--header-height-mobile);
+  }
+  
+  /* Скрываем кнопку Log In на мобильных */
+  .logInBtn {
+    display: none;
+  }
+  
+  /* Показываем Your Lessons в меню на мобильных */
+  .mobileYourLessons {
+    display: block;
+  }
+  
+  /* Скрываем кнопку Your Lessons в headerActions на мобильных */
+  .yourLessonsBtn {
+    display: none;
+  }
+  
+  .signUpBtn {
+    padding: 6px 14px;
+    font-size: 13px;
+    min-width: 70px;
+  }
+  
+  .themeToggle {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* МАЛЕНЬКИЕ ТЕЛЕФОНЫ */
+@media (max-width: 480px) {
+  .mobileYourLessons a {
+    padding: 10px 0;
+    font-size: 15px;
+  }
+
+  .header {
+    padding: 10px 0;
+    height: var(--header-height-small);
+}}
+
+/* ДЕСКТОПНАЯ ВЕРСИЯ */
+@media (min-width: 769px) {
+  .mobileYourLessons {
+    display: none;
+  }
+  
+  .yourLessonsBtn {
+    display: flex;
+  }
+}

@@ -1,0 +1,184 @@
+/* src/components/YourLessons/EmptyState/EmptyState.module.css */
+.emptyState {
+  text-align: center;
+  padding: 60px 40px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  border: 2px dashed rgba(155, 47, 255, 0.2);
+}
+
+.darkMode.emptyState {
+  background: #1a1a2e;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.emptyIcon {
+  margin-bottom: 25px;
+}
+
+.emptyIcon svg {
+  color: #FF4081;
+  opacity: 0.7;
+}
+
+.emptyTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.darkMode .emptyTitle {
+  color: #f0f0f0;
+}
+
+.emptySubtitle {
+  font-size: 1.1rem;
+  color: #666;
+  max-width: 500px;
+  margin: 0 auto 30px;
+  line-height: 1.6;
+}
+
+.darkMode .emptySubtitle {
+  color: #aaa;
+}
+
+.emptyActions {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.exploreBtn,
+.homeBtn {
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.exploreBtn {
+  background: linear-gradient(135deg, #9B2FFF, #667eea);
+  color: white;
+}
+
+.exploreBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(155, 47, 255, 0.3);
+}
+
+.homeBtn {
+  background: rgba(155, 47, 255, 0.1);
+  border: 2px solid rgba(155, 47, 255, 0.3);
+  color: #9B2FFF;
+}
+
+.homeBtn:hover {
+  background: rgba(155, 47, 255, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(155, 47, 255, 0.2);
+}
+
+.darkMode .homeBtn {
+  background: rgba(155, 47, 255, 0.15);
+  border-color: rgba(155, 47, 255, 0.4);
+  color: #b366ff;
+}
+
+.emptyTips {
+  text-align: left;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 25px;
+  background: rgba(155, 47, 255, 0.05);
+  border-radius: 12px;
+  border-left: 4px solid #9B2FFF;
+}
+
+.darkMode .emptyTips {
+  background: rgba(155, 47, 255, 0.1);
+}
+
+.emptyTips h4 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.darkMode .emptyTips h4 {
+  color: #f0f0f0;
+}
+
+.emptyTips h4::before {
+  content: '💡';
+  font-size: 1.1em;
+}
+
+.emptyTips ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.emptyTips li {
+  color: #666;
+  margin-bottom: 10px;
+  padding-left: 24px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.darkMode .emptyTips li {
+  color: #aaa;
+}
+
+.emptyTips li::before {
+  content: '✓';
+  color: #4CAF50;
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+.emptyTips li:last-child {
+  margin-bottom: 0;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .emptyState {
+    padding: 40px 20px;
+  }
+  
+  .emptyTitle {
+    font-size: 1.5rem;
+  }
+  
+  .emptySubtitle {
+    font-size: 1rem;
+  }
+  
+  .emptyActions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .exploreBtn,
+  .homeBtn {
+    width: 100%;
+    max-width: 250px;
+    justify-content: center;
+  }
+}

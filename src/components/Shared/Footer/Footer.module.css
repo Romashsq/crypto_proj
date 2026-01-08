@@ -1,0 +1,241 @@
+/* Footer.module.css */
+.footer {
+  background: #f9f7ff;
+  padding: 60px 0 30px;
+  position: relative;
+}
+
+:global(.dark-mode) .footer {
+  background: #0f0f23;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Верхняя часть */
+.topSection {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-bottom: 50px;
+}
+
+.brand {
+  flex: 1;
+  min-width: 250px;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.brandName {
+  font-size: 24px;
+  font-weight: 700;
+  color: #9B2FFF;
+  margin: 0;
+}
+
+.tagline {
+  font-size: 14px;
+  color: #666;
+  margin: 5px 0 0 0;
+}
+
+:global(.dark-mode) .tagline {
+  color: #aaa;
+}
+
+.description {
+  font-size: 16px;
+  line-height: 1.6;
+  opacity: 0.8;
+  max-width: 300px;
+}
+
+/* Ссылки */
+.links {
+  display: flex;
+  gap: 60px;
+  flex-wrap: wrap;
+}
+
+.column h3 {
+  font-size: 18px;
+  margin: 0 0 20px 0;
+  color: #9B2FFF;
+}
+
+.column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.column li {
+  margin-bottom: 10px;
+}
+
+.column a {
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.column a:hover {
+  opacity: 1;
+  color: #9B2FFF;
+}
+
+/* Социальные иконки */
+.social {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.socialLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(155, 47, 255, 0.1);
+  border-radius: 50%;
+  color: #9B2FFF;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.socialLink:hover {
+  background: #9B2FFF;
+  color: white;
+  transform: translateY(-3px);
+}
+
+/* Нижняя часть */
+.bottomSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding-top: 30px;
+  border-top: 1px solid rgba(155, 47, 255, 0.1);
+}
+
+.copyright {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.legal {
+  display: flex;
+  gap: 25px;
+}
+
+.legal a {
+  color: inherit;
+  text-decoration: none;
+  font-size: 14px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.legal a:hover {
+  opacity: 1;
+  color: #9B2FFF;
+}
+
+/* Back to Top */
+.backToTop {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background: #9B2FFF;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+.backToTop.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.backToTop:hover {
+  background: #8a1fe0;
+  transform: translateY(-5px);
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+  .topSection {
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .links {
+    gap: 40px;
+  }
+  
+  .column {
+    min-width: 150px;
+  }
+  
+  .bottomSection {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .legal {
+    justify-content: center;
+  }
+}
+
+/* ЛОГОТИП - УПРОЩЕННЫЙ ГРАДИЕНТ */
+.logo {
+  display: inline-block;
+  cursor: pointer !important;
+  text-decoration: none;
+  line-height: 0;
+  position: relative;
+  width: 65px;
+  height: 65px;
+}
+/* САМА КАРТИНКА ЛОГО */
+.logoImage {
+  width: 65px;
+  height: 65px;
+  object-fit: contain;
+  border-radius: 50%;
+  display: block;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}

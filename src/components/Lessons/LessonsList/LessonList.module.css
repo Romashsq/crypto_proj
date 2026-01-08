@@ -1,0 +1,357 @@
+.lessonsContainer {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.darkMode.lessonsContainer {
+  color: var(--text-light);
+}
+
+.courseHeader {
+  text-align: center;
+  padding: 60px 0 40px;
+  margin-bottom: 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+.courseHeader::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(155, 47, 255, 0.1) 0%, rgba(155, 47, 255, 0.05) 100%);
+  z-index: -1;
+}
+
+.darkMode .courseHeader::before {
+  background: linear-gradient(135deg, rgba(155, 47, 255, 0.15) 0%, rgba(155, 47, 255, 0.05) 100%);
+}
+
+.courseHeaderContent {
+  position: relative;
+  z-index: 1;
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  background: rgba(155, 47, 255, 0.1);
+  border-radius: 10px;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  margin-bottom: 30px;
+  transition: all 0.3s ease;
+}
+
+.backButton:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(155, 47, 255, 0.3);
+}
+
+.courseTitle {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: var(--text-dark);
+  line-height: 1.2;
+}
+
+.darkMode .courseTitle {
+  color: var(--text-light);
+}
+
+.courseDescription {
+  font-size: 1.2rem;
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto 30px;
+  line-height: 1.6;
+}
+
+.darkMode .courseDescription {
+  color: #aaa;
+}
+
+.courseMeta {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  background: white;
+  padding: 10px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.darkMode .metaItem {
+  color: var(--text-light);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.metaItem i {
+  color: var(--primary);
+}
+
+/* Progress Bar Styles */
+.progressContainer {
+  background: rgba(155, 47, 255, 0.05);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 40px;
+  border: 1px solid rgba(155, 47, 255, 0.1);
+}
+
+.darkMode .progressContainer {
+  background: rgba(155, 47, 255, 0.1);
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.progressTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.darkMode .progressTitle {
+  color: var(--text-light);
+}
+
+.progressTitle i {
+  color: var(--primary);
+}
+
+.progressPercentage {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary);
+  background: rgba(155, 47, 255, 0.1);
+  padding: 8px 16px;
+  border-radius: 12px;
+}
+
+.progressBar {
+  height: 12px;
+  background: rgba(155, 47, 255, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 20px 0;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary) 0%, #8a1fe0 100%);
+  border-radius: 6px;
+  transition: width 0.8s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.progressFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+  animation: progressShimmer 2s infinite;
+}
+
+@keyframes progressShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.progressStats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.statNumber {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.statLabel {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 4px;
+}
+
+.darkMode .statLabel {
+  color: #aaa;
+}
+
+/* Lessons List */
+.lessonsList {
+  margin-bottom: 40px;
+}
+
+/* В конец файла добавь или замени эти стили */
+
+.actionsContainer {
+  display: flex;
+  justify-content: space-between; /* Меняем space-around на space-between */
+  align-items: center;
+  margin-top: 40px;
+  padding: 30px;
+  border-top: 1px solid rgba(155, 47, 255, 0.1);
+  border-radius: 16px;
+  background: rgba(155, 47, 255, 0.02);
+}
+
+.darkMode .actionsContainer {
+  border-top-color: rgba(255, 255, 255, 0.1);
+  background: rgba(155, 47, 255, 0.05);
+}
+
+/* Левая кнопка */
+.backToCourses {
+  display: inline-flex;
+  align-items: center;
+  padding: 14px 28px;
+  background: linear-gradient(135deg, rgba(155, 47, 255, 0.1) 0%, rgba(155, 47, 255, 0.2) 100%);
+  border-radius: 12px;
+  color: #9B2FFF;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  border: 2px solid rgba(155, 47, 255, 0.3);
+  flex: 0 0 auto;
+}
+
+.backToCourses:hover {
+  background: linear-gradient(135deg, #9B2FFF 0%, #8a1fe0 100%);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(155, 47, 255, 0.4);
+  border-color: #9B2FFF;
+}
+
+/* Правая кнопка - Reset Progress */
+.resetButton {
+  display: inline-flex;
+  align-items: center;
+  padding: 14px 28px;
+  background: linear-gradient(135deg, rgba(255, 59, 48, 0.1) 0%, rgba(255, 59, 48, 0.2) 100%);
+  border-radius: 12px;
+  color: #FF3B30;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 59, 48, 0.3);
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+
+.resetButton:hover {
+  background: linear-gradient(135deg, #FF3B30 0%, #ff1c1c 100%);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 59, 48, 0.4);
+  border-color: #FF3B30;
+}
+
+/* Иконки */
+.backToCourses i,
+.resetButton i {
+  font-size: 1em;
+  transition: transform 0.3s ease;
+}
+
+.backToCourses:hover i {
+  transform: translateX(-4px);
+}
+
+.resetButton:hover i {
+  transform: rotate(180deg);
+}
+
+
+@media (max-width: 768px) {
+  .courseHeader {
+    padding: 40px 0 30px;
+  }
+  
+  .courseTitle {
+    font-size: 2.2rem;
+  }
+  
+  .courseDescription {
+    font-size: 1.1rem;
+  }
+  
+  .courseMeta {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .progressContainer {
+    padding: 20px;
+  }
+  
+  .progressPercentage {
+    font-size: 1.5rem;
+  }
+  
+  .navigation {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+  
+  .navButton {
+    justify-content: center;
+  }
+
+  .actionsContainer {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+    padding: 20px;
+    margin-top: 30px;
+  }
+  
+  .backToCourses,
+  .resetButton {
+    justify-content: center;
+    width: 100%;
+    padding: 16px 24px;
+  }
+}

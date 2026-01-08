@@ -1,0 +1,70 @@
+.saveButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 64, 129, 0.1);
+  border: 2px solid rgba(255, 64, 129, 0.3);
+  border-radius: 8px;
+  color: #FF4081;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 8px 16px;
+}
+
+.saveButton:hover {
+  background: rgba(255, 64, 129, 0.2);
+  border-color: #FF4081;
+  transform: translateY(-2px);
+}
+
+.saveButton.saved {
+  background: #FF4081;
+  color: white;
+  border-color: #FF4081;
+}
+
+.saveButton.saved:hover {
+  background: #FF2E71;
+}
+
+.saveButton.small {
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+.saveButton.medium {
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.saveButton.large {
+  padding: 12px 24px;
+  font-size: 16px;
+}
+
+.heartIcon {
+  transition: transform 0.3s ease;
+}
+
+.saveButton:hover .heartIcon {
+  transform: scale(1.1);
+}
+
+.saveButton.saved .heartIcon {
+  filter: brightness(0) invert(1);
+}
+
+.buttonLabel {
+  font-weight: 600;
+}
+
+/* Темная тема */
+:global(.dark-mode) .saveButton:not(.saved) {
+  background: rgba(255, 64, 129, 0.15);
+  color: #FF80AB;
+}
+
+:global(.dark-mode) .saveButton:not(.saved):hover {
+  background: rgba(255, 64, 129, 0.25);
+}

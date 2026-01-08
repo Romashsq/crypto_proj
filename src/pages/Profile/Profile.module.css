@@ -1,0 +1,1276 @@
+/* Profile.module.css */
+
+.profilePage {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f9f7ff 0%, #f0ebff 100%);
+  padding: 20px;
+  /* Добавляем отступ сверху для фиксированного хедера */
+  padding-top: 100px;
+}
+
+.profilePage.darkMode {
+  background: linear-gradient(135deg, #0a0a15 0%, #1a1a2e 100%);
+}
+
+.profileContainer {
+  max-width: 1450px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 280px 1fr; /* Уменьшили с 300px до 280px */
+  gap: 20px; /* Уменьшили с 30px до 20px */
+  min-height: calc(100vh - 140px);
+  overflow-x: hidden; /* Запрещаем горизонтальный скролл */
+}
+
+/* САЙДБАР */
+.sidebar {
+  background: white;
+  border-radius: 24px;
+  padding: 25px; /* Уменьшили с 30px до 25px */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 120px;
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
+  overflow-x: hidden; /* Запрещаем горизонтальный скролл */
+  width: 100%;
+  box-sizing: border-box;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.darkMode .sidebar {
+  background: #1a1a2e;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+
+
+/* Аватар */
+.profileHeader {
+  text-align: center;
+  margin-bottom: 25px; /* Уменьшили с 30px до 25px */
+}
+
+.avatarContainer {
+  position: relative;
+  margin-bottom: 15px; /* Уменьшили с 20px до 15px */
+}
+
+.avatar {
+  width: 100px; /* Уменьшили с 120px до 100px */
+  height: 100px; /* Уменьшили с 120px до 100px */
+  margin: 0 auto;
+  background: linear-gradient(135deg, #9B2FFF, #667eea);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid white;
+  box-shadow: 0 8px 25px rgba(155, 47, 255, 0.3);
+  cursor: pointer;
+}
+
+.darkMode .avatar {
+  border-color: #1a1a2e;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.levelBadge {
+  position: absolute;
+  bottom: 0;
+  right: 15px; /* Уменьшили с 20px до 15px */
+  background: linear-gradient(135deg, #FF6B9D, #FF4081);
+  color: white;
+  padding: 5px 10px; /* Уменьшили с 6px 12px до 5px 10px */
+  border-radius: 20px;
+  font-size: 0.75rem; /* Уменьшили с 0.8rem до 0.75rem */
+  font-weight: 700;
+  border: 3px solid white;
+  cursor: pointer;
+}
+
+.darkMode .levelBadge {
+  border-color: #1a1a2e;
+}
+
+.levelBadge:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+.userInfo {
+  margin-bottom: 15px;
+}
+
+.userName {
+  font-size: 1.5rem; /* Уменьшили с 1.8rem до 1.5rem */
+  font-weight: 800;
+  color: #1a1a2e;
+  margin-bottom: 5px;
+  cursor: text;
+}
+
+.darkMode .userName {
+  color: #ffffff;
+}
+
+.username {
+  color: #9B2FFF;
+  font-size: 0.9rem; /* Уменьшили с 0.95rem до 0.9rem */
+  font-weight: 600;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.username:hover {
+  text-decoration: underline;
+}
+
+.userBio {
+  color: #666;
+  font-size: 0.85rem; /* Уменьшили с 0.9rem до 0.85rem */
+  line-height: 1.5;
+  cursor: text;
+}
+
+.darkMode .userBio {
+  color: #aaaaaa;
+}
+
+.joinDate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #888;
+  font-size: 0.8rem; /* Уменьшили с 0.85rem до 0.8rem */
+  margin-top: 10px; /* Уменьшили с 15px до 10px */
+  cursor: default;
+}
+
+/* Прогресс уровня */
+.levelProgress {
+  background: rgba(155, 47, 255, 0.05);
+  border-radius: 16px;
+  padding: 15px; /* Уменьшили с 20px до 15px */
+  margin-bottom: 20px; /* Уменьшили с 25px до 20px */
+  cursor: default;
+}
+
+.progressRingText {
+  font-size: 1.3rem;
+  font-weight: 700;
+  fill: #1a1a2e;
+  cursor: pointer;
+}
+
+.darkMode .progressRingText {
+  fill: #ffffff; /* Белый текст в темной теме */
+}
+
+.darkMode .levelProgress {
+  background: rgba(155, 47, 255, 0.1);
+}
+
+.levelInfo {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px; /* Уменьшили с 12px до 10px */
+}
+
+.levelLabel {
+  font-size: 0.85rem; /* Уменьшили с 0.9rem до 0.85rem */
+  color: #666;
+  font-weight: 600;
+  cursor: default;
+}
+
+.darkMode .levelLabel {
+  color: #aaaaaa;
+}
+
+.levelXp {
+  font-size: 0.85rem; /* Уменьшили с 0.9rem до 0.85rem */
+  font-weight: 700;
+  color: #9B2FFF;
+  cursor: pointer;
+}
+
+.xpBar {
+  height: 8px;
+  background: rgba(155, 47, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.darkMode .xpBar {
+  background: rgba(155, 47, 255, 0.2);
+}
+
+.xpFill {
+  height: 100%;
+  background: linear-gradient(90deg, #9B2FFF, #667eea);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+/* Быстрая статистика */
+.quickStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px; /* Уменьшили с 15px до 12px */
+  margin-bottom: 25px; /* Уменьшили с 30px до 25px */
+}
+
+.statItem {
+  background: rgba(155, 47, 255, 0.05);
+  border-radius: 12px;
+  padding: 12px; /* Уменьшили с 15px до 12px */
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.statItem:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(155, 47, 255, 0.2);
+}
+
+.darkMode .statItem {
+  background: rgba(155, 47, 255, 0.1);
+}
+
+.statIcon {
+  width: 35px; /* Уменьшили с 40px до 35px */
+  height: 35px; /* Уменьшили с 40px до 35px */
+  margin: 0 auto 8px; /* Уменьшили с 10px до 8px */
+  background: rgba(155, 47, 255, 0.1);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.statContent {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.statValue {
+  font-size: 1rem; /* Уменьшили с 1.1rem до 1rem */
+  font-weight: 700;
+  color: #1a1a2e;
+  cursor: pointer;
+}
+
+.darkMode .statValue {
+  color: #ffffff;
+}
+
+.statLabel {
+  font-size: 0.7rem; /* Уменьшили с 0.75rem до 0.7rem */
+  color: #666;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: default;
+}
+
+.darkMode .statLabel {
+  color: #aaaaaa;
+}
+
+/* Навигация */
+.sidebarNav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px; /* Уменьшили с 8px до 6px */
+  margin-bottom: 25px; /* Уменьшили с 30px до 25px */
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Уменьшили с 12px до 10px */
+  padding: 12px 14px; /* Уменьшили с 14px 16px до 12px 14px */
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  color: #666;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  font-size: 0.9rem; /* Добавили размер шрифта */
+}
+
+.navItem:hover {
+  background: rgba(155, 47, 255, 0.05);
+  color: #9B2FFF;
+}
+
+.navItem.active {
+  background: linear-gradient(135deg, #9B2FFF, #667eea);
+  color: white;
+}
+
+.darkMode .navItem {
+  color: #aaaaaa;
+}
+
+.darkMode .navItem:hover {
+  background: rgba(155, 47, 255, 0.1);
+}
+
+.darkMode .navItem.active {
+  background: linear-gradient(135deg, #9B2FFF, #667eea);
+}
+
+/* Настройки */
+.settingsSection {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Уменьшили с 10px до 8px */
+}
+
+.settingsBtn, .logoutBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Уменьшили с 12px до 10px */
+  padding: 12px 14px; /* Уменьшили с 14px 16px до 12px 14px */
+  background: transparent;
+  border: 2px solid rgba(155, 47, 255, 0.1);
+  border-radius: 12px;
+  color: #666;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem; /* Добавили размер шрифта */
+}
+
+.settingsBtn:hover {
+  background: rgba(155, 47, 255, 0.05);
+  border-color: #9B2FFF;
+  color: #9B2FFF;
+}
+
+.logoutBtn:hover {
+  background: rgba(255, 64, 129, 0.05);
+  border-color: #FF4081;
+  color: #FF4081;
+}
+
+.darkMode .settingsBtn,
+.darkMode .logoutBtn {
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #aaaaaa;
+}
+
+/* ОСНОВНОЙ КОНТЕНТ */
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Уменьшили с 30px до 20px */
+  width: 100%;
+  overflow-x: hidden; /* Запрещаем горизонтальный скролл */
+  box-sizing: border-box;
+}
+
+/* Хедер контента */
+.contentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border-radius: 24px;
+  padding: 20px 25px; /* Уменьшили с 25px 30px до 20px 25px */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  margin-top: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.darkMode .contentHeader {
+  background: #1a1a2e;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.headerTitle h2 {
+  font-size: 1.8rem; /* Уменьшили с 2rem до 1.8rem */
+  font-weight: 800;
+  color: #1a1a2e;
+  margin-bottom: 5px;
+  cursor: default;
+}
+
+.darkMode .headerTitle h2 {
+  color: #ffffff;
+}
+
+.headerTitle p {
+  color: #666;
+  font-size: 0.95rem; /* Уменьшили с 1rem до 0.95rem */
+  cursor: default;
+}
+
+.darkMode .headerTitle p {
+  color: #aaaaaa;
+}
+
+.headerActions {
+  display: flex;
+  gap: 12px; /* Уменьшили с 15px до 12px */
+}
+
+.editProfileBtn {
+  padding: 10px 20px; /* Уменьшили с 12px 24px до 10px 20px */
+  background: linear-gradient(135deg, #9B2FFF, #667eea);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem; /* Добавили размер шрифта */
+}
+
+.editProfileBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(155, 47, 255, 0.3);
+}
+
+.themeToggleBtn {
+  width: 42px; /* Уменьшили с 48px до 42px */
+  height: 42px; /* Уменьшили с 48px до 42px */
+  background: rgba(155, 47, 255, 0.1);
+  border: 2px solid rgba(155, 47, 255, 0.2);
+  border-radius: 12px;
+  font-size: 1.1rem; /* Уменьшили с 1.2rem до 1.1rem */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.themeToggleBtn:hover {
+  background: rgba(155, 47, 255, 0.2);
+  transform: rotate(15deg);
+}
+
+/* Сетка статистики */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px; /* Уменьшили с 25px до 20px */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.statCard {
+  background: white;
+  border-radius: 20px;
+  padding: 20px; /* Уменьшили с 25px до 20px */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.statCard:hover {
+  transform: translateY(-5px);
+}
+
+.darkMode .statCard {
+  background: #1a1a2e;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.statCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Уменьшили с 12px до 10px */
+  margin-bottom: 20px; /* Уменьшили с 25px до 20px */
+}
+
+.statCardIcon {
+  width: 45px; /* Уменьшили с 50px до 45px */
+  height: 45px; /* Уменьшили с 50px до 45px */
+  background: rgba(155, 47, 255, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9B2FFF;
+}
+
+/* БЕЛЫЙ БГ для иконок в темной теме */
+.darkMode .statCardIcon {
+  background: rgba(255, 255, 255, 0.1) !important; /* Белый фон в темной теме */
+  color: #ffffff !important;
+}
+
+.statCardHeader h3 {
+  font-size: 1.1rem; /* Уменьшили с 1.2rem до 1.1rem */
+  font-weight: 700;
+  color: #1a1a2e;
+  cursor: default;
+}
+
+.darkMode .statCardHeader h3 {
+  color: #ffffff;
+}
+
+.statCardBody {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Уменьшили с 20px до 15px */
+  flex-wrap: wrap; /* Добавили перенос */
+}
+
+.statCardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.statCardValue {
+  font-size: 1.8rem; /* Уменьшили с 2rem до 1.8rem */
+  font-weight: 800;
+  color: #9B2FFF;
+  cursor: pointer;
+}
+
+.statCardLabel {
+  font-size: 0.85rem; /* Уменьшили с 0.9rem до 0.85rem */
+  color: #666;
+  cursor: default;
+}
+
+.darkMode .statCardLabel {
+  color: #aaaaaa;
+}
+
+/* Прогресс ринг */
+.progressRing {
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0; /* Запрещаем уменьшение */
+}
+
+.progressRingBackground {
+  fill: none;
+  stroke: rgba(155, 47, 255, 0.1);
+}
+
+/* Исправляем прогресс ринг в темной теме */
+.progressRingCircle {
+  fill: none;
+  stroke: #9B2FFF;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+
+
+/* Счет */
+.scoreDisplay {
+  text-align: center;
+  cursor: default;
+  flex-shrink: 0; /* Запрещаем уменьшение */
+}
+
+.scoreValue {
+  font-size: 2.5rem; /* Уменьшили с 3rem до 2.5rem */
+  font-weight: 800;
+  color: #9B2FFF;
+  display: block;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.scoreLabel {
+  font-size: 0.85rem; /* Уменьшили с 0.9rem до 0.85rem */
+  color: #666;
+  margin-top: 5px;
+  cursor: default;
+}
+
+.darkMode .scoreLabel {
+  color: #aaaaaa;
+}
+
+.scoreProgress {
+  flex: 1;
+  cursor: default;
+  min-width: 120px; /* Минимальная ширина */
+}
+
+.scoreBar {
+  height: 8px;
+  background: rgba(155, 47, 255, 0.1);
+  border-radius: 4px;
+  margin-bottom: 8px; /* Уменьшили с 10px до 8px */
+  overflow: hidden;
+  cursor: pointer;
+  width: 100%;
+}
+
+.darkMode .scoreBar {
+  background: rgba(155, 47, 255, 0.2);
+}
+
+.scoreFill {
+  height: 100%;
+  background: linear-gradient(90deg, #4CAF50, #45a049);
+  border-radius: 4px;
+}
+
+.scoreText {
+  font-size: 0.85rem; /* Уменьшили с 0.9rem до 0.85rem */
+  color: #4CAF50;
+  font-weight: 600;
+  cursor: default;
+}
+
+/* Время */
+.timeDisplay {
+  text-align: center;
+  margin-bottom: 15px; /* Уменьшили с 20px до 15px */
+  cursor: default;
+  flex-shrink: 0; /* Запрещаем уменьшение */
+}
+
+.timeValue {
+  font-size: 2.2rem; /* Уменьшили с 2.5rem до 2.2rem */
+  font-weight: 800;
+  color: #FF6B9D;
+  display: block;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.timeLabel {
+  font-size: 0.85rem; /* Уменьшили с 0.9rem до 0.85rem */
+  color: #666;
+  cursor: default;
+}
+
+.darkMode .timeLabel {
+  color: #aaaaaa;
+}
+
+.timeBreakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Уменьшили с 12px до 10px */
+  cursor: default;
+  flex: 1;
+  min-width: 150px; /* Минимальная ширина */
+}
+
+.timeItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px; /* Уменьшили с 10px до 8px */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  cursor: default !important; /* Меняем на default и добавляем !important */
+  gap: 10px;
+  transition: none !important; /* Отключаем переходы */
+}
+
+
+/* График */
+.chartCard {
+  background: white;
+  border-radius: 24px;
+  padding: 25px; /* Уменьшили с 30px до 25px */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  cursor: default;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.darkMode .chartCard {
+  background: #1a1a2e;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px; /* Уменьшили с 30px до 25px */
+  flex-wrap: wrap; /* Добавили перенос */
+  gap: 10px;
+}
+
+.chartHeader h3 {
+  font-size: 1.4rem; /* Уменьшили с 1.5rem до 1.4rem */
+  font-weight: 700;
+  color: #1a1a2e;
+  cursor: default;
+}
+
+.darkMode .chartHeader h3 {
+  color: #ffffff;
+}
+
+.chartSelect {
+  padding: 8px 14px; /* Уменьшили с 10px 16px до 8px 14px */
+  background: rgba(155, 47, 255, 0.1);
+  border: 2px solid rgba(155, 47, 255, 0.2);
+  border-radius: 10px;
+  color: #1a1a2e;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem; /* Добавили размер шрифта */
+}
+
+.chartSelect:hover {
+  background: rgba(155, 47, 255, 0.15);
+}
+
+.darkMode .chartSelect {
+  background: rgba(155, 47, 255, 0.2);
+  border-color: rgba(155, 47, 255, 0.3);
+  color: #ffffff;
+}
+
+.chartContainer {
+  height: 180px; /* Уменьшили с 200px до 180px */
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 25px; /* Уменьшили с 30px до 25px */
+  cursor: default;
+  width: 100%;
+  overflow-x: hidden; /* Запрещаем горизонтальный скролл */
+}
+
+.chartGrid {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  width: 100%;
+  height: 100%;
+  gap: 15px; /* Уменьшили с 20px до 15px */
+}
+
+.chartColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px; /* Уменьшили с 10px до 8px */
+  flex: 1;
+  cursor: pointer;
+  min-width: 0; /* Разрешаем уменьшение */
+}
+
+.chartColumn:hover .chartBar {
+  background: linear-gradient(to top, #b366ff, #d9b3ff);
+}
+
+.chartBarContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.chartBar {
+  width: 100%;
+  background: linear-gradient(to top, #9B2FFF, #b366ff);
+  border-radius: 8px 8px 0 0;
+  transition: height 0.5s ease, background 0.3s ease;
+}
+
+.chartLabel {
+  font-size: 0.8rem; /* Уменьшили с 0.85rem до 0.8rem */
+  color: #666;
+  font-weight: 600;
+  cursor: default;
+  white-space: nowrap;
+}
+
+.darkMode .chartLabel {
+  color: #aaaaaa;
+}
+
+.chartValue {
+  font-size: 0.85rem; /* Уменьшили с 0.9rem до 0.85rem */
+  font-weight: 700;
+  color: #1a1a2e;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.darkMode .chartValue {
+  color: #ffffff;
+}
+
+.chartLegend {
+  display: flex;
+  gap: 15px; /* Уменьшили с 20px до 15px */
+  padding-top: 15px; /* Уменьшили с 20px до 15px */
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: default;
+  flex-wrap: wrap; /* Добавили перенос */
+}
+
+.darkMode .chartLegend {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px; /* Уменьшили с 8px до 6px */
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.legendColor {
+  width: 14px; /* Уменьшили с 16px до 14px */
+  height: 14px; /* Уменьшили с 16px до 14px */
+  border-radius: 4px;
+}
+
+/* Нижняя сетка */
+.bottomGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px; /* Уменьшили с 25px до 20px */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.goalsCard, .activityCard {
+  background: white;
+  border-radius: 24px;
+  padding: 25px; /* Уменьшили с 30px до 25px */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  cursor: default;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.darkMode .goalsCard,
+.darkMode .activityCard {
+  background: #1a1a2e;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px; /* Уменьшили с 25px до 20px */
+  flex-wrap: wrap; /* Добавили перенос */
+  gap: 10px;
+}
+
+.cardHeader h3 {
+  font-size: 1.4rem; /* Уменьшили с 1.5rem до 1.4rem */
+  font-weight: 700;
+  color: #1a1a2e;
+  cursor: default;
+}
+
+.darkMode .cardHeader h3 {
+  color: #ffffff;
+}
+
+.viewAllLink {
+  color: #9B2FFF;
+  font-size: 0.9rem; /* Уменьшили с 0.95rem до 0.9rem */
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.viewAllLink:hover {
+  color: #8a1fe0;
+  text-decoration: underline;
+}
+
+/* Цели */
+.goalsList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Уменьшили с 20px до 15px */
+  margin-bottom: 20px; /* Уменьшили с 25px до 20px */
+}
+
+.goalItem {
+  padding: 15px; /* Уменьшили с 20px до 15px */
+  background: rgba(155, 47, 255, 0.05);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.goalItem:hover {
+  background: rgba(155, 47, 255, 0.08);
+  transform: translateX(5px);
+}
+
+.darkMode .goalItem {
+  background: rgba(155, 47, 255, 0.1);
+}
+
+.darkMode .goalItem:hover {
+  background: rgba(155, 47, 255, 0.15);
+}
+
+.goalInfo {
+  margin-bottom: 12px; /* Уменьшили с 15px до 12px */
+}
+
+.goalTitle {
+  font-size: 1rem; /* Уменьшили с 1.1rem до 1rem */
+  font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 6px; /* Уменьшили с 8px до 6px */
+  cursor: pointer;
+}
+
+.darkMode .goalTitle {
+  color: #ffffff;
+}
+
+.goalMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem; /* Уменьшили с 0.85rem до 0.8rem */
+  color: #666;
+  cursor: pointer;
+  flex-wrap: wrap; /* Добавили перенос */
+}
+
+.darkMode .goalMeta {
+  color: #aaaaaa;
+}
+
+.goalDeadline {
+  display: flex;
+  align-items: center;
+  gap: 4px; /* Уменьшили с 5px до 4px */
+  white-space: nowrap;
+}
+
+.goalDeadline svg {
+  width: 12px; /* Уменьшили с 14px до 12px */
+  height: 12px; /* Уменьшили с 14px до 12px */
+}
+
+.goalProgress {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* Уменьшили с 15px до 12px */
+  cursor: pointer;
+  flex-wrap: wrap; /* Добавили перенос */
+}
+
+.goalProgressBar {
+  flex: 1;
+  height: 6px; /* Уменьшили с 8px до 6px */
+  background: rgba(155, 47, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  min-width: 100px; /* Минимальная ширина */
+}
+
+.darkMode .goalProgressBar {
+  background: rgba(155, 47, 255, 0.2);
+}
+
+.goalProgressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #4CAF50, #45a049);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.goalProgressText {
+  font-size: 0.85rem; /* Уменьшили с 0.9rem до 0.85rem */
+  font-weight: 700;
+  color: #4CAF50;
+  min-width: 35px; /* Уменьшили с 40px до 35px */
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.addGoalBtn {
+  width: 100%;
+  padding: 14px; /* Уменьшили с 16px до 14px */
+  background: rgba(155, 47, 255, 0.1);
+  border: 2px dashed rgba(155, 47, 255, 0.3);
+  border-radius: 16px;
+  color: #9B2FFF;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem; /* Добавили размер шрифта */
+}
+
+.addGoalBtn:hover {
+  background: rgba(155, 47, 255, 0.2);
+  border-color: #9B2FFF;
+  border-style: solid;
+}
+
+/* Активность */
+.activityList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Уменьшили с 20px до 15px */
+}
+
+.activityItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px; /* Уменьшили с 15px до 12px */
+  padding: 15px; /* Уменьшили с 20px до 15px */
+  background: rgba(155, 47, 255, 0.05);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.activityItem:hover {
+  background: rgba(155, 47, 255, 0.08);
+  transform: translateX(5px);
+}
+
+.darkMode .activityItem {
+  background: rgba(155, 47, 255, 0.1);
+}
+
+.darkMode .activityItem:hover {
+  background: rgba(155, 47, 255, 0.15);
+}
+
+.activityIcon {
+  width: 40px; /* Уменьшили с 45px до 40px */
+  height: 40px; /* Уменьшили с 45px до 40px */
+  background: rgba(155, 47, 255, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9B2FFF;
+  flex-shrink: 0;
+}
+
+.activityIcon svg {
+  width: 18px; /* Уменьшили с 20px до 18px */
+  height: 18px; /* Уменьшили с 20px до 18px */
+}
+
+.activityContent {
+  flex: 1;
+  min-width: 0; /* Разрешаем уменьшение */
+}
+
+.activityTitle {
+  font-size: 1rem; /* Уменьшили с 1.1rem до 1rem */
+  font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 4px; /* Уменьшили с 5px до 4px */
+  cursor: pointer;
+  word-break: break-word; /* Добавили перенос слов */
+}
+
+.darkMode .activityTitle {
+  color: #ffffff;
+}
+
+.activityCourse {
+  font-size: 0.85rem; /* Уменьшили с 0.9rem до 0.85rem */
+  color: #666;
+  margin-bottom: 8px; /* Уменьшили с 10px до 8px */
+  cursor: pointer;
+  word-break: break-word; /* Добавили перенос слов */
+}
+
+.darkMode .activityCourse {
+  color: #aaaaaa;
+}
+
+.activityFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* Добавили перенос */
+  gap: 8px;
+}
+
+.activityTime {
+  font-size: 0.8rem; /* Уменьшили с 0.85rem до 0.8rem */
+  color: #888;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.activityStatus {
+  padding: 3px 10px; /* Уменьшили с 4px 12px до 3px 10px */
+  border-radius: 20px;
+  font-size: 0.7rem; /* Уменьшили с 0.75rem до 0.7rem */
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.activityStatus.completed,
+.activityStatus.passed,
+.activityStatus.earned {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+}
+
+.activityStatus.enrolled {
+  background: rgba(155, 47, 255, 0.1);
+  color: #9B2FFF;
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+  .profileContainer {
+    grid-template-columns: 260px 1fr; /* Еще уменьшили для средних экранов */
+    gap: 15px;
+  }
+  
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .bottomGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 992px) {
+  .profileContainer {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .sidebar {
+    position: static;
+    top: auto;
+    max-height: none;
+    width: 100%;
+  }
+  
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .bottomGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .profilePage {
+    padding: 15px;
+    padding-top: 90px;
+  }
+  
+  .contentHeader {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .headerActions {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .avatar {
+    width: 90px;
+    height: 90px;
+  }
+  
+  .userName {
+    font-size: 1.4rem;
+  }
+  
+  .statsGrid {
+    gap: 15px;
+  }
+  
+  .statCardBody {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+  
+  .chartGrid {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profileContainer {
+    gap: 12px;
+  }
+  
+  .sidebar,
+  .contentHeader,
+  .statCard,
+  .chartCard,
+  .goalsCard,
+  .activityCard {
+    padding: 15px;
+  }
+  
+  .quickStats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .statCardBody {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+  
+  .activityFooter {
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+  }
+  
+  .chartSelect {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .bottomGrid {
+    gap: 15px;
+  }
+}

@@ -1,0 +1,261 @@
+.learningPath {
+  padding: 100px 0;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.learningPath.animated {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sectionTitle {
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: 60px;
+  color: #333;
+}
+
+:global(.dark-mode) .sectionTitle {
+  color: #f0f0f0;
+}
+
+.sectionTitle span {
+  background: linear-gradient(135deg, #9B2FFF, #667eea);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.pathContainer {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.pathLine {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) scaleY(0);
+  transform-origin: top;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(135deg, #FFFFFF 0%, #9B2FFF 100%);
+  z-index: 1;
+  transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.learningPath.animated .pathLine {
+  transform: translateX(-50%) scaleY(1);
+}
+
+.pathItem {
+  display: flex;
+  margin-bottom: 60px;
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.pathItem:nth-child(even) {
+  transform: translateX(50px);
+}
+
+.learningPath.animated .pathItem {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.pathItem:nth-child(odd) {
+  flex-direction: row;
+}
+
+.pathItem:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+.pathContent {
+  flex: 1;
+  padding: 30px;
+  background: #FFFFFF;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(155, 47, 255, 0.15);
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+:global(.dark-mode) .pathContent {
+  background: #1a1a2e;
+}
+
+.learningPath.animated .pathContent {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.pathContent h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+:global(.dark-mode) .pathContent h3 {
+  color: #f0f0f0;
+}
+
+.pathContent p {
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+}
+
+:global(.dark-mode) .pathContent p {
+  color: #aaa;
+}
+
+.pathIcon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FFFFFF 0%, #9B2FFF 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 30px;
+  flex-shrink: 0;
+  color: #FFFFFF;
+  font-size: 24px;
+  font-weight: bold;
+  box-shadow: 0 10px 30px rgba(155, 47, 255, 0.15);
+  transform: scale(0);
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.learningPath.animated .pathIcon {
+  transform: scale(1);
+}
+
+.pathItem:nth-child(odd) .pathIcon {
+  order: 3;
+}
+
+.pathItem:nth-child(even) .pathIcon {
+  order: 1;
+}
+
+/* Stagger animations */
+.learningPath.animated .pathItem:nth-child(1) { transition-delay: 0.2s; }
+.learningPath.animated .pathItem:nth-child(2) { transition-delay: 0.4s; }
+.learningPath.animated .pathItem:nth-child(3) { transition-delay: 0.6s; }
+.learningPath.animated .pathItem:nth-child(4) { transition-delay: 0.8s; }
+
+.learningPath.animated .pathItem:nth-child(1) .pathIcon { transition-delay: 0.3s; }
+.learningPath.animated .pathItem:nth-child(2) .pathIcon { transition-delay: 0.5s; }
+.learningPath.animated .pathItem:nth-child(3) .pathIcon { transition-delay: 0.7s; }
+.learningPath.animated .pathItem:nth-child(4) .pathIcon { transition-delay: 0.9s; }
+
+.learningPath.animated .pathItem:nth-child(1) .pathContent { transition-delay: 0.4s; }
+.learningPath.animated .pathItem:nth-child(2) .pathContent { transition-delay: 0.6s; }
+.learningPath.animated .pathItem:nth-child(3) .pathContent { transition-delay: 0.8s; }
+.learningPath.animated .pathItem:nth-child(4) .pathContent { transition-delay: 1.0s; }
+
+/* Responsive */
+@media (max-width: 992px) {
+  .pathLine {
+    left: 30px;
+  }
+  
+  .pathItem {
+    flex-direction: row !important;
+  }
+  
+  .pathIcon {
+    order: 1 !important;
+    margin-left: 0;
+    margin-right: 20px;
+  }
+  
+  .pathContent {
+    order: 2;
+  }
+}
+@media (max-width: 768px) {
+  .learningPath {
+    padding: 60px 0;
+  }
+  
+  .sectionTitle {
+    font-size: 2rem;
+    margin-bottom: 40px;
+  }
+  
+  .pathItem {
+    margin-bottom: 40px;
+  }
+  
+  .pathContent {
+    padding: 20px;
+  }
+  
+  .pathIcon {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    margin: 0 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pathItem {
+    flex-direction: column !important;
+    text-align: center;
+  }
+  
+  .pathIcon {
+    order: 1 !important;
+    margin: 0 auto 20px !important;
+  }
+  
+  .pathContent {
+    order: 2 !important;
+  }
+  
+  .sectionTitle {
+    font-size: 1.8rem;
+  }
+}
+
+:global(.dark-mode) .pathContent {
+  background: #1a1a2e !important;
+  border: 1px solid #2d2d44 !important;
+  box-shadow: 0 10px 30px rgba(155, 47, 255, 0.1) !important;
+}
+
+:global(.dark-mode) .pathContent h3 {
+  color: #ffffff !important;
+}
+
+:global(.dark-mode) .pathContent p {
+  color: #cccccc !important;
+}
+
+:global(.dark-mode) .pathContent h3 a {
+  color: #ffffff !important;
+}
+
+/* Добавляем плавные переходы для цветов */
+.pathContent {
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              background-color 0.3s ease,
+              color 0.3s ease !important;
+}
+
+.pathContent h3,
+.pathContent p {
+  transition: color 0.3s ease !important;
+}
