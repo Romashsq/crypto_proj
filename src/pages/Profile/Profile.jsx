@@ -1,3 +1,4 @@
+// Profile.jsx - ПОЛНАЯ ВЕРСИЯ С РАБОЧИМИ КУРСАМИ
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../Context/ThemeContext';
 import { Link, useNavigate } from 'react-router-dom';
@@ -75,18 +76,18 @@ const Profile = () => {
     }
   }, [currentUser, navigate]);
   
-  if (!currentUser) {
-    return <div className={styles.loading}>Loading...</div>;
-  }
-  
+  // Состояние для курсов пользователя
+  const [userCourses, setUserCourses] = useState([]);
+  const [coursesLoading, setCoursesLoading] = useState(false);
+
   // Данные пользователя
   const [userData, setUserData] = useState({
-    name: currentUser.fullName || 'New User',
-    username: currentUser.username || '@newuser',
+    name: currentUser?.fullName || 'New User',
+    username: currentUser?.username || '@newuser',
     bio: 'Start your crypto learning journey!',
-    joinDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
-    level: currentUser.level || 1,
-    xp: currentUser.xp || 0,
+    joinDate: currentUser?.createdAt ? new Date(currentUser.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : 'Recently',
+    level: currentUser?.level || 1,
+    xp: currentUser?.xp || 0,
     nextLevelXp: 1000,
     rank: 'Beginner',
     streak: 0,
@@ -103,45 +104,75 @@ const Profile = () => {
     totalLessons: 0
   });
 
-  // Данные для общего прогресса - ВСЁ ПО НУЛЯМ!
+  // Данные для общего прогресса
   const [overallProgressData, setOverallProgressData] = useState({
     progress: 0,
     completedCourses: 0,
-    totalCourses: 10, // всего курсов на платформе
+    totalCourses: 10,
     enrolledCourses: 0,
     achievements: 0
   });
 
-  // Загружаем данные о прогрессе - ТЕПЕРЬ ВСЁ НУЛИ!
+  // Загружаем данные о прогрессе и курсах
   useEffect(() => {
-    const fetchProgressData = async () => {
-      try {
-        // ВСЁ ПО НУЛЯМ ДЛЯ НОВОГО ПОЛЬЗОВАТЕЛЯ
-        const mockData = {
-          progress: 0, // 0% общего прогресса
-          completedCourses: 0, // 0 курсов завершено
-          enrolledCourses: 0, // 0 курсов записано
-          achievements: 0 // 0 достижений
-        };
-        
+    if (currentUser) {
+      fetchProgressData();
+      loadUserCourses();
+    }
+  }, [currentUser]);
+
+  const fetchProgressData = async () => {
+    try {
+      // Получаем общий прогресс
+      const response = await api.getOverallProgress();
+      
+      if (response.success) {
         setOverallProgressData(prev => ({
           ...prev,
-          ...mockData
+          progress: response.totalProgress || 0,
+          completedCourses: response.completedCourses || 0,
+          enrolledCourses: response.enrolledCourses || 0
         }));
         
         setStats(prev => ({
           ...prev,
-          completionRate: mockData.progress,
-          enrolledCourses: mockData.enrolledCourses
+          completionRate: response.totalProgress || 0,
+          enrolledCourses: response.enrolledCourses || 0,
+          completedLessons: response.completedLessons || 0,
+          totalLessons: response.totalLessons || 0
         }));
-        
-      } catch (error) {
-        console.error('Error fetching progress data:', error);
       }
-    };
-    
-    fetchProgressData();
-  }, []);
+    } catch (error) {
+      console.error('Error fetching progress data:', error);
+    }
+  };
+
+  const loadUserCourses = async () => {
+    try {
+      setCoursesLoading(true);
+      const response = await api.getMyCourses();
+      
+      if (response.success) {
+        setUserCourses(response.courses || []);
+        
+        // Обновляем статистику
+        const totalProgress = response.courses.length > 0 
+          ? Math.round(response.courses.reduce((sum, course) => sum + (course.percentage || 0), 0) / response.courses.length)
+          : 0;
+        
+        setOverallProgressData(prev => ({
+          ...prev,
+          progress: totalProgress,
+          completedCourses: response.completedCourses || 0,
+          enrolledCourses: response.enrolledCourses || 0
+        }));
+      }
+    } catch (error) {
+      console.error('Error loading user courses:', error);
+    } finally {
+      setCoursesLoading(false);
+    }
+  };
 
   // Недавние активности
   const [recentActivity, setRecentActivity] = useState([
@@ -192,6 +223,35 @@ const Profile = () => {
     api.logout();
     navigate('/login');
   };
+
+  // Функция для перехода к курсу
+  const goToCourse = (courseId) => {
+    navigate(`/course/${courseId}`);
+  };
+
+  // Функция для перехода к курсам
+  const goToCoursesPage = () => {
+    navigate('/courses');
+  };
+
+  // Форматирование даты
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric',
+        year: 'numeric' 
+      });
+    } catch (error) {
+      return 'N/A';
+    }
+  };
+
+  if (!currentUser) {
+    return <div className={styles.loading}>Loading...</div>;
+  }
 
   return (
     <div className={`${styles.profilePage} ${theme === 'dark' ? styles.darkMode : ''}`}>
@@ -284,6 +344,9 @@ const Profile = () => {
             >
               <Nft width={20} height={20} />
               <span>My Courses</span>
+              {userCourses.length > 0 && (
+                <span className={styles.courseCount}>{userCourses.length}</span>
+              )}
             </button>
             
             <button 
@@ -365,174 +428,278 @@ const Profile = () => {
             />
           </div>
 
-          {/* Три блока статистики */}
-          <div className={styles.statsGrid}>
-            <div className={styles.statCard}>
-              <div className={styles.statCardHeader}>
-                <div className={styles.statCardIcon}>
-                  <Rocket width={24} height={24} />
-                </div>
-                <h3>Completion Rate</h3>
-              </div>
-              <div className={styles.statCardBody}>
-                <ProgressRing progress={stats.completionRate} size={100} />
-                <div className={styles.statCardInfo}>
-                  <span className={styles.statCardValue}>{stats.completionRate}%</span>
-                  <span className={styles.statCardLabel}>of all lessons</span>
-                </div>
-              </div>
-            </div>
-            
-            <div className={styles.statCard}>
-              <div className={styles.statCardHeader}>
-                <div className={styles.statCardIcon}>
-                  <Heart width={24} height={24} />
-                </div>
-                <h3>Average Score</h3>
-              </div>
-              <div className={styles.statCardBody}>
-                <div className={styles.scoreDisplay}>
-                  <span className={styles.scoreValue}>{stats.avgScore}</span>
-                  <span className={styles.scoreLabel}>out of 100</span>
-                </div>
-                <div className={styles.scoreProgress}>
-                  <div className={styles.scoreBar}>
-                    <div 
-                      className={styles.scoreFill}
-                      style={{ width: `${stats.avgScore}%` }}
-                    ></div>
-                  </div>
-                  <span className={styles.scoreText}>Start learning!</span>
-                </div>
-              </div>
-            </div>
-            
-            <div className={styles.statCard}>
-              <div className={styles.statCardHeader}>
-                <div className={styles.statCardIcon}>
-                  <Schedule width={24} height={24} />
-                </div>
-                <h3>Time Spent</h3>
-              </div>
-              <div className={styles.statCardBody}>
-                <div className={styles.timeDisplay}>
-                  <span className={styles.timeValue}>{stats.timeSpent}</span>
-                  <span className={styles.timeLabel}>hours</span>
-                </div>
-                <div className={styles.timeBreakdown}>
-                  <div className={styles.timeItem}>
-                    <span className={styles.timeType}>Learning</span>
-                    <span className={styles.timeHours}>0h</span>
-                  </div>
-                  <div className={styles.timeItem}>
-                    <span className={styles.timeType}>Practice</span>
-                    <span className={styles.timeHours}>0h</span>
-                  </div>
-                  <div className={styles.timeItem}>
-                    <span className={styles.timeType}>Projects</span>
-                    <span className={styles.timeHours}>0h</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* График производительности */}
-          <div className={styles.chartCard}>
-            <div className={styles.chartHeader}>
-              <h3>Performance Trends</h3>
-              <select className={styles.chartSelect}>
-                <option>Last 6 months</option>
-                <option>Last year</option>
-                <option>All time</option>
-              </select>
-            </div>
-            <div className={styles.chartContainer}>
-              <div className={styles.chartGrid}>
-                {performanceData.map((item, index) => (
-                  <div key={index} className={styles.chartColumn}>
-                    <div className={styles.chartBarContainer}>
-                      <div 
-                        className={styles.chartBar}
-                        style={{ height: `${item.score}%` }}
-                      ></div>
+          {/* Вкладки контента */}
+          {activeTab === 'overview' && (
+            <>
+              {/* Три блока статистики */}
+              <div className={styles.statsGrid}>
+                <div className={styles.statCard}>
+                  <div className={styles.statCardHeader}>
+                    <div className={styles.statCardIcon}>
+                      <Rocket width={24} height={24} />
                     </div>
-                    <span className={styles.chartLabel}>{item.month}</span>
-                    <span className={styles.chartValue}>{item.score}</span>
+                    <h3>Completion Rate</h3>
                   </div>
-                ))}
-              </div>
-            </div>
-            <div className={styles.chartLegend}>
-              <div className={styles.legendItem}>
-                <div className={styles.legendColor} style={{ backgroundColor: '#9B2FFF' }}></div>
-                <span>Monthly Score</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Цели и активности */}
-          <div className={styles.bottomGrid}>
-            <div className={styles.goalsCard}>
-              <div className={styles.cardHeader}>
-                <h3>Learning Goals</h3>
-                <Link to="/goals" className={styles.viewAllLink}>View All</Link>
-              </div>
-              <div className={styles.goalsList}>
-                {goals.map(goal => (
-                  <div key={goal.id} className={styles.goalItem}>
-                    <div className={styles.goalInfo}>
-                      <h4 className={styles.goalTitle}>{goal.title}</h4>
-                      <div className={styles.goalMeta}>
-                        <span className={styles.goalDeadline}>
-                          <Schedule width={14} height={14} />
-                          Due {goal.deadline}
-                        </span>
-                      </div>
+                  <div className={styles.statCardBody}>
+                    <ProgressRing progress={stats.completionRate} size={100} />
+                    <div className={styles.statCardInfo}>
+                      <span className={styles.statCardValue}>{stats.completionRate}%</span>
+                      <span className={styles.statCardLabel}>of all lessons</span>
                     </div>
-                    <div className={styles.goalProgress}>
-                      <div className={styles.goalProgressBar}>
+                  </div>
+                </div>
+                
+                <div className={styles.statCard}>
+                  <div className={styles.statCardHeader}>
+                    <div className={styles.statCardIcon}>
+                      <Heart width={24} height={24} />
+                    </div>
+                    <h3>Average Score</h3>
+                  </div>
+                  <div className={styles.statCardBody}>
+                    <div className={styles.scoreDisplay}>
+                      <span className={styles.scoreValue}>{stats.avgScore}</span>
+                      <span className={styles.scoreLabel}>out of 100</span>
+                    </div>
+                    <div className={styles.scoreProgress}>
+                      <div className={styles.scoreBar}>
                         <div 
-                          className={styles.goalProgressFill}
-                          style={{ width: `${goal.progress}%` }}
+                          className={styles.scoreFill}
+                          style={{ width: `${stats.avgScore}%` }}
                         ></div>
                       </div>
-                      <span className={styles.goalProgressText}>{goal.progress}%</span>
+                      <span className={styles.scoreText}>Start learning!</span>
                     </div>
                   </div>
-                ))}
-              </div>
-              <button className={styles.addGoalBtn}>
-                + Add New Goal
-              </button>
-            </div>
-            
-            <div className={styles.activityCard}>
-              <div className={styles.cardHeader}>
-                <h3>Recent Activity</h3>
-                <Link to="/activity" className={styles.viewAllLink}>View All</Link>
-              </div>
-              <div className={styles.activityList}>
-                {recentActivity.map(activity => (
-                  <div key={activity.id} className={styles.activityItem}>
-                    <div className={styles.activityIcon}>
-                      <Rocket width={20} height={20} />
+                </div>
+                
+                <div className={styles.statCard}>
+                  <div className={styles.statCardHeader}>
+                    <div className={styles.statCardIcon}>
+                      <Schedule width={24} height={24} />
                     </div>
-                    <div className={styles.activityContent}>
-                      <h4 className={styles.activityTitle}>{activity.title}</h4>
-                      <p className={styles.activityCourse}>{activity.course}</p>
-                      <div className={styles.activityFooter}>
-                        <span className={styles.activityTime}>{activity.time}</span>
-                        <span className={`${styles.activityStatus} ${styles[activity.status]}`}>
-                          {activity.status}
-                        </span>
+                    <h3>Time Spent</h3>
+                  </div>
+                  <div className={styles.statCardBody}>
+                    <div className={styles.timeDisplay}>
+                      <span className={styles.timeValue}>{stats.timeSpent}</span>
+                      <span className={styles.timeLabel}>hours</span>
+                    </div>
+                    <div className={styles.timeBreakdown}>
+                      <div className={styles.timeItem}>
+                        <span className={styles.timeType}>Learning</span>
+                        <span className={styles.timeHours}>0h</span>
+                      </div>
+                      <div className={styles.timeItem}>
+                        <span className={styles.timeType}>Practice</span>
+                        <span className={styles.timeHours}>0h</span>
+                      </div>
+                      <div className={styles.timeItem}>
+                        <span className={styles.timeType}>Projects</span>
+                        <span className={styles.timeHours}>0h</span>
                       </div>
                     </div>
                   </div>
-                ))}
+                </div>
               </div>
+
+              {/* График производительности */}
+              <div className={styles.chartCard}>
+                <div className={styles.chartHeader}>
+                  <h3>Performance Trends</h3>
+                  <select className={styles.chartSelect}>
+                    <option>Last 6 months</option>
+                    <option>Last year</option>
+                    <option>All time</option>
+                  </select>
+                </div>
+                <div className={styles.chartContainer}>
+                  <div className={styles.chartGrid}>
+                    {performanceData.map((item, index) => (
+                      <div key={index} className={styles.chartColumn}>
+                        <div className={styles.chartBarContainer}>
+                          <div 
+                            className={styles.chartBar}
+                            style={{ height: `${item.score}%` }}
+                          ></div>
+                        </div>
+                        <span className={styles.chartLabel}>{item.month}</span>
+                        <span className={styles.chartValue}>{item.score}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className={styles.chartLegend}>
+                  <div className={styles.legendItem}>
+                    <div className={styles.legendColor} style={{ backgroundColor: '#9B2FFF' }}></div>
+                    <span>Monthly Score</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Цели и активности */}
+              <div className={styles.bottomGrid}>
+                <div className={styles.goalsCard}>
+                  <div className={styles.cardHeader}>
+                    <h3>Learning Goals</h3>
+                    <Link to="/goals" className={styles.viewAllLink}>View All</Link>
+                  </div>
+                  <div className={styles.goalsList}>
+                    {goals.map(goal => (
+                      <div key={goal.id} className={styles.goalItem}>
+                        <div className={styles.goalInfo}>
+                          <h4 className={styles.goalTitle}>{goal.title}</h4>
+                          <div className={styles.goalMeta}>
+                            <span className={styles.goalDeadline}>
+                              <Schedule width={14} height={14} />
+                              Due {goal.deadline}
+                            </span>
+                          </div>
+                        </div>
+                        <div className={styles.goalProgress}>
+                          <div className={styles.goalProgressBar}>
+                            <div 
+                              className={styles.goalProgressFill}
+                              style={{ width: `${goal.progress}%` }}
+                            ></div>
+                          </div>
+                          <span className={styles.goalProgressText}>{goal.progress}%</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <button className={styles.addGoalBtn}>
+                    + Add New Goal
+                  </button>
+                </div>
+                
+                <div className={styles.activityCard}>
+                  <div className={styles.cardHeader}>
+                    <h3>Recent Activity</h3>
+                    <Link to="/activity" className={styles.viewAllLink}>View All</Link>
+                  </div>
+                  <div className={styles.activityList}>
+                    {recentActivity.map(activity => (
+                      <div key={activity.id} className={styles.activityItem}>
+                        <div className={styles.activityIcon}>
+                          <Rocket width={20} height={20} />
+                        </div>
+                        <div className={styles.activityContent}>
+                          <h4 className={styles.activityTitle}>{activity.title}</h4>
+                          <p className={styles.activityCourse}>{activity.course}</p>
+                          <div className={styles.activityFooter}>
+                            <span className={styles.activityTime}>{activity.time}</span>
+                            <span className={`${styles.activityStatus} ${styles[activity.status]}`}>
+                              {activity.status}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {activeTab === 'courses' && (
+            <div className={styles.coursesTab}>
+              <div className={styles.tabHeader}>
+                <h3>My Courses ({userCourses.length})</h3>
+                <button 
+                  className={styles.browseCoursesBtn}
+                  onClick={goToCoursesPage}
+                >
+                  Browse More Courses
+                </button>
+              </div>
+              
+              {coursesLoading ? (
+                <div className={styles.loadingState}>
+                  <div className={styles.loadingSpinner}></div>
+                  <p>Loading your courses...</p>
+                </div>
+              ) : userCourses.length === 0 ? (
+                <div className={styles.noCourses}>
+                  <div className={styles.noCoursesIcon}>📚</div>
+                  <h4>No Courses Yet</h4>
+                  <p>You haven't enrolled in any courses yet. Start your learning journey now!</p>
+                  <button 
+                    className={styles.enrollNowBtn}
+                    onClick={goToCoursesPage}
+                  >
+                    Browse Courses
+                  </button>
+                </div>
+              ) : (
+                <div className={styles.coursesList}>
+                  {userCourses.map((course, index) => (
+                    <div key={index} className={styles.courseItem}>
+                      <div className={styles.courseIcon}>
+                        {course.courseIcon || '📚'}
+                      </div>
+                      <div className={styles.courseInfo}>
+                        <h4 className={styles.courseTitle}>{course.courseTitle || `Course ${course.courseId}`}</h4>
+                        <div className={styles.courseMeta}>
+                          <span className={styles.courseDate}>
+                            <Schedule width={14} height={14} />
+                            Enrolled: {formatDate(course.enrolledAt)}
+                          </span>
+                          <span className={styles.courseStatus}>
+                            {course.isCompleted ? '✅ Completed' : '📚 In Progress'}
+                          </span>
+                        </div>
+                        <div className={styles.courseProgress}>
+                          <div className={styles.courseProgressBar}>
+                            <div 
+                              className={styles.courseProgressFill}
+                              style={{ width: `${course.percentage || 0}%` }}
+                            ></div>
+                          </div>
+                          <div className={styles.progressStats}>
+                            <span className={styles.percentage}>{course.percentage || 0}%</span>
+                            <span className={styles.lessonsCount}>
+                              {course.completedLessons || 0}/{course.totalLessons || 0} lessons
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <button 
+                        className={styles.continueButton}
+                        onClick={() => goToCourse(course.courseId)}
+                      >
+                        {course.percentage > 0 ? 'Continue' : 'Start'}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-          </div>
+          )}
+
+          {activeTab === 'achievements' && (
+            <div className={styles.emptyTab}>
+              <div className={styles.emptyIcon}>🏆</div>
+              <h3>Achievements</h3>
+              <p>Your achievements will appear here as you complete courses and lessons.</p>
+            </div>
+          )}
+
+          {activeTab === 'stats' && (
+            <div className={styles.emptyTab}>
+              <div className={styles.emptyIcon}>📊</div>
+              <h3>Statistics</h3>
+              <p>Detailed learning statistics will be available soon.</p>
+            </div>
+          )}
+
+          {activeTab === 'community' && (
+            <div className={styles.emptyTab}>
+              <div className={styles.emptyIcon}>👥</div>
+              <h3>Community</h3>
+              <p>Connect with other learners and share your progress.</p>
+            </div>
+          )}
         </main>
       </div>
     </div>

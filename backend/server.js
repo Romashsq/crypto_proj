@@ -1,4 +1,4 @@
-// server.js - ПОЛНАЯ РАБОЧАЯ ВЕРСИЯ С СОХРАНЕНИЕМ КУРСОВ И OVERALL PROGRESS
+// server.js - ПОЛНАЯ ИСПРАВЛЕННАЯ ВЕРСИЯ ДЛЯ КУРСОВ И ПРОФИЛЯ
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
@@ -363,7 +363,201 @@ app.get('/api/verify-auth', authenticateToken, (req, res) => {
   });
 });
 
-// ============ КУРСЫ И ПРОГРЕСС ============
+// ============ НОВЫЙ: ЗАПИСАТЬСЯ НА КУРС (простая версия) ============
+app.post('/api/enroll-course', authenticateToken, (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { courseId, courseTitle, courseIcon, totalLessons } = req.body;
+    
+    console.log('🎯 Запись на курс:', { userId, courseId, courseTitle });
+    
+    if (!courseId) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'courseId обязателен' 
+      });
+    }
+    
+    const user = users.find(u => u.id === userId);
+    if (!user) {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'Пользователь не найден' 
+      });
+    }
+    
+    // Инициализируем курсы если нет
+    const courses = initializeUserCourses(userId);
+    
+    // Проверяем, не записан ли уже
+    const existingCourse = courses.find(c => c.courseId === courseId);
+    
+    if (existingCourse) {
+      return res.json({
+        success: true,
+        message: 'Вы уже записаны на этот курс',
+        course: existingCourse,
+        isAlreadyEnrolled: true
+      });
+    }
+    
+    // Создаем новый курс
+    const newCourse = {
+      courseId,
+      courseTitle: courseTitle || `Course ${courseId}`,
+      courseIcon: courseIcon || '📚',
+      totalLessons: totalLessons || 1,
+      enrolledAt: new Date().toISOString(),
+      lastAccessed: new Date().toISOString(),
+      completedLessons: 0,
+      percentage: 0
+    };
+    
+    courses.push(newCourse);
+    
+    console.log('✅ Успешно записан на курс:', courseId);
+    
+    // Обновляем общий прогресс
+    if (userProgress[userId]) {
+      updateOverallProgress(userId);
+    }
+    
+    res.json({
+      success: true,
+      message: 'Успешно записан на курс',
+      course: newCourse,
+      enrolledCourses: courses.length
+    });
+    
+  } catch (error) {
+    console.error('❌ Ошибка записи на курс:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message || 'Внутренняя ошибка сервера' 
+    });
+  }
+});
+
+// ============ НОВЫЙ: ПОЛУЧИТЬ МОИ КУРСЫ (простая версия) ============
+app.get('/api/my-courses', authenticateToken, (req, res) => {
+  try {
+    const userId = req.user.id;
+    
+    console.log('📚 Получение курсов пользователя:', userId);
+    
+    const courses = userCourses[userId] || [];
+    const progress = userProgress[userId];
+    
+    // Для каждого курса получаем прогресс
+    const coursesWithProgress = courses.map(course => {
+      let completedLessons = 0;
+      
+      if (progress && progress.lessons) {
+        // Считаем завершенные уроки для этого курса
+        for (let i = 1; i <= course.totalLessons; i++) {
+          const lessonKey = `${course.courseId}_${i}`;
+          if (progress.lessons[lessonKey] && progress.lessons[lessonKey].completed) {
+            completedLessons++;
+          }
+        }
+      }
+      
+      const percentage = course.totalLessons > 0 
+        ? Math.round((completedLessons / course.totalLessons) * 100) 
+        : 0;
+      
+      return {
+        courseId: course.courseId,
+        courseTitle: course.courseTitle,
+        courseIcon: course.courseIcon,
+        enrolledAt: course.enrolledAt,
+        lastAccessed: course.lastAccessed,
+        totalLessons: course.totalLessons,
+        completedLessons,
+        percentage,
+        isCompleted: percentage === 100
+      };
+    });
+    
+    // Считаем статистику
+    const completedCourses = coursesWithProgress.filter(c => c.isCompleted).length;
+    
+    res.json({
+      success: true,
+      courses: coursesWithProgress,
+      enrolledCourses: courses.length,
+      completedCourses,
+      totalCourses: courses.length
+    });
+    
+  } catch (error) {
+    console.error('❌ Ошибка получения курсов:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Внутренняя ошибка сервера' 
+    });
+  }
+});
+
+// ============ НОВЫЙ: ПРОВЕРИТЬ ЗАПИСАН ЛИ НА КУРС ============
+app.get('/api/check-enrollment/:courseId', authenticateToken, (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { courseId } = req.params;
+    
+    console.log('🔍 Проверка зачисления:', { userId, courseId });
+    
+    const courses = userCourses[userId] || [];
+    const isEnrolled = courses.some(c => c.courseId === courseId);
+    
+    let courseData = null;
+    let progress = null;
+    
+    if (isEnrolled) {
+      courseData = courses.find(c => c.courseId === courseId);
+      
+      // Получаем прогресс
+      const userProg = userProgress[userId];
+      if (userProg && courseData) {
+        let completedLessons = 0;
+        
+        for (let i = 1; i <= courseData.totalLessons; i++) {
+          const lessonKey = `${courseId}_${i}`;
+          if (userProg.lessons[lessonKey] && userProg.lessons[lessonKey].completed) {
+            completedLessons++;
+          }
+        }
+        
+        const percentage = courseData.totalLessons > 0 
+          ? Math.round((completedLessons / courseData.totalLessons) * 100) 
+          : 0;
+        
+        progress = {
+          completedLessons,
+          totalLessons: courseData.totalLessons,
+          percentage,
+          isCompleted: percentage === 100
+        };
+      }
+    }
+    
+    res.json({
+      success: true,
+      isEnrolled,
+      course: courseData,
+      progress
+    });
+    
+  } catch (error) {
+    console.error('❌ Ошибка проверки зачисления:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Внутренняя ошибка сервера' 
+    });
+  }
+});
+
+// ============ КУРСЫ И ПРОГРЕСС (старые методы - оставляем для совместимости) ============
 
 // Сохранить курс (добавить к пользователю)
 app.post('/api/user/save-course', authenticateToken, (req, res) => {
@@ -808,18 +1002,18 @@ app.get('/api/debug/users', (req, res) => {
 app.listen(PORT, () => {
   console.log(`✅ Сервер запущен на http://localhost:${PORT}`);
   console.log('🌐 CORS настроен для: http://localhost:5173');
-  console.log('📚 ДОСТУПНЫЕ ЭНДПОЙНТЫ:');
-  console.log('   POST /api/register           - Регистрация');
-  console.log('   POST /api/login              - Вход');
-  console.log('   GET  /api/verify-auth        - Проверка токена');
-  console.log('   POST /api/user/save-course   - Сохранить курс');
-  console.log('   GET  /api/user/courses       - Все курсы пользователя');
-  console.log('   GET  /api/user/check-course/:courseId - Проверить курс');
-  console.log('   POST /api/user/complete-lesson - Завершить урок');
+  console.log('📚 НОВЫЕ ЭНДПОЙНТЫ ДЛЯ КУРСОВ:');
+  console.log('   POST /api/enroll-course         - Записаться на курс (новая простая версия)');
+  console.log('   GET  /api/my-courses            - Получить все мои курсы');
+  console.log('   GET  /api/check-enrollment/:id  - Проверить запись на курс');
+  console.log('\n📚 СТАРЫЕ ЭНДПОЙНТЫ (работают):');
+  console.log('   POST /api/register              - Регистрация');
+  console.log('   POST /api/login                 - Вход');
+  console.log('   GET  /api/verify-auth           - Проверка токена');
+  console.log('   POST /api/user/save-course      - Сохранить курс');
+  console.log('   GET  /api/user/courses          - Все курсы пользователя');
+  console.log('   GET  /api/user/check-course/:id - Проверить курс');
+  console.log('   POST /api/user/complete-lesson  - Завершить урок');
   console.log('   GET  /api/user/overall-progress - Общий прогресс');
-  console.log('   GET  /api/user/course/:courseId/progress - Прогресс курса');
-  console.log('   GET  /api/user/lesson-status/:courseId/:lessonId - Статус урока');
-  console.log('   GET  /api/health             - Проверка сервера');
-  console.log('   GET  /api/debug/users        - Отладка (только dev)');
   console.log('\n⚠️  ВНИМАНИЕ: Данные хранятся в памяти и сбросятся при перезапуске!');
 });

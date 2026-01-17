@@ -391,6 +391,80 @@ class ApiService {
     }
   }
 
+  // ============ НОВЫЕ МЕТОДЫ ДЛЯ КУРСОВ (добавить в существующий api.js) ============
+
+// Записаться на курс (простая версия)
+async enrollCourse(courseData) {
+  console.log('🎯 Запись на курс:', courseData?.courseId);
+  
+  try {
+    const response = await this._request('/enroll-course', {
+      method: 'POST',
+      body: JSON.stringify(courseData)
+    });
+    
+    return response;
+  } catch (error) {
+    console.error('❌ Ошибка записи на курс:', error.message);
+    return { 
+      success: false, 
+      error: error.message || 'Ошибка сети' 
+    };
+  }
+}
+
+// Получить все мои курсы
+async getMyCourses() {
+  console.log('📚 Получение моих курсов');
+  
+  try {
+    const response = await this._request('/my-courses', {
+      method: 'GET'
+    });
+    
+    return response;
+  } catch (error) {
+    console.error('❌ Ошибка получения курсов:', error.message);
+    return { 
+      success: false, 
+      error: error.message || 'Ошибка сети' 
+    };
+  }
+}
+
+// Проверить зачислен ли на курс
+async checkEnrollment(courseId) {
+  console.log('🔍 Проверка зачисления:', courseId);
+  
+  try {
+    const response = await this._request(`/check-enrollment/${courseId}`, {
+      method: 'GET'
+    });
+    
+    return response;
+  } catch (error) {
+    console.error('❌ Ошибка проверки зачисления:', error.message);
+    return { 
+      success: false, 
+      error: error.message || 'Ошибка сети' 
+    };
+  }
+}
+
+// Быстрая запись на курс
+async quickEnroll(courseId, courseTitle) {
+  console.log('⚡ Быстрая запись на курс:', courseId);
+  
+  const courseData = {
+    courseId,
+    courseTitle: courseTitle || courseId,
+    courseIcon: '📚',
+    totalLessons: 6 // по умолчанию
+  };
+  
+  return await this.enrollCourse(courseData);
+}
+
   setToken(token) {
     this.token = token;
     localStorage.setItem('auth_token', token);
@@ -459,6 +533,8 @@ class ApiService {
     }
   }
 }
+
+
 
 // Создаем единственный экземпляр
 const api = new ApiService();
