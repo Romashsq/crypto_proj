@@ -1,13 +1,13 @@
 /* Sidebar.module.css */
 .sidebar {
-  width: 280px;
+  width: 260px; /* Уменьшил с 280px */
   flex-shrink: 0;
   position: sticky;
   top: calc(var(--header-height) + 20px);
   max-height: calc(100vh - var(--header-height) - 40px);
   overflow-y: auto;
-  border-radius: 16px;
-  padding: 20px 0;
+  border-radius: 14px; /* Уменьшил с 16px */
+  padding: 16px 0; /* Уменьшил с 20px */
   border: 1px solid rgba(155, 47, 255, 0.1);
   transition: all 0.3s ease;
   
@@ -16,7 +16,7 @@
     rgba(255, 255, 255, 0.95) 0%,
     rgba(248, 250, 252, 0.95) 100%);
   backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(155, 47, 255, 0.08);
+  box-shadow: 0 6px 25px rgba(155, 47, 255, 0.06); /* Уменьшил с 0 8px 32px */
 }
 
 .sidebar.darkMode {
@@ -25,53 +25,53 @@
     rgba(30, 30, 46, 0.95) 0%,
     rgba(20, 20, 36, 0.95) 100%);
   border-color: rgba(155, 47, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.25); /* Уменьшил с 0 8px 32px */
 }
 
 .sidebar:hover {
-  box-shadow: 0 12px 40px rgba(155, 47, 255, 0.12);
+  box-shadow: 0 8px 32px rgba(155, 47, 255, 0.1); /* Уменьшил с 0 12px 40px */
 }
 
 .sidebar.darkMode:hover {
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35); /* Уменьшил с 0 12px 40px */
 }
 
 /* Sidebar Header */
 .sidebarHeader {
-  padding: 0 20px 20px;
+  padding: 0 18px 16px; /* Уменьшил с 20px */
   border-bottom: 1px solid rgba(155, 47, 255, 0.1);
-  margin-bottom: 15px;
+  margin-bottom: 12px; /* Уменьшил с 15px */
 }
 
 .backToCourses {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 16px;
+  gap: 8px; /* Уменьшил с 10px */
+  padding: 8px 14px; /* Уменьшил с 10px 16px */
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  border-radius: 10px;
+  border-radius: 8px; /* Уменьшил с 10px */
   text-decoration: none;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 13px; /* Уменьшил с 14px */
   transition: all 0.3s ease;
 }
 
 .backToCourses:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+  transform: translateY(-1px); /* Уменьшил с -2px */
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25); /* Уменьшил с 0 6px 20px */
 }
 
 /* Sections */
 .sidebarSection {
-  margin-bottom: 10px;
-  padding: 0 15px;
+  margin-bottom: 8px; /* Уменьшил с 10px */
+  padding: 0 14px; /* Уменьшил с 15px */
 }
 
 .sidebarSection h3 {
-  font-size: 0.9rem;
+  font-size: 0.85rem; /* Уменьшил с 0.9rem */
   margin: 0;
-  padding: 12px 10px;
+  padding: 10px 8px; /* Уменьшил с 12px 10px */
   color: var(--text-primary);
   font-weight: 600;
   display: flex;
@@ -79,7 +79,7 @@
   justify-content: space-between;
   cursor: pointer;
   transition: all 0.3s ease;
-  border-radius: 8px;
+  border-radius: 6px; /* Уменьшил с 8px */
   user-select: none;
 }
 
@@ -88,28 +88,12 @@
 }
 
 .sidebarSection h3:hover {
-  background: rgba(155, 47, 255, 0.08);
-  color: #764ba2;
-}
-
-.sidebarSection.active h3 {
-  background: linear-gradient(135deg, 
-    rgba(155, 47, 255, 0.1) 0%,
-    rgba(118, 75, 162, 0.1) 100%);
-  color: #764ba2;
-  border-left: 3px solid #764ba2;
-}
-
-.darkMode .sidebarSection.active h3 {
-  background: linear-gradient(135deg, 
-    rgba(155, 47, 255, 0.15) 0%,
-    rgba(118, 75, 162, 0.15) 100%);
-  color: #a78bfa;
+  background: rgba(155, 47, 255, 0.06); /* Уменьшил с 0.08 */
 }
 
 .toggleIcon {
   transition: all 0.3s ease;
-  font-size: 0.8rem;
+  font-size: 0.75rem; /* Уменьшил с 0.8rem */
   color: #94a3b8;
 }
 
@@ -128,19 +112,19 @@
 }
 
 .sidebarMenu li {
-  margin: 4px 0;
+  margin: 3px 0; /* Уменьшил с 4px */
 }
 
 .menuLink {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 15px;
+  padding: 9px 13px; /* Уменьшил с 10px 15px */
   text-decoration: none;
   color: var(--text-secondary);
   transition: all 0.3s ease;
-  font-size: 0.85rem;
-  border-radius: 8px;
+  font-size: 0.82rem; /* Уменьшил с 0.85rem */
+  border-radius: 6px; /* Уменьшил с 8px */
   border-left: 2px solid transparent;
 }
 
@@ -148,7 +132,27 @@
   color: #cbd5e1;
 }
 
-.menuLink:hover,
+/* Стили для заблокированных уроков */
+.menuLink.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  background: rgba(148, 163, 184, 0.05) !important;
+  color: #94a3b8 !important;
+}
+
+.darkMode .menuLink.disabled {
+  background: rgba(148, 163, 184, 0.1) !important;
+  color: #64748b !important;
+}
+
+/* Стили для уроков с доступом */
+.menuLink.available {
+  cursor: pointer;
+  opacity: 1;
+}
+
+.menuLink.available:hover,
 .menuLink.active {
   background: linear-gradient(135deg, 
     rgba(155, 47, 255, 0.05) 0%,
@@ -157,7 +161,7 @@
   border-left-color: #764ba2;
 }
 
-.darkMode .menuLink:hover,
+.darkMode .menuLink.available:hover,
 .darkMode .menuLink.active {
   background: linear-gradient(135deg, 
     rgba(155, 47, 255, 0.1) 0%,
@@ -165,9 +169,22 @@
   color: #a78bfa;
 }
 
+/* Стили для заблокированных курсов (курс не куплен) */
+.sidebarSection.locked h3 {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(148, 163, 184, 0.05) !important;
+  color: #94a3b8 !important;
+}
+
+.darkMode .sidebarSection.locked h3 {
+  background: rgba(148, 163, 184, 0.1) !important;
+  color: #64748b !important;
+}
+
 .lessonName {
   flex: 1;
-  padding-right: 10px;
+  padding-right: 8px; /* Уменьшил с 10px */
 }
 
 /* Status Badges */
@@ -175,64 +192,77 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 22px; /* Уменьшил с 24px */
+  height: 22px;
   border-radius: 50%;
-  font-size: 0.7rem;
+  font-size: 0.65rem; /* Уменьшил с 0.7rem */
 }
 
-.status-in-progress {
-  background: rgba(251, 191, 36, 0.1);
-  color: #f59e0b;
-}
-
-.status-locked {
+.statusLocked {
   background: rgba(148, 163, 184, 0.1);
   color: #94a3b8;
 }
 
-.status-completed {
+.statusInProgress {
+  background: rgba(251, 191, 36, 0.1);
+  color: #f59e0b;
+}
+
+.statusCompleted {
   background: rgba(34, 197, 94, 0.1);
   color: #10b981;
 }
 
-.status-available {
+.statusAvailable {
   background: rgba(59, 130, 246, 0.1);
   color: #3b82f6;
 }
 
-/* Category Items */
-.categoryItem {
-  margin: 10px 0;
-  padding: 10px 15px;
-  background: rgba(155, 47, 255, 0.03);
-  border-radius: 8px;
-  border-left: 3px solid rgba(155, 47, 255, 0.3);
-}
-
-.darkMode .categoryItem {
-  background: rgba(155, 47, 255, 0.08);
-}
-
-.categoryHeader {
+/* Сообщение "Скоро" */
+.comingSoonItem {
+  padding: 8px 13px; /* Уменьшил */
+  color: #94a3b8;
+  font-size: 0.82rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: rgba(148, 163, 184, 0.05);
+  border-radius: 6px;
+  margin: 3px 0;
 }
 
-.categoryName {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--text-primary);
+.darkMode .comingSoonItem {
+  background: rgba(148, 163, 184, 0.08);
+  color: #64748b;
 }
 
-.darkMode .categoryName {
-  color: #e2e8f0;
+/* Подсказка о следующем уроке */
+.nextLessonHint {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: rgba(251, 191, 36, 0.1);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: #d97706;
+  border-left: 3px solid #f59e0b;
+}
+
+.darkMode .nextLessonHint {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+  border-left-color: #fbbf24;
+}
+
+.nextLessonHint i {
+  font-size: 0.9rem;
 }
 
 /* Scrollbar */
 .sidebar::-webkit-scrollbar {
-  width: 4px;
+  width: 3px; /* Уменьшил с 4px */
 }
 
 .sidebar::-webkit-scrollbar-track {
@@ -255,7 +285,7 @@
     position: fixed;
     top: var(--header-height);
     left: -100%;
-    width: 280px;
+    width: 260px;
     height: calc(100vh - var(--header-height));
     z-index: 999;
     border-radius: 0;
@@ -269,6 +299,19 @@
 
 @media (max-width: 480px) {
   .sidebar {
-    width: 260px;
+    width: 240px;
+  }
+  
+  .sidebarHeader {
+    padding: 0 16px 14px;
+  }
+  
+  .sidebarSection {
+    padding: 0 12px;
+  }
+  
+  .menuLink {
+    padding: 8px 12px;
+    font-size: 0.8rem;
   }
 }

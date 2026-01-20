@@ -1,15 +1,18 @@
-// /frontend/services/api.js - ИСПРАВЛЕННАЯ ВЕРСИЯ
+// /frontend/services/api.js - ПОЛНОСТЬЮ ИСПРАВЛЕННАЯ ВЕРСИЯ
 const API_BASE = 'http://localhost:5000/api';
 
 class ApiService {
   constructor() {
     this.token = localStorage.getItem('auth_token') || null;
+    this.user = JSON.parse(localStorage.getItem('user') || 'null');
     console.log('🔧 API сервис инициализирован, токен:', this.token ? 'есть' : 'нет');
   }
 
   // Универсальный метод запроса
   async _request(endpoint, options = {}) {
     const url = `${API_BASE}${endpoint}`;
+    
+    console.log(`🌐 [API] Запрос: ${options.method || 'GET'} ${endpoint}`);
     
     const headers = {
       'Content-Type': 'application/json',
@@ -19,6 +22,7 @@ class ApiService {
     // Добавляем токен если есть
     if (this.token) {
       headers['Authorization'] = `Bearer ${this.token}`;
+      console.log(`🔑 [API] Токен добавлен в заголовок`);
     }
 
     const config = {
@@ -27,8 +31,6 @@ class ApiService {
     };
 
     try {
-      console.log(`🌐 Запрос: ${config.method || 'GET'} ${endpoint}`);
-      
       const response = await fetch(url, config);
       
       let data;
@@ -40,7 +42,7 @@ class ApiService {
         data = await response.text();
       }
       
-      console.log(`📥 Ответ ${endpoint}:`, response.status, data);
+      console.log(`📥 [API] Ответ ${endpoint}:`, response.status, data);
       
       if (!response.ok) {
         if (typeof data === 'object' && data.error) {
@@ -62,20 +64,27 @@ class ApiService {
       return data;
       
     } catch (error) {
-      console.error(`❌ Ошибка запроса ${endpoint}:`, error.message);
+      console.error(`❌ [API] Ошибка запроса ${endpoint}:`, error.message);
       
-      if (error.message.includes('expired') || error.message.includes('Invalid token')) {
-        console.log('🔄 Токен истек, очищаем...');
+      // Если токен истек - очищаем
+      if (error.message.includes('expired') || 
+          error.message.includes('Invalid token') || 
+          error.message.includes('Неверный или просроченный токен')) {
+        console.log('🔄 [API] Токен истек, очищаем...');
         this.logout();
       }
       
-      throw error;
+      // Возвращаем ошибку в стандартном формате
+      return {
+        success: false,
+        error: error.message || 'Ошибка сети'
+      };
     }
   }
 
   // ============ АУТЕНТИФИКАЦИЯ ============
   async register(userData) {
-    console.log('📝 Регистрация:', userData.username);
+    console.log('📝 [API] Регистрация:', userData.username);
     
     try {
       const response = await this._request('/register', {
@@ -83,9 +92,14 @@ class ApiService {
         body: JSON.stringify(userData)
       });
       
+      // Если ответ содержит ошибку от _request
+      if (response.success === false) {
+        return response;
+      }
+      
       return response;
     } catch (error) {
-      console.error('❌ Ошибка регистрации:', error.message);
+      console.error('❌ [API] Ошибка регистрации:', error.message);
       return { 
         success: false, 
         error: error.message || 'Ошибка регистрации' 
@@ -94,7 +108,7 @@ class ApiService {
   }
 
   async login(credentials) {
-    console.log('🔑 Логин:', credentials.email);
+    console.log('🔑 [API] Логин:', credentials.email);
     
     try {
       const response = await this._request('/login', {
@@ -102,9 +116,14 @@ class ApiService {
         body: JSON.stringify(credentials)
       });
       
+      // Если ответ содержит ошибку от _request
+      if (response.success === false) {
+        return response;
+      }
+      
       return response;
     } catch (error) {
-      console.error('❌ Ошибка логина:', error.message);
+      console.error('❌ [API] Ошибка логина:', error.message);
       return { 
         success: false, 
         error: error.message || 'Ошибка входа' 
@@ -115,23 +134,30 @@ class ApiService {
   async verifyAuth() {
     try {
       if (!this.token) {
+        console.log('⚠️ [API] Нет токена для проверки');
         return { success: false, error: 'Нет токена' };
       }
       
+      console.log('🔍 [API] Проверка авторизации...');
       const response = await this._request('/verify-auth', {
         method: 'GET'
       });
       
+      // Если ответ содержит ошибку от _request
+      if (response.success === false) {
+        return response;
+      }
+      
       return response;
     } catch (error) {
-      console.log('❌ Ошибка проверки авторизации:', error.message);
+      console.error('❌ [API] Ошибка проверки авторизации:', error.message);
       return { success: false, error: error.message };
     }
   }
 
   // ============ КУРСЫ ============
   async saveCourse(courseData) {
-    console.log('💾 Сохранение курса:', courseData?.courseId);
+    console.log('💾 [API] Сохранение курса:', courseData?.courseId);
     
     try {
       const response = await this._request('/user/save-course', {
@@ -139,21 +165,14 @@ class ApiService {
         body: JSON.stringify(courseData)
       });
       
-      // Обновляем локального пользователя если курс сохранен
-      if (response.success) {
-        const currentUser = this.getCurrentUser();
-        if (currentUser) {
-          // Обновляем общий прогресс в локальном хранилище
-          if (response.overallProgress) {
-            currentUser.overallProgress = response.overallProgress;
-            this._saveUser(currentUser);
-          }
-        }
+      // Если ответ содержит ошибку от _request
+      if (response.success === false) {
+        return response;
       }
       
       return response;
     } catch (error) {
-      console.error('❌ Ошибка сохранения курса:', error.message);
+      console.error('❌ [API] Ошибка сохранения курса:', error.message);
       return { 
         success: false, 
         error: error.message || 'Ошибка сети' 
@@ -162,16 +181,21 @@ class ApiService {
   }
 
   async getUserCourses() {
-    console.log('📚 Получение курсов пользователя');
+    console.log('📚 [API] Получение курсов пользователя');
     
     try {
       const response = await this._request('/user/courses', {
         method: 'GET'
       });
       
+      // Если ответ содержит ошибку от _request
+      if (response.success === false) {
+        return response;
+      }
+      
       return response;
     } catch (error) {
-      console.error('❌ Ошибка получения курсов:', error.message);
+      console.error('❌ [API] Ошибка получения курсов:', error.message);
       return { 
         success: false, 
         error: error.message || 'Ошибка сети' 
@@ -180,16 +204,21 @@ class ApiService {
   }
 
   async checkCourseStatus(courseId) {
-    console.log('🔍 Проверка статуса курса:', courseId);
+    console.log('🔍 [API] Проверка статуса курса:', courseId);
     
     try {
       const response = await this._request(`/user/check-course/${courseId}`, {
         method: 'GET'
       });
       
+      // Если ответ содержит ошибку от _request
+      if (response.success === false) {
+        return response;
+      }
+      
       return response;
     } catch (error) {
-      console.error('❌ Ошибка проверки курса:', error.message);
+      console.error('❌ [API] Ошибка проверки курса:', error.message);
       return { 
         success: false, 
         error: error.message || 'Ошибка сети' 
@@ -197,9 +226,98 @@ class ApiService {
     }
   }
 
+  // ============ НОВЫЕ МЕТОДЫ ДЛЯ КУРСОВ ============
+  
+  // Записаться на курс (новая простая версия)
+  async enrollCourse(courseData) {
+    console.log('🎯 [API] Запись на курс:', courseData?.courseId);
+    
+    try {
+      const response = await this._request('/enroll-course', {
+        method: 'POST',
+        body: JSON.stringify(courseData)
+      });
+      
+      // Если ответ содержит ошибку от _request
+      if (response.success === false) {
+        return response;
+      }
+      
+      return response;
+    } catch (error) {
+      console.error('❌ [API] Ошибка записи на курс:', error.message);
+      return { 
+        success: false, 
+        error: error.message || 'Ошибка сети' 
+      };
+    }
+  }
+
+  // Получить все мои курсы (новая простая версия)
+  async getMyCourses() {
+    console.log('📚 [API] Получение моих курсов');
+    
+    try {
+      const response = await this._request('/my-courses', {
+        method: 'GET'
+      });
+      
+      // Если ответ содержит ошибку от _request
+      if (response.success === false) {
+        return response;
+      }
+      
+      return response;
+    } catch (error) {
+      console.error('❌ [API] Ошибка получения курсов:', error.message);
+      return { 
+        success: false, 
+        error: error.message || 'Ошибка сети' 
+      };
+    }
+  }
+
+  // Проверить зачислен ли на курс
+  async checkEnrollment(courseId) {
+    console.log('🔍 [API] Проверка зачисления:', courseId);
+    
+    try {
+      const response = await this._request(`/check-enrollment/${courseId}`, {
+        method: 'GET'
+      });
+      
+      // Если ответ содержит ошибку от _request
+      if (response.success === false) {
+        return response;
+      }
+      
+      return response;
+    } catch (error) {
+      console.error('❌ [API] Ошибка проверки зачисления:', error.message);
+      return { 
+        success: false, 
+        error: error.message || 'Ошибка сети' 
+      };
+    }
+  }
+
+  // Быстрая запись на курс
+  async quickEnroll(courseId, courseTitle) {
+    console.log('⚡ [API] Быстрая запись на курс:', courseId);
+    
+    const courseData = {
+      courseId,
+      courseTitle: courseTitle || courseId,
+      courseIcon: '📚',
+      totalLessons: 6 // по умолчанию
+    };
+    
+    return await this.enrollCourse(courseData);
+  }
+
   // ============ УРОКИ И ПРОГРЕСС ============
   async completeLesson(courseId, lessonId, timeSpent = 0, score = 100) {
-    console.log('✅ Завершение урока:', { courseId, lessonId });
+    console.log('✅ [API] Завершение урока:', { courseId, lessonId });
     
     try {
       const response = await this._request('/user/complete-lesson', {
@@ -212,6 +330,11 @@ class ApiService {
         })
       });
       
+      // Если ответ содержит ошибку от _request
+      if (response.success === false) {
+        return response;
+      }
+      
       // Обновляем локального пользователя
       if (response.success && response.user) {
         this.updateUserInStorage(response.user);
@@ -219,7 +342,7 @@ class ApiService {
       
       return response;
     } catch (error) {
-      console.error('❌ Ошибка завершения урока:', error.message);
+      console.error('❌ [API] Ошибка завершения урока:', error.message);
       return { 
         success: false, 
         error: error.message || 'Ошибка сети' 
@@ -228,16 +351,21 @@ class ApiService {
   }
 
   async getLessonStatus(courseId, lessonId) {
-    console.log('🔍 Статус урока:', { courseId, lessonId });
+    console.log('🔍 [API] Статус урока:', { courseId, lessonId });
     
     try {
       const response = await this._request(`/user/lesson-status/${courseId}/${lessonId}`, {
         method: 'GET'
       });
       
+      // Если ответ содержит ошибку от _request
+      if (response.success === false) {
+        return response;
+      }
+      
       return response;
     } catch (error) {
-      console.error('❌ Ошибка проверки статуса урока:', error.message);
+      console.error('❌ [API] Ошибка проверки статуса урока:', error.message);
       return { 
         success: false, 
         error: error.message || 'Ошибка сети' 
@@ -246,16 +374,21 @@ class ApiService {
   }
 
   async getOverallProgress() {
-    console.log('📊 Получение общего прогресса');
+    console.log('📊 [API] Получение общего прогресса');
     
     try {
       const response = await this._request('/user/overall-progress', {
         method: 'GET'
       });
       
+      // Если ответ содержит ошибку от _request
+      if (response.success === false) {
+        return response;
+      }
+      
       return response;
     } catch (error) {
-      console.error('❌ Ошибка получения общего прогресса:', error.message);
+      console.error('❌ [API] Ошибка получения общего прогресса:', error.message);
       return { 
         success: false, 
         error: error.message || 'Ошибка сети' 
@@ -264,16 +397,21 @@ class ApiService {
   }
 
   async getCourseProgress(courseId) {
-    console.log('📈 Получение прогресса курса:', courseId);
+    console.log('📈 [API] Получение прогресса курса:', courseId);
     
     try {
       const response = await this._request(`/user/course/${courseId}/progress`, {
         method: 'GET'
       });
       
+      // Если ответ содержит ошибку от _request
+      if (response.success === false) {
+        return response;
+      }
+      
       return response;
     } catch (error) {
-      console.error('❌ Ошибка получения прогресса курса:', error.message);
+      console.error('❌ [API] Ошибка получения прогресса курса:', error.message);
       return { 
         success: false, 
         error: error.message || 'Ошибка сети' 
@@ -284,48 +422,56 @@ class ApiService {
   // ============ УТИЛИТЫ ============
   _saveUser(user) {
     try {
-      // Сохраняем user с id в localStorage
+      // Убедимся что у пользователя есть id
       if (!user.id && user._id) {
         user.id = user._id;
       }
       
+      // Если у пользователя нет id, генерируем из токена
+      if (!user.id && this.token) {
+        try {
+          const payload = JSON.parse(atob(this.token.split('.')[1]));
+          user.id = payload.id;
+        } catch (e) {
+          console.error('❌ [API] Не могу распарсить токен для получения id:', e);
+        }
+      }
+      
+      this.user = user;
       localStorage.setItem('user', JSON.stringify(user));
-      localStorage.setItem('user_id', user.id); // Сохраняем отдельно id для быстрого доступа
-      console.log('💾 Пользователь сохранен в localStorage:', user.username, 'ID:', user.id);
+      
+      // Сохраняем отдельно id для быстрого доступа
+      if (user.id) {
+        localStorage.setItem('user_id', user.id);
+      }
+      
+      console.log('💾 [API] Пользователь сохранен в localStorage:', user.username, 'ID:', user.id);
       return true;
     } catch (error) {
-      console.error('❌ Ошибка сохранения пользователя:', error);
+      console.error('❌ [API] Ошибка сохранения пользователя:', error);
       return false;
     }
   }
 
   getCurrentUser() {
     try {
+      // Возвращаем пользователя из памяти если есть
+      if (this.user) {
+        return this.user;
+      }
+      
+      // Иначе загружаем из localStorage
       const userStr = localStorage.getItem('user');
       if (!userStr) {
         return null;
       }
       
       const user = JSON.parse(userStr);
-      
-      // Если id нет, но есть _id - копируем
-      if (!user.id && user._id) {
-        user.id = user._id;
-      }
-      
-      // Если все еще нет id, пытаемся получить из токена
-      if (!user.id && this.token) {
-        try {
-          const payload = JSON.parse(atob(this.token.split('.')[1]));
-          user.id = payload.id;
-        } catch (e) {
-          console.error('❌ Не могу распарсить токен:', e);
-        }
-      }
+      this.user = user;
       
       return user;
     } catch (error) {
-      console.error('❌ Ошибка получения пользователя:', error);
+      console.error('❌ [API] Ошибка получения пользователя:', error);
       return null;
     }
   }
@@ -353,11 +499,11 @@ class ApiService {
           return payload.id;
         }
       } catch (e) {
-        console.error('❌ Не могу распарсить токен:', e);
+        console.error('❌ [API] Не могу распарсить токен для получения user_id:', e);
       }
     }
     
-    console.error('❌ Не могу получить user ID');
+    console.warn('⚠️ [API] Не могу получить user ID');
     return null;
   }
 
@@ -366,119 +512,48 @@ class ApiService {
     const hasUser = !!this.getCurrentUser();
     const hasUserId = !!this.getCurrentUserId();
     
-    console.log('🔍 Проверка аутентификации:', {
+    const isAuth = hasToken && hasUser && hasUserId;
+    
+    console.log(`🔍 [API] Проверка аутентификации: ${isAuth ? 'Аутентифицирован' : 'Не аутентифицирован'}`, {
       hasToken,
       hasUser,
-      hasUserId,
-      token: this.token,
-      user: this.getCurrentUser(),
-      userId: this.getCurrentUserId()
+      hasUserId
     });
     
-    return hasToken && hasUser && hasUserId;
+    return isAuth;
   }
 
   logout() {
-    console.log('🚪 Выход из системы');
+    console.log('🚪 [API] Выход из системы');
     this.token = null;
+    this.user = null;
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user');
     localStorage.removeItem('user_id');
+    localStorage.removeItem('savedCourses');
     
     // Перенаправляем на страницу логина
     if (window.location.pathname !== '/login') {
-      window.location.href = '/login';
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 100);
     }
   }
-
-  // ============ НОВЫЕ МЕТОДЫ ДЛЯ КУРСОВ (добавить в существующий api.js) ============
-
-// Записаться на курс (простая версия)
-async enrollCourse(courseData) {
-  console.log('🎯 Запись на курс:', courseData?.courseId);
-  
-  try {
-    const response = await this._request('/enroll-course', {
-      method: 'POST',
-      body: JSON.stringify(courseData)
-    });
-    
-    return response;
-  } catch (error) {
-    console.error('❌ Ошибка записи на курс:', error.message);
-    return { 
-      success: false, 
-      error: error.message || 'Ошибка сети' 
-    };
-  }
-}
-
-// Получить все мои курсы
-async getMyCourses() {
-  console.log('📚 Получение моих курсов');
-  
-  try {
-    const response = await this._request('/my-courses', {
-      method: 'GET'
-    });
-    
-    return response;
-  } catch (error) {
-    console.error('❌ Ошибка получения курсов:', error.message);
-    return { 
-      success: false, 
-      error: error.message || 'Ошибка сети' 
-    };
-  }
-}
-
-// Проверить зачислен ли на курс
-async checkEnrollment(courseId) {
-  console.log('🔍 Проверка зачисления:', courseId);
-  
-  try {
-    const response = await this._request(`/check-enrollment/${courseId}`, {
-      method: 'GET'
-    });
-    
-    return response;
-  } catch (error) {
-    console.error('❌ Ошибка проверки зачисления:', error.message);
-    return { 
-      success: false, 
-      error: error.message || 'Ошибка сети' 
-    };
-  }
-}
-
-// Быстрая запись на курс
-async quickEnroll(courseId, courseTitle) {
-  console.log('⚡ Быстрая запись на курс:', courseId);
-  
-  const courseData = {
-    courseId,
-    courseTitle: courseTitle || courseId,
-    courseIcon: '📚',
-    totalLessons: 6 // по умолчанию
-  };
-  
-  return await this.enrollCourse(courseData);
-}
 
   setToken(token) {
     this.token = token;
     localStorage.setItem('auth_token', token);
-    console.log('🔑 Токен установлен');
+    console.log('🔑 [API] Токен установлен');
     
     // Пытаемся получить user_id из токена
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       if (payload.id) {
         localStorage.setItem('user_id', payload.id);
-        console.log('✅ User ID из токена:', payload.id);
+        console.log('✅ [API] User ID из токена:', payload.id);
       }
     } catch (e) {
-      console.error('❌ Не могу распарсить токен для получения user_id:', e);
+      console.error('❌ [API] Не могу распарсить токен для получения user_id:', e);
     }
   }
 
@@ -489,9 +564,13 @@ async quickEnroll(courseId, courseTitle) {
   updateUserInStorage(updates) {
     try {
       const currentUser = this.getCurrentUser();
-      if (!currentUser) return null;
+      if (!currentUser) {
+        console.warn('⚠️ [API] Нет текущего пользователя для обновления');
+        return null;
+      }
       
       const updatedUser = { ...currentUser, ...updates };
+      this.user = updatedUser;
       localStorage.setItem('user', JSON.stringify(updatedUser));
       
       // Обновляем user_id если изменился
@@ -499,44 +578,79 @@ async quickEnroll(courseId, courseTitle) {
         localStorage.setItem('user_id', updatedUser.id);
       }
       
-      console.log('💾 Пользователь обновлен');
+      console.log('💾 [API] Пользователь обновлен');
       return updatedUser;
     } catch (error) {
-      console.error('❌ Ошибка обновления пользователя:', error);
+      console.error('❌ [API] Ошибка обновления пользователя:', error);
       return null;
     }
   }
 
-  // Получить данные о пользователе с сервера
+  // Обновить данные о пользователе с сервера
   async refreshUserData() {
     try {
+      console.log('🔄 [API] Обновление данных пользователя с сервера');
       const response = await this.verifyAuth();
       if (response.success && response.user) {
         this._saveUser(response.user);
         return response.user;
       }
     } catch (error) {
-      console.error('❌ Ошибка обновления данных пользователя:', error);
+      console.error('❌ [API] Ошибка обновления данных пользователя:', error);
     }
     return null;
   }
 
-  // ============ ПРОВЕРКА СЕРВЕРА ============
+  // Проверить доступность сервера
   async checkServer() {
     try {
+      console.log('🏥 [API] Проверка доступности сервера');
       const response = await fetch(`${API_BASE}/health`);
       const data = await response.json();
       return data.success === true;
     } catch (error) {
-      console.error('❌ Сервер недоступен:', error);
+      console.error('❌ [API] Сервер недоступен:', error);
       return false;
+    }
+  }
+
+  // Удалить все локальные данные
+  clearLocalData() {
+    console.log('🧹 [API] Очистка локальных данных');
+    this.token = null;
+    this.user = null;
+    localStorage.clear();
+  }
+
+  // Установить тестовые данные (для разработки)
+  setTestData() {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🧪 [API] Установка тестовых данных');
+      const testUser = {
+        id: 'test_user_123',
+        username: 'testuser',
+        email: 'test@example.com',
+        fullName: 'Test User',
+        xp: 500,
+        level: 2,
+        streak: 3,
+        createdAt: new Date().toISOString()
+      };
+      
+      const testToken = 'test_token_123';
+      
+      this._saveUser(testUser);
+      this.setToken(testToken);
     }
   }
 }
 
-
-
 // Создаем единственный экземпляр
 const api = new ApiService();
+
+// Для отладки в консоли
+if (typeof window !== 'undefined') {
+  window.api = api;
+}
 
 export default api;

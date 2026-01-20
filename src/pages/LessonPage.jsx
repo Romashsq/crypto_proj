@@ -1,5 +1,4 @@
-// LessonPage.jsx - ТВОЯ ВЕРСИЯ, НЕ МЕНЯЮ КОМПОНЕНТЫ, ТОЛЬКО ЛОГИКУ
-
+// LessonPage.jsx - ENGLISH VERSION WITH FIXED NAVIGATION
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../Context/ThemeContext';
@@ -38,25 +37,27 @@ const Toast = ({ message, isVisible, duration = 5000 }) => {
 
 const LessonPage = () => {
   const { theme } = useTheme();
-  const { lessonId, courseId = 'crypto' } = useParams();
+  const { lessonId, courseId = 'crypto-fundamentals' } = useParams();
   const navigate = useNavigate();
-  
-  const [notesOpen, setNotesOpen] = useState(false);
-  const [materialsOpen, setMaterialsOpen] = useState(false);
-  const [detailsOpen, setDetailsOpen] = useState(true);
   
   const [isCompleted, setIsCompleted] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [isMarking, setIsMarking] = useState(false);
   const [courseProgress, setCourseProgress] = useState(0);
-  const [canAccess, setCanAccess] = useState(false); // ДОБАВИЛ
-  const [loading, setLoading] = useState(true); // ДОБАВИЛ
+  const [canAccess, setCanAccess] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [lessonStatus, setLessonStatus] = useState(null);
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [currentLessonNum, setCurrentLessonNum] = useState(parseInt(lessonId) || 1);
 
   const lessonNum = parseInt(lessonId) || 1;
   const nextLessonNum = lessonNum + 1;
   const prevLessonNum = lessonNum - 1;
-
+  const totalLessons = getTotalLessons(courseId);
   const lessonData = getLessonData(courseId, lessonNum);
+  const nextLessonExists = hasNextLesson(courseId, lessonNum);
+  const nextTitle = getNextLessonTitle(courseId, lessonNum);
+  const prevLessonData = getLessonData(courseId, prevLessonNum);
 
   const lessonForSave = {
     id: lessonNum,
@@ -70,53 +71,121 @@ const LessonPage = () => {
   };
 
   useEffect(() => {
+    checkEnrollmentStatus();
     checkLessonStatus();
     loadCourseProgress();
   }, [courseId, lessonNum]);
 
+  const checkEnrollmentStatus = async () => {
+    try {
+      if (!api.isAuthenticated()) return;
+      
+      const response = await api.checkEnrollment(courseId);
+      
+      if (response.success) {
+        setIsEnrolled(response.isEnrolled);
+        
+        if (!response.isEnrolled && lessonNum === 1) {
+          await enrollToCourse();
+        }
+      }
+    } catch (error) {
+      console.error('Error checking course enrollment:', error);
+    }
+  };
+
+  const enrollToCourse = async () => {
+    try {
+      const courseData = {
+        courseId: courseId,
+        courseTitle: getCourseTitle(),
+        courseIcon: '📚',
+        totalLessons: totalLessons
+      };
+      
+      const response = await api.enrollCourse(courseData);
+      
+      if (response.success) {
+        setIsEnrolled(true);
+        return true;
+      } else {
+        console.error('❌ Error enrolling in course:', response.error);
+        return false;
+      }
+    } catch (error) {
+      console.error('❌ Exception when enrolling in course:', error);
+      return false;
+    }
+  };
+
   const checkLessonStatus = async () => {
-  try {
-    setLoading(true);
-    const currentUser = api.getCurrentUser();
-    
-    if (!currentUser) {
-      navigate('/login');
-      return;
-    }
+    try {
+      setLoading(true);
+      
+      if (!api.isAuthenticated()) {
+        if (lessonNum === 1) {
+          setCanAccess(true);
+        }
+        setLoading(false);
+        return;
+      }
 
-    if (lessonNum === 1) {
-      setCanAccess(true);
-      setIsCompleted(false);
+      if (lessonNum === 1) {
+        setCanAccess(true);
+        
+        try {
+          const response = await api.getLessonStatus(courseId, lessonNum);
+          if (response.success) {
+            setIsCompleted(response.isCompleted || false);
+            setLessonStatus(response);
+          }
+        } catch (error) {
+          console.log('Could not check first lesson status:', error);
+        }
+        
+        setLoading(false);
+        return;
+      }
+
+      const response = await api.getLessonStatus(courseId, lessonNum);
+      
+      if (response.success) {
+        setIsCompleted(response.isCompleted || false);
+        setCanAccess(response.canAccess || false);
+        setLessonStatus(response);
+      } else {
+        console.warn('Error checking lesson status:', response.error);
+        if (lessonNum === 1) {
+          setCanAccess(true);
+        } else {
+          setCanAccess(false);
+        }
+      }
+    } catch (error) {
+      console.error('Error checking lesson status:', error);
+      if (lessonNum === 1) {
+        setCanAccess(true);
+      } else {
+        setCanAccess(false);
+      }
+    } finally {
       setLoading(false);
-      return;
     }
-
-    const response = await api.getLessonStatus(currentUser.id, courseId, lessonId);
-    
-    if (response.success) {
-      setIsCompleted(response.isCompleted);
-      setCanAccess(response.canAccess || response.status === 'available' || response.status === 'completed');
-    }
-  } catch (error) {
-    console.error('Error checking lesson status:', error);
-    if (lessonNum === 1) {
-      setCanAccess(true);
-    }
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const loadCourseProgress = async () => {
     try {
-      const currentUser = api.getCurrentUser();
-      if (!currentUser) return;
+      if (!api.isAuthenticated()) {
+        console.log('User not authenticated, progress not loaded');
+        return;
+      }
 
-      const response = await api.getUserProgress(currentUser.id);
+      const response = await api.getCourseProgress(courseId);
       
-      if (response.success && response.courses && response.courses[courseId]) {
-        const progress = response.courses[courseId].percentage || 0;
-        setCourseProgress(progress);
+      if (response.success && response.progress) {
+        setCourseProgress(response.progress.percentage || 0);
+      } else if (response.success && response.isEnrolled && response.progress) {
+        setCourseProgress(response.progress.percentage || 0);
       }
     } catch (error) {
       console.error('Error loading progress:', error);
@@ -129,59 +198,65 @@ const LessonPage = () => {
     setIsMarking(true);
     
     try {
-      const currentUser = api.getCurrentUser();
-      if (!currentUser) {
-        navigate('/login');
-        return;
+      if (!isEnrolled) {
+        const enrolled = await enrollToCourse();
+        
+        if (!enrolled) {
+          alert('Failed to enroll in course. Please try again.');
+          setIsMarking(false);
+          return;
+        }
+        
+        setIsEnrolled(true);
       }
-
-      // Отправляем запрос на сервер
+      
       const response = await api.completeLesson(
-        currentUser.id,
         courseId,
-        lessonId,
-        300 // 5 минут времени
+        lessonNum,
+        300,
+        100
       );
-
+      
       if (response.success) {
         setIsCompleted(true);
         setShowToast(true);
-        setCourseProgress(response.courseProgress?.percentage || 0);
         
-        // Обновляем пользователя в localStorage
-        if (response.user) {
-          localStorage.setItem('user', JSON.stringify(response.user));
+        if (response.courseProgress) {
+          setCourseProgress(response.courseProgress.percentage || 0);
         }
+        
+        if (response.user) {
+          api.updateUserInStorage(response.user);
+        }
+        
+        await checkLessonStatus();
         
         setTimeout(() => {
           setShowToast(false);
         }, 5000);
+        
+      } else {
+        alert('Error: ' + (response.error || 'Failed to mark lesson as complete'));
       }
     } catch (error) {
-      console.error('Error completing lesson:', error);
-      alert('Failed to mark lesson as completed: ' + error.message);
+      alert('Network error: ' + error.message);
     } finally {
       setIsMarking(false);
     }
   };
 
-  const hasPrevLesson = () => {
-    return lessonNum > 1;
-  };
-
   const getCourseTitle = () => {
     const titles = {
-      crypto: 'Crypto Fundamentals',
-      scams: 'Scams Protection',
-      memecoins: 'Memecoins',
-      security: 'Security Essentials'
+      'crypto-fundamentals': 'Crypto Fundamentals',
+      'crypto': 'Crypto Fundamentals',
+      'scams': 'Scams Protection',
+      'memecoins': 'Memecoins',
+      'security': 'Security Essentials',
+      'additional': 'Additional Materials',
+      'defi': 'DeFi & Staking'
     };
     return titles[courseId] || 'Crypto Fundamentals';
   };
-
-  const totalLessons = getTotalLessons(courseId);
-  const nextLessonExists = hasNextLesson(courseId, lessonNum);
-  const nextTitle = getNextLessonTitle(courseId, lessonNum);
 
   if (loading) {
     return (
@@ -203,11 +278,11 @@ const LessonPage = () => {
           </div>
           <main className={styles.lessonContent}>
             <div className={styles.lessonHeader}>
-              <h1>Lesson Not Found</h1>
-              <p>The lesson you're looking for doesn't exist.</p>
+              <h1>Lesson not found</h1>
+              <p>The requested lesson does not exist.</p>
               <Link to={`/${courseId}`} className={styles.backToLessonsTop}>
                 <i className="fas fa-arrow-left"></i>
-                Back to Lessons
+                Back to lessons
               </Link>
             </div>
           </main>
@@ -216,7 +291,6 @@ const LessonPage = () => {
     );
   }
 
-  // Если урок заблокирован
   if (!canAccess && lessonNum !== 1) {
     return (
       <div className={`${styles.lessonPage} ${theme === 'dark' ? styles.darkMode : ''}`}>
@@ -230,11 +304,20 @@ const LessonPage = () => {
                 <i className="fas fa-lock"></i>
               </div>
               <h2>Lesson Locked</h2>
-              <p>Complete the previous lesson first to unlock this one.</p>
-              <Link to={`/lesson/${courseId}/${lessonNum - 1}`} className={styles.goBackButton}>
-                <i className="fas fa-arrow-left"></i>
-                Go to Previous Lesson
-              </Link>
+              <p>Complete the previous lesson first.</p>
+              <div className={styles.lockedActions}>
+                <Link to={`/lesson/${courseId}/${lessonNum - 1}`} className={styles.goBackButton}>
+                  <i className="fas fa-arrow-left"></i>
+                  Go to previous lesson
+                </Link>
+                <button 
+                  className={styles.refreshButton}
+                  onClick={checkLessonStatus}
+                >
+                  <i className="fas fa-sync-alt"></i>
+                  Check again
+                </button>
+              </div>
             </div>
           </main>
         </div>
@@ -245,7 +328,7 @@ const LessonPage = () => {
   return (
     <div className={`${styles.lessonPage} ${theme === 'dark' ? styles.darkMode : ''}`}>
       <Toast 
-        message="Your lesson has been marked as completed!" 
+        message="Lesson marked as completed!" 
         isVisible={showToast} 
         duration={5000}
       />
@@ -268,6 +351,19 @@ const LessonPage = () => {
               </div>
               
               <div className={styles.headerActions}>
+                <div className={styles.enrollmentStatus}>
+                  {isEnrolled ? (
+                    <span className={styles.enrolledBadge}>✓ Enrolled</span>
+                  ) : (
+                    <button 
+                      className={styles.enrollNowBtn}
+                      onClick={enrollToCourse}
+                    >
+                      <i className="fas fa-plus"></i> Enroll in Course
+                    </button>
+                  )}
+                </div>
+                
                 <SaveButton 
                   lesson={lessonForSave}
                   size="medium"
@@ -276,7 +372,7 @@ const LessonPage = () => {
                 />
                 <Link to={`/${courseId}`} className={styles.backToLessonsBtn}>
                   <i className="fas fa-arrow-left"></i>
-                  Back to Lessons
+                  Back to lessons
                 </Link>
               </div>
             </div>
@@ -290,7 +386,6 @@ const LessonPage = () => {
             </div>
             
             <div className={styles.infoCardsGrid}>
-              {/* DURATION CARD */}
               <div className={styles.infoCard}>
                 <div className={styles.cardIcon}>
                   <i className="far fa-clock"></i>
@@ -301,7 +396,6 @@ const LessonPage = () => {
                 </div>
               </div>
               
-              {/* LEVEL CARD */}
               <div className={styles.infoCard}>
                 <div className={styles.cardIcon}>
                   <i className="fas fa-signal"></i>
@@ -312,7 +406,6 @@ const LessonPage = () => {
                 </div>
               </div>
               
-              {/* PROGRESS CARD */}
               <div className={styles.infoCard}>
                 <div className={styles.cardIcon}>
                   <i className="fas fa-hashtag"></i>
@@ -323,7 +416,6 @@ const LessonPage = () => {
                 </div>
               </div>
               
-              {/* STATUS CARD */}
               <div className={styles.infoCard}>
                 <div className={styles.cardIcon}>
                   <i className="fas fa-bookmark"></i>
@@ -356,7 +448,7 @@ const LessonPage = () => {
                   />
                   <div className={styles.videoBadge}>
                     <i className="fas fa-play"></i>
-                    Watch Now
+                    Watch
                   </div>
                 </div>
               </div>
@@ -382,7 +474,7 @@ const LessonPage = () => {
                   <i className="fas fa-chart-line"></i>
                   Course Progress
                 </h4>
-                <span className={styles.progressPercentage}>{Math.round(courseProgress)}% Complete</span>
+                <span className={styles.progressPercentage}>{Math.round(courseProgress)}% completed</span>
               </div>
               <ProgressBar progress={courseProgress} />
             </div>
@@ -391,7 +483,7 @@ const LessonPage = () => {
               <div className={styles.completeHeader}>
                 <h4 className={styles.completeTitle}>
                   <i className="fas fa-flag-checkered"></i>
-                  Mark as Complete
+                  Mark as Completed
                 </h4>
                 <SaveButton 
                   lesson={lessonForSave}
@@ -421,7 +513,7 @@ const LessonPage = () => {
                     </span>
                     <span className={styles.buttonText}>
                       {isCompleted ? 'Lesson Completed' : 
-                       isMarking ? 'Marking...' : 'Mark as Complete'}
+                       isMarking ? 'Marking...' : 'Mark as Completed'}
                     </span>
                   </span>
                   {!isCompleted && !isMarking && canAccess && (
@@ -431,198 +523,124 @@ const LessonPage = () => {
                   )}
                 </button>
                 
+                {!isEnrolled && !isCompleted && (
+                  <div className={styles.enrollmentMessage}>
+                    <i className="fas fa-info-circle"></i>
+                    <span>You need to enroll in the course first</span>
+                    <button 
+                      className={styles.enrollInlineBtn}
+                      onClick={enrollToCourse}
+                    >
+                      Enroll Now
+                    </button>
+                  </div>
+                )}
+                
                 {isCompleted && (
                   <div className={styles.completedMessage}>
                     <div className={styles.messageIcon}>
                       <i className="fas fa-check"></i>
                     </div>
                     <div className={styles.messageContent}>
-                      <span className={styles.messageTitle}>Great job!</span>
-                      <span className={styles.messageSubtitle}>Lesson marked as complete</span>
+                      <span className={styles.messageTitle}>Excellent!</span>
+                      <span className={styles.messageSubtitle}>Lesson completed</span>
                     </div>
                   </div>
                 )}
 
-                {!canAccess && (
+                {!canAccess && lessonNum !== 1 && (
                   <div className={styles.lockedMessage}>
                     <i className="fas fa-lock"></i>
-                    <span>Complete previous lesson first</span>
+                    <span>Complete the previous lesson</span>
                   </div>
                 )}
               </div>
             </div>
           </div>
 
-          {/* DETAILS SECTION */}
-          <div className={styles.detailsSection}>
-            <div className={styles.detailsCard}>
-              <div 
-                className={styles.sectionHeader} 
-                onClick={() => setDetailsOpen(!detailsOpen)}
-              >
-                <div className={styles.sectionTitle}>
-                  <i className="fas fa-info-circle"></i>
-                  <h3>Lesson Details & Key Concepts</h3>
-                </div>
-                <i className={`fas fa-chevron-down ${styles.toggleIcon}`} 
-                   style={{ transform: detailsOpen ? 'rotate(180deg)' : 'rotate(0)' }}
-                ></i>
-              </div>
-              
-              <div className={`${styles.sectionContent} ${detailsOpen ? styles.active : ''}`}>
-                <div className={styles.shortDescription}>
-                  <p className={styles.descriptionText}>{lessonData.shortDescription}</p>
-                </div>
-                
-                {lessonData.fullDescription && (
-                  <div className={styles.fullDescription}>
-                    <h4 className={styles.descriptionTitle}>Detailed Explanation</h4>
-                    <pre className={styles.descriptionPre}>
-                      {lessonData.fullDescription}
-                    </pre>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* NOTES SECTION */}
-          {lessonData.notes && lessonData.notes.length > 0 && (
-            <div className={styles.notesSection}>
-              <div className={styles.notesCard}>
-                <div 
-                  className={styles.sectionHeader} 
-                  onClick={() => setNotesOpen(!notesOpen)}
-                >
-                  <div className={styles.sectionTitle}>
-                    <i className="fas fa-sticky-note"></i>
-                    <h3>Lesson Notes & Key Takeaways</h3>
-                  </div>
-                  <i className={`fas fa-chevron-down ${styles.toggleIcon}`} 
-                     style={{ transform: notesOpen ? 'rotate(180deg)' : 'rotate(0)' }}
-                  ></i>
-                </div>
-                
-                <div className={`${styles.sectionContent} ${notesOpen ? styles.active : ''}`}>
-                  <div className={styles.notesList}>
-                    {lessonData.notes.map((note, index) => (
-                      <div key={index} className={styles.noteItem}>
-                        <div className={styles.noteNumber}>{index + 1}</div>
-                        <div className={styles.noteContent}>
-                          <h4 className={styles.noteTitle}>{note.title || `Key Takeaway ${index + 1}`}</h4>
-                          <p className={styles.noteText}>{note.content}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* MATERIALS SECTION */}
-          {lessonData.materials && lessonData.materials.length > 0 && (
-            <div className={styles.materialsSection}>
-              <div className={styles.materialsCard}>
-                <div 
-                  className={styles.sectionHeader} 
-                  onClick={() => setMaterialsOpen(!materialsOpen)}
-                >
-                  <div className={styles.sectionTitle}>
-                    <i className="fas fa-download"></i>
-                    <h3>Download Materials & Resources</h3>
-                  </div>
-                  <i className={`fas fa-chevron-down ${styles.toggleIcon}`}
-                     style={{ transform: materialsOpen ? 'rotate(180deg)' : 'rotate(0)' }}
-                  ></i>
-                </div>
-                
-                <div className={`${styles.sectionContent} ${materialsOpen ? styles.active : ''}`}>
-                  <div className={styles.materialsList}>
-                    {lessonData.materials.map((material, index) => (
-                      <div key={index} className={styles.materialItem}>
-                        <div className={styles.materialIcon}>
-                          <i className={`fas fa-${material.icon || 'file'}`}></i>
-                        </div>
-                        <div className={styles.materialInfo}>
-                          <h4 className={styles.materialTitle}>{material.title}</h4>
-                          <div className={styles.materialMeta}>
-                            <span className={styles.materialFormat}>{material.format || 'PDF'}</span>
-                            {material.size && (
-                              <>
-                                <span className={styles.materialSeparator}>•</span>
-                                <span className={styles.materialSize}>{material.size}</span>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                        <button className={styles.materialDownload}>
-                          <i className="fas fa-download"></i>
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* NAVIGATION */}
+          {/* LESSON NAVIGATION - FIXED STYLES */}
           <div className={styles.navigationSection}>
             <div className={styles.navigationContainer}>
               <div className={styles.navigationGrid}>
-                {/* PREVIOUS BUTTON */}
+                {/* PREVIOUS LESSON BUTTON */}
                 <Link 
-                  to={hasPrevLesson() ? `/lesson/${courseId}/${prevLessonNum}` : "#"}
+                  to={prevLessonData ? `/lesson/${courseId}/${prevLessonNum}` : '#'}
                   className={`${styles.navButton} ${styles.prevButton} ${
-                    !hasPrevLesson() ? styles.disabled : ''
+                    !prevLessonData ? styles.disabled : ''
                   }`}
                 >
                   <div className={styles.navButtonInner}>
+                    <div className={styles.navIcon}>
+                      <i className="fas fa-chevron-left"></i>
+                    </div>
                     <div className={styles.navContent}>
-                      <span className={styles.navLabel}>Previous</span>
+                      <span className={styles.navLabel}>Previous Lesson</span>
                       <span className={styles.navTitle}>
-                        {hasPrevLesson() ? `Lesson ${prevLessonNum}` : 'No Previous'}
+                        {prevLessonData 
+                          ? `Lesson ${prevLessonNum}: ${prevLessonData?.title || ''}`
+                          : 'Course Start'
+                        }
                       </span>
                     </div>
                   </div>
                 </Link>
-                
-                {/* OVERVIEW BUTTON - CENTER */}
-                <Link to={`/${courseId}`} className={`${styles.navButton} ${styles.overviewButton}`}>
-                  <div className={styles.navButtonInner}>
-                    <div className={styles.navContent}>
-                      <span className={styles.navLabel}>Back to</span>
-                      <span className={styles.navTitle}>Course Overview</span>
-                    </div>
-                  </div>
-                </Link>
-                
-                {/* NEXT BUTTON */}
+
+                {/* COURSE OVERVIEW BUTTON */}
                 <Link 
-                  to={isCompleted && nextLessonExists ? `/lesson/${courseId}/${nextLessonNum}` : "#"}
-                  onClick={(e) => {
-                    if (!isCompleted) {
-                      e.preventDefault();
-                      alert('Complete this lesson first to unlock the next one!');
-                    }
-                  }}
+                  to={`/${courseId}`}
+                  className={`${styles.navButton} ${styles.overviewButton}`}
+                >
+                  <div className={styles.navButtonInner}>
+                    <div className={styles.navIcon}>
+                      <i className="fas fa-list-ul"></i>
+                    </div>
+                    <div className={styles.navContent}>
+                      <span className={styles.navLabel}>All Lessons</span>
+                      <span className={styles.navTitle}>{getCourseTitle()}</span>
+                    </div>
+                  </div>
+                </Link>
+
+                {/* NEXT LESSON BUTTON - ACTIVE ONLY IF LESSON IS COMPLETED */}
+                <Link 
+                  to={nextLessonExists && isCompleted ? `/lesson/${courseId}/${nextLessonNum}` : '#'}
                   className={`${styles.navButton} ${styles.nextButton} ${
-                    !(isCompleted && nextLessonExists) ? styles.disabled : ''
+                    (!nextLessonExists || !isCompleted) ? styles.disabled : ''
                   }`}
                 >
                   <div className={styles.navButtonInner}>
                     <div className={styles.navContent}>
-                      <span className={styles.navLabel}>Next</span>
+                      <span className={styles.navLabel}>Next Lesson</span>
                       <span className={styles.navTitle}>
-                        {nextLessonExists ? nextTitle : 'Course Complete'}
+                        {nextLessonExists 
+                          ? `Lesson ${nextLessonNum}: ${nextTitle || ''}`
+                          : 'Course Completed'
+                        }
                       </span>
+                    </div>
+                    <div className={styles.navIcon}>
+                      <i className="fas fa-chevron-right"></i>
                     </div>
                   </div>
                 </Link>
               </div>
+
+              {/* Next lesson hint - NEW STYLED VERSION */}
+              {nextLessonExists && !isCompleted && (
+                <div className={styles.nextLessonHint}>
+                  <div className={styles.hintIcon}>
+                    <i className="fas fa-lock"></i>
+                  </div>
+                  <div className={styles.hintContent}>
+                    <span className={styles.hintText}>
+                      Complete this lesson to unlock Lesson {nextLessonNum}
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
+
         </main>
       </div>
     </div>

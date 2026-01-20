@@ -1,221 +1,222 @@
-// /frontend/components/CoursesCard.jsx - С ЗАЩИТОЙ ОТ UNDEFINED
-import React, { useState, useEffect } from 'react';
+// CoursesCard.jsx - ИСПРАВЛЕННАЯ ВЕРСИЯ
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import courseService from '../../../services/courseService';
 import api from '../../../services/api';
 import styles from './CoursesCard.module.css';
 
+const courseStatusCache = {};
+
 const CoursesCard = ({ course }) => {
   const navigate = useNavigate();
+  const hasChecked = useRef(false);
   
-  // Проверяем что курс существует
   if (!course) {
-    console.error('❌ CoursesCard: передан undefined курс!');
-    return (
-      <div className={styles.errorCard}>
-        <div className={styles.errorIcon}>⚠️</div>
-        <p>Ошибка загрузки курса</p>
-      </div>
-    );
+    return null;
   }
 
-  // Создаем безопасный объект курса с дефолтными значениями
+  // Функция для получения корректного courseId и ссылки
+  const getCourseInfo = () => {
+    // Если в курсе уже есть courseId - используем его
+    if (course.courseId) return { 
+      courseId: course.courseId, 
+      route: course.buttonLink || `/course/${course.courseId}` 
+    };
+    
+    // Генерируем courseId из title
+    const generatedId = course.title
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/&/g, '')
+      .replace(/[^a-z0-9-]/g, '');
+    
+    // Сопоставляем с существующими маршрутами
+    const routeMap = {
+      'crypto-fundamentals': '/crypto',
+      'scams-protection': '/scams',
+      'memecoins': '/memecoins',
+      'security-essentials': '/security',
+      'additional-materials': '/additional',
+      'defi-&-staking': '/defi',
+      'crypto': '/crypto',
+      'scams': '/scams',
+      'security': '/security',
+      'memecoins': '/memecoins'
+    };
+    
+    return {
+      courseId: generatedId,
+      route: routeMap[generatedId] || `/course/${generatedId}`
+    };
+  };
+
+  const { courseId, route } = getCourseInfo();
+  
   const safeCourse = {
-    courseId: course.courseId || course.id || 'unknown',
+    courseId: courseId,
     title: course.title || 'Без названия',
     icon: course.icon || 'fa-book',
     description: course.description || 'Описание отсутствует',
-    totalLessons: course.totalLessons || 0,
-    buttonLink: course.buttonLink || `/course/${course.courseId || 'unknown'}`,
+    totalLessons: course.totalLessons || 6,
+    buttonLink: route, // Используем правильный маршрут
     lessons: course.lessons || []
   };
 
-  console.log('📦 CoursesCard загружается:', safeCourse);
-  
-  // Состояния
-  const [isSaved, setIsSaved] = useState(false);
+  const [isEnrolled, setIsEnrolled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [enrollLoading, setEnrollLoading] = useState(false);
+  const [message, setMessage] = useState('');
   const [progress, setProgress] = useState({
     percentage: 0,
-    completed: 0,
-    total: safeCourse.totalLessons
+    completedLessons: 0,
+    totalLessons: safeCourse.totalLessons
   });
 
-  // Проверяем статус курса при загрузке
   useEffect(() => {
-    if (!safeCourse.courseId || safeCourse.courseId === 'unknown') {
-      console.error('❌ Некорректный courseId:', safeCourse.courseId);
-      setError('Некорректный идентификатор курса');
-      return;
-    }
+    if (hasChecked.current || isLoading) return;
     
-    checkCourseStatus();
-  }, [safeCourse.courseId]);
+    checkEnrollmentStatus();
+  }, [courseId]);
 
-  const checkCourseStatus = async () => {
-    console.log('🔍 Начинаю проверку статуса курса:', safeCourse.courseId);
-    
-    try {
-      setIsLoading(true);
-      
-      // Проверяем аутентификацию
-      const isAuth = api.isAuthenticated();
-      console.log('🔍 isAuthenticated():', isAuth);
-      
-      if (!isAuth) {
-        console.log('❌ Пользователь не аутентифицирован');
-        setIsSaved(false);
-        return;
-      }
-      
-      console.log('🔍 Вызываю courseService.isCourseSaved...');
-      const saved = await courseService.isCourseSaved(safeCourse.courseId);
-      console.log('🔍 Результат isCourseSaved:', saved);
-      
-      setIsSaved(saved);
-      
-      if (saved) {
-        console.log('🔍 Курс сохранен, получаю прогресс...');
-        const progressData = await courseService.getUserCourseProgress(safeCourse.courseId);
-        console.log('🔍 Полученный прогресс:', progressData);
-        
-        if (progressData) {
-          setProgress({
-            percentage: progressData.percentage || 0,
-            completed: progressData.completedLessons || 0,
-            total: progressData.totalLessons || safeCourse.totalLessons
-          });
-        } else {
-          console.log('⚠️ Прогресс не получен, устанавливаю 0');
-          setProgress({
-            percentage: 0,
-            completed: 0,
-            total: safeCourse.totalLessons
-          });
-        }
-      } else {
-        console.log('ℹ️ Курс не сохранен, сбрасываю прогресс');
-        setProgress({
-          percentage: 0,
-          completed: 0,
-          total: safeCourse.totalLessons
-        });
-      }
-      
-    } catch (error) {
-      console.error('❌ Ошибка проверки статуса курса:', error);
-      setError('Ошибка загрузки статуса курса');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSaveCourse = async () => {
-    console.log('💾 Начинаю сохранение курса:', safeCourse.courseId);
-    
-    // Проверяем авторизацию
-    const isAuth = api.isAuthenticated();
-    console.log('💾 Аутентификация перед сохранением:', isAuth);
-    
-    if (!isAuth) {
-      setError('Войдите в систему для сохранения курсов');
-      setTimeout(() => {
-        setError('');
-        navigate('/login');
-      }, 2000);
+  const checkEnrollmentStatus = async () => {
+    if (courseStatusCache[safeCourse.courseId]) {
+      const cached = courseStatusCache[safeCourse.courseId];
+      setIsEnrolled(cached.isEnrolled);
+      setProgress(cached.progress);
+      hasChecked.current = true;
       return;
     }
 
     setIsLoading(true);
-    setError('');
-
+    
     try {
-      console.log('💾 Вызываю courseService.saveCourseToUser...');
-      const result = await courseService.saveCourseToUser(safeCourse);
-      console.log('💾 Результат сохранения:', result);
+      const response = await api.checkEnrollment(safeCourse.courseId);
       
-      if (result.success) {
-        setIsSaved(true);
-        console.log('✅ Курс успешно сохранен, обновляю статус...');
-        // Обновляем прогресс после сохранения
-        await checkCourseStatus();
-        // Показываем сообщение об успехе на 2 секунды
-        setError('✅ Курс успешно сохранен!');
-        setTimeout(() => setError(''), 2000);
-      } else {
-        setError(result.message || 'Ошибка сохранения курса');
-        console.error('❌ Ошибка при сохранении:', result.message);
+      if (response.success) {
+        courseStatusCache[safeCourse.courseId] = {
+          isEnrolled: response.isEnrolled,
+          progress: response.progress || {
+            percentage: 0,
+            completedLessons: 0,
+            totalLessons: safeCourse.totalLessons
+          }
+        };
+        
+        setIsEnrolled(response.isEnrolled);
+        
+        if (response.progress) {
+          setProgress({
+            percentage: response.progress.percentage || 0,
+            completedLessons: response.progress.completedLessons || 0,
+            totalLessons: response.progress.totalLessons || safeCourse.totalLessons
+          });
+        }
       }
     } catch (error) {
-      console.error('❌ Исключение при сохранении:', error);
-      setError('Ошибка сети. Проверьте соединение.');
+      console.error('❌ Ошибка сети:', error);
     } finally {
       setIsLoading(false);
+      hasChecked.current = true;
     }
   };
 
-  const handleStartCourse = async () => {
-    console.log('🚀 Начинаю курс:', safeCourse.courseId);
-    console.log('🚀 isSaved:', isSaved);
+  const handleEnrollAndNavigate = async () => {
+    console.log('🎯 Запись на курс:', safeCourse.courseId, 'Маршрут:', safeCourse.buttonLink);
     
-    // Проверяем авторизацию
-    const isAuth = api.isAuthenticated();
-    console.log('🚀 Аутентификация перед началом:', isAuth);
-    
-    if (!isAuth) {
-      setError('Войдите в систему для начала курса');
+    // Если не авторизован - на логин
+    if (!api.isAuthenticated()) {
+      setMessage('Войдите в систему для записи на курсы');
       setTimeout(() => {
-        setError('');
         navigate('/login');
-      }, 2000);
+      }, 1500);
       return;
     }
 
-    if (!isSaved) {
-      console.log('🚀 Курс не сохранен, сначала сохраняю...');
-      // Сначала сохраняем курс
-      await handleSaveCourse();
+    setEnrollLoading(true);
+    setMessage('Запись на курс...');
+
+    try {
+      // Записываемся на курс
+      const response = await api.enrollCourse({
+        courseId: safeCourse.courseId,
+        courseTitle: safeCourse.title,
+        courseIcon: safeCourse.icon,
+        totalLessons: safeCourse.totalLessons
+      });
+      
+      if (response.success) {
+        // Обновляем кэш и состояние
+        courseStatusCache[safeCourse.courseId] = {
+          isEnrolled: true,
+          progress: {
+            percentage: 0,
+            completedLessons: 0,
+            totalLessons: safeCourse.totalLessons
+          }
+        };
+        
+        setIsEnrolled(true);
+        
+        setMessage('🎉 Вы успешно записались! Перенаправление...');
+        
+        // Переходим на страницу курса после записи
+        setTimeout(() => {
+          navigate(safeCourse.buttonLink);
+        }, 1000);
+        
+      } else if (response.error?.includes('уже записан') || response.isAlreadyEnrolled) {
+        // Если уже записан - просто переходим
+        setIsEnrolled(true);
+        setMessage('Вы уже записаны. Переход...');
+        
+        setTimeout(() => {
+          navigate(safeCourse.buttonLink);
+        }, 1000);
+        
+      } else {
+        setMessage(response.error || 'Ошибка записи на курс');
+      }
+    } catch (error) {
+      console.error('❌ Исключение при записи:', error);
+      setMessage('Ошибка сети. Проверьте соединение.');
+    } finally {
+      setEnrollLoading(false);
+    }
+  };
+
+  const handleNavigateToCourse = () => {
+    if (!api.isAuthenticated()) {
+      setMessage('Войдите в систему для начала курса');
+      setTimeout(() => {
+        navigate('/login');
+      }, 1500);
+      return;
+    }
+
+    console.log('📖 Переход к курсу:', safeCourse.buttonLink);
+    
+    // Если не записан - сначала записываемся
+    if (!isEnrolled) {
+      handleEnrollAndNavigate();
+      return;
     }
     
-    // Переходим к курсу только если он сохранен
-    if (isSaved) {
-      console.log('🚀 Перехожу к курсу:', safeCourse.buttonLink);
-      navigate(safeCourse.buttonLink);
-    } else {
-      console.log('⚠️ Курс все еще не сохранен, не перехожу');
-    }
+    // Если уже записан - переходим сразу
+    navigate(safeCourse.buttonLink);
   };
 
-  // Определяем текст кнопки
   const getButtonText = () => {
-    if (isLoading) return 'Загрузка...';
-    if (!isSaved) return 'Добавить курс';
-    if (progress.completed === 0) return 'Начать обучение';
-    if (progress.completed < progress.total) return 'Продолжить';
+    if (enrollLoading) return 'Запись...';
+    if (isLoading) return 'Проверка...';
+    
+    if (!api.isAuthenticated()) return 'Войти для записи';
+    if (!isEnrolled) return 'Записаться и начать';
+    if (progress.completedLessons === 0) return 'Начать обучение';
+    if (progress.completedLessons < progress.totalLessons) return 'Продолжить курс';
     return 'Повторить курс';
-  };
-
-  // Получаем иконку для кнопки
-  const getButtonIcon = () => {
-    if (!isSaved) return 'fa-plus';
-    if (progress.completed === 0) return 'fa-play';
-    if (progress.completed < progress.total) return 'fa-forward';
-    return 'fa-redo';
-  };
-
-  // Получаем цвет прогресса
-  const getProgressColor = (percentage) => {
-    if (percentage === 0) return '#E2E8F0';
-    if (percentage < 30) return '#FF6B6B';
-    if (percentage < 70) return '#FFD93D';
-    if (percentage < 90) return '#6BCF7F';
-    return '#9B2FFF';
   };
 
   return (
     <div className={styles.courseCard}>
-      {/* Заголовок с иконкой */}
       <div className={styles.courseHeader}>
         <div className={styles.courseIcon}>
           <i className={`fas ${safeCourse.icon}`}></i>
@@ -225,90 +226,54 @@ const CoursesCard = ({ course }) => {
           <p className={styles.courseDescription}>{safeCourse.description}</p>
         </div>
         
-        {/* Кнопка сохранения */}
-        <button 
-          className={`${styles.saveButton} ${
-            isSaved ? styles.saved : ''
-          } ${isLoading ? styles.loading : ''}`}
-          onClick={handleSaveCourse}
-          disabled={isLoading || isSaved}
-          title={isSaved ? 'Курс сохранен' : 'Сохранить курс'}
-        >
-          <i className={`fas ${isSaved ? 'fa-check' : 'fa-bookmark'}`}></i>
-        </button>
+        <div className={`${styles.statusBadge} ${
+          isEnrolled ? styles.enrolled : styles.notEnrolled
+        }`}>
+          {isEnrolled ? '✓ Записан' : 'Не записан'}
+        </div>
       </div>
 
-      {/* Информация для отладки */}
-      <div className={styles.debugInfo}>
-        <small>
-          ID: {safeCourse.courseId} | Сохранен: {isSaved ? 'Да' : 'Нет'} | 
-          Загрузка: {isLoading ? 'Да' : 'Нет'}
-        </small>
-      </div>
-
-      {/* Прогресс */}
-      <div className={styles.courseProgress}>
-        {isSaved ? (
-          <>
-            <div className={styles.progressBar}>
-              <div 
-                className={styles.progressFill}
-                style={{ 
-                  width: `${progress.percentage}%`,
-                  backgroundColor: getProgressColor(progress.percentage)
-                }}
-              ></div>
-            </div>
-            <div className={styles.progressInfo}>
-              <span className={styles.progressPercentage}>
-                {progress.percentage}%
-              </span>
-              <span className={styles.progressLessons}>
-                {progress.completed}/{progress.total} уроков
-              </span>
-            </div>
-          </>
-        ) : (
-          <div className={styles.notStarted}>
-            <span className={styles.notStartedBadge}>Не начат</span>
-            <span className={styles.totalLessons}>
-              <i className="fas fa-book-open"></i> {safeCourse.totalLessons} уроков
+      {isEnrolled && (
+        <div className={styles.courseProgress}>
+          <div className={styles.progressBar}>
+            <div 
+              className={styles.progressFill}
+              style={{ width: `${progress.percentage}%` }}
+            ></div>
+          </div>
+          <div className={styles.progressInfo}>
+            <span className={styles.progressPercentage}>
+              {progress.percentage}%
+            </span>
+            <span className={styles.progressLessons}>
+              {progress.completedLessons}/{safeCourse.totalLessons} уроков
             </span>
           </div>
-        )}
-      </div>
-
-      {/* Сообщения об ошибках/успехе */}
-      {error && (
-        <div className={`${styles.message} ${
-          error.includes('✅') ? styles.successMessage : styles.errorMessage
-        }`}>
-          <i className={`fas ${
-            error.includes('✅') ? 'fa-check-circle' : 'fa-exclamation-circle'
-          }`}></i> 
-          {error}
-          <button 
-            className={styles.dismissButton}
-            onClick={() => setError('')}
-          >
-            ×
-          </button>
         </div>
       )}
 
-      {/* Кнопка действий */}
+      {message && (
+        <div className={`${styles.message} ${
+          message.includes('🎉') || message.includes('Переход') 
+            ? styles.successMessage 
+            : styles.errorMessage
+        }`}>
+          {message}
+        </div>
+      )}
+
       <div className={styles.courseActions}>
         <button
           className={`${styles.actionButton} ${
-            isSaved ? styles.continueButton : styles.startButton
-          } ${isLoading ? styles.disabledButton : ''}`}
-          onClick={handleStartCourse}
-          disabled={isLoading}
+            !api.isAuthenticated() ? styles.loginButton :
+            !isEnrolled ? styles.enrollButton :
+            progress.completedLessons === 0 ? styles.startButton :
+            styles.continueButton
+          } ${(isLoading || enrollLoading) ? styles.disabledButton : ''}`}
+          onClick={handleNavigateToCourse}
+          disabled={isLoading || enrollLoading}
         >
-          <span className={styles.buttonText}>
-            {getButtonText()}
-          </span>
-          <i className={`fas ${getButtonIcon()}`}></i>
+          {getButtonText()}
         </button>
       </div>
     </div>

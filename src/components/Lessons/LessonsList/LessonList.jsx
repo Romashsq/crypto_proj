@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../../Context/ThemeContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LessonCard from './LessonCard/LessonCard';
 import ProgressBar from '../ProgressBar/ProgressBar';
-import ResetProgress from '../ResetProgress/ResetProgress';
 import Toast from '../../Shared/Toast/Toast';
 import styles from './LessonList.module.css';
 import api from '../../../services/api';
@@ -11,12 +10,13 @@ import { lessonsData } from '../lessonData';
 
 const LessonList = ({ courseId = "crypto" }) => {
   const { theme } = useTheme();
+  const navigate = useNavigate();
   
   const lessons = lessonsData[courseId] || [];
   
   const [progress, setProgress] = useState({
     overall: { completed: 0, total: lessons.length, percentage: 0 },
-    courses: {}
+    completedLessons: []
   });
   
   const [loading, setLoading] = useState(true);
@@ -34,96 +34,152 @@ const LessonList = ({ courseId = "crypto" }) => {
       if (!currentUser) {
         setProgress({
           overall: { completed: 0, total: lessons.length, percentage: 0 },
-          courses: {}
+          completedLessons: []
         });
         return;
       }
 
-      const response = await api.getUserProgress(currentUser.id);
+      const response = await api.getCourseProgress(courseId);
       
       if (response.success) {
+        const courseProgress = response.progress || {};
+        
+        let completedLessons = [];
+        
+        if (courseProgress.completedLessons) {
+          if (Array.isArray(courseProgress.completedLessons)) {
+            completedLessons = courseProgress.completedLessons;
+          } 
+          else if (typeof courseProgress.completedLessons === 'number') {
+            for (let i = 1; i <= courseProgress.completedLessons; i++) {
+              completedLessons.push(i);
+            }
+          }
+          else if (typeof courseProgress.completedLessons === 'string') {
+            completedLessons = courseProgress.completedLessons
+              .split(',')
+              .map(num => parseInt(num.trim()))
+              .filter(num => !isNaN(num));
+          }
+        }
+        
+        const totalLessons = lessons.length;
+        const completedCount = completedLessons.length;
+        
         setProgress({
-          overall: response.overall,
-          courses: response.courses || {}
+          overall: { 
+            completed: completedCount, 
+            total: totalLessons, 
+            percentage: totalLessons > 0 ? (completedCount / totalLessons) * 100 : 0 
+          },
+          completedLessons: completedLessons
+        });
+      } else {
+        setProgress({
+          overall: { completed: 0, total: lessons.length, percentage: 0 },
+          completedLessons: []
         });
       }
     } catch (error) {
       console.error('Error loading progress:', error);
       setProgress({
         overall: { completed: 0, total: lessons.length, percentage: 0 },
-        courses: {}
+        completedLessons: []
       });
     } finally {
       setLoading(false);
     }
   };
 
+  const getCurrentLessonNumber = () => {
+    const { completedLessons } = progress;
+    
+    const completedArray = Array.isArray(completedLessons) ? completedLessons : [];
+    
+    for (let i = 1; i <= lessons.length; i++) {
+      if (!completedArray.includes(i)) {
+        return i;
+      }
+    }
+    
+    return lessons.length;
+  };
+
+  const getNextLessonNumber = () => {
+    const current = getCurrentLessonNumber();
+    return Math.min(current + 1, lessons.length);
+  };
+
   const getCourseProgress = () => {
-    return progress.courses[courseId] || {
-      completed: 0,
-      total: lessons.length,
-      percentage: 0,
-      currentLesson: 1,
-      nextLesson: 1
+    const currentLesson = getCurrentLessonNumber();
+    const nextLesson = getNextLessonNumber();
+    const { overall } = progress;
+    
+    return {
+      completed: overall.completed,
+      total: overall.total,
+      percentage: overall.percentage,
+      currentLesson: currentLesson,
+      nextLesson: nextLesson
     };
   };
 
   const getLessonStatus = (lessonNumber) => {
-    try {
-      const courseProgress = progress.courses[courseId];
-      
-      if (!courseProgress) {
-        // Если прогресса нет, только первый урок доступен
-        return {
-          isLocked: lessonNumber !== 1,
-          isCompleted: false,
-          canAccess: lessonNumber === 1
-        };
-      }
-      
-      // Проверяем завершен ли урок
-      const lessonKey = `lesson_${lessonNumber}`;
-      const isCompleted = !!courseProgress[lessonKey];
-      
-      // Первый урок всегда доступен
-      if (lessonNumber === 1) {
-        return {
-          isLocked: false,
-          isCompleted: isCompleted,
-          canAccess: true
-        };
-      }
-      
-      // Проверяем доступность на основе предыдущего урока
-      const prevLessonKey = `lesson_${lessonNumber - 1}`;
-      const prevCompleted = !!courseProgress[prevLessonKey];
-      
+    const { completedLessons } = progress;
+    
+    const completedArray = Array.isArray(completedLessons) ? completedLessons : [];
+    
+    const isCompleted = completedArray.includes(lessonNumber);
+    
+    if (lessonNumber === 1) {
       return {
-        isLocked: !prevCompleted && !isCompleted,
+        isLocked: false,
         isCompleted: isCompleted,
-        canAccess: prevCompleted || isCompleted
-      };
-      
-    } catch (error) {
-      console.error('Error checking lesson status:', error);
-      return {
-        isLocked: lessonNumber !== 1,
-        isCompleted: false,
-        canAccess: lessonNumber === 1
+        canAccess: true
       };
     }
+    
+    const prevCompleted = completedArray.includes(lessonNumber - 1);
+    const canAccess = prevCompleted || isCompleted;
+    
+    return {
+      isLocked: !canAccess,
+      isCompleted: isCompleted,
+      canAccess: canAccess
+    };
   };
 
-  const handleLessonComplete = (xpEarned, message) => {
-    const newToast = {
-      id: Date.now(),
-      message: `${message} ${xpEarned > 0 ? `+${xpEarned} XP` : ''}`,
-      type: 'success',
-      duration: 3000
-    };
-    
-    setToasts(prev => [...prev, newToast]);
-    loadUserProgress(); // Обновляем прогресс после завершения урока
+  const handleLessonComplete = async (xpEarned, message) => {
+    try {
+      const newToast = {
+        id: Date.now(),
+        message: `${message} ${xpEarned > 0 ? `+${xpEarned} XP` : ''}`,
+        type: 'success',
+        duration: 3000
+      };
+      
+      setToasts(prev => [...prev, newToast]);
+      
+      setTimeout(() => {
+        loadUserProgress();
+        
+        const courseProgress = getCourseProgress();
+        if (courseProgress.nextLesson <= lessons.length) {
+          setTimeout(() => {
+            const nextToast = {
+              id: Date.now() + 1,
+              message: `🎉 Next lesson unlocked! Continue to Lesson ${courseProgress.nextLesson}`,
+              type: 'info',
+              duration: 4000
+            };
+            setToasts(prev => [...prev, nextToast]);
+          }, 1000);
+        }
+      }, 500);
+      
+    } catch (error) {
+      console.error('Error handling lesson completion:', error);
+    }
   };
 
   const handleRemoveToast = (id) => {
@@ -136,10 +192,11 @@ const LessonList = ({ courseId = "crypto" }) => {
         const currentUser = api.getCurrentUser();
         if (!currentUser) return;
         
-        await api.resetProgress(currentUser.id, courseId);
-        await loadUserProgress();
+        setProgress({
+          overall: { completed: 0, total: lessons.length, percentage: 0 },
+          completedLessons: []
+        });
         
-        // Показываем тост о сбросе прогресса
         const newToast = {
           id: Date.now(),
           message: '✅ Course progress has been reset!',
@@ -191,7 +248,6 @@ const LessonList = ({ courseId = "crypto" }) => {
 
   return (
     <div className={`${styles.lessonsContainer} ${theme === 'dark' ? styles.darkMode : ''}`}>
-      {/* Toast контейнер */}
       <div className={styles.toastContainer}>
         {toasts.map(toast => (
           <Toast
@@ -207,7 +263,7 @@ const LessonList = ({ courseId = "crypto" }) => {
       <div className={styles.courseHeader}>
         <Link to="/courses" className={styles.backButton}>
           <i className="fas fa-arrow-left"></i>
-          Back to Courses
+          Back to All Courses
         </Link>
         
         <h1 className={styles.courseTitle}>
@@ -230,7 +286,64 @@ const LessonList = ({ courseId = "crypto" }) => {
         </div>
       </div>
       
-      <ProgressBar progress={courseProgress.percentage} />
+      <div className={styles.progressSection}>
+        <div className={styles.progressHeader}>
+          <h2 className={styles.progressTitle}>
+            <i className="fas fa-trophy"></i>
+            Course Progress
+          </h2>
+          <div className={styles.progressPercentage}>
+            {Math.round(courseProgress.percentage)}%
+          </div>
+        </div>
+        
+        <div className={styles.progressBarWrapper}>
+          <div className={styles.progressBar}>
+            <div 
+              className={styles.progressFill}
+              style={{ width: `${courseProgress.percentage}%` }}
+            ></div>
+          </div>
+          <div className={styles.progressLabels}>
+            <span className={styles.completedLabel}>
+              {Math.round(courseProgress.percentage)}% Completed
+            </span>
+            <span className={styles.remainingLabel}>
+              {Math.round(100 - courseProgress.percentage)}% Remaining
+            </span>
+          </div>
+        </div>
+        
+        <div className={styles.progressStats}>
+          <div className={styles.progressStat}>
+            <div className={styles.statNumber}>{courseProgress.completed}</div>
+            <div className={styles.statLabel}>Lessons Completed</div>
+          </div>
+          <div className={styles.progressStat}>
+            <div className={styles.statNumber}>{courseProgress.total}</div>
+            <div className={styles.statLabel}>Total Lessons</div>
+          </div>
+          <div className={styles.progressStat}>
+            <div className={styles.statNumber}>{courseProgress.currentLesson}</div>
+            <div className={styles.statLabel}>Current Lesson</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Кнопка продолжить обучение - УПРОЩЕННАЯ ВЕРСИЯ */}
+      {courseProgress.currentLesson <= lessons.length && (
+        <div className={styles.continueSection}>
+          <Link 
+            to={`/lesson/${courseId}/${courseProgress.currentLesson}`}
+            className={styles.continueButton}
+          >
+            <i className="fas fa-play-circle"></i>
+            <span className={styles.continueText}>
+              {courseProgress.completed > 0 ? 'Continue Learning' : 'Start Learning'}
+            </span>
+          </Link>
+        </div>
+      )}
 
       <div className={styles.lessonsList}>
         {lessons.map((lesson) => {
@@ -247,6 +360,7 @@ const LessonList = ({ courseId = "crypto" }) => {
               isLocked={lessonStatus.isLocked}
               isCompleted={lessonStatus.isCompleted}
               isActive={lesson.id === courseProgress.currentLesson}
+              totalLessons={lessons.length}
             />
           );
         })}
