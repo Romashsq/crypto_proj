@@ -39,7 +39,7 @@ app.use('/api', routes.userRoutes);      // МонгоДБ версия (пок�
 app.use(express.static(path.join(__dirname, '../dist')));
 
 // Все остальные запросы отдаём index.html
-app.get('*', (req, res) => {
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, '../dist', 'index.html'));
 });
 
