@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from '../../../Context_TEMP/ThemeContext';
+import { useTheme } from '../../../Context/ThemeContext';
 
 const FilterBar = ({ filter, setFilter, sortBy, setSortBy, courseStats }) => {
   const { theme } = useTheme();

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { useTheme } from '../../../Context_TEMP/ThemeContext';
+import { useTheme } from '../../../Context/ThemeContext';
 import { 
   isLessonCompleted,
   getCurrentLesson

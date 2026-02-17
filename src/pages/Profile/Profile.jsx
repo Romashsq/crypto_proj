@@ -1,6 +1,6 @@
 // Profile.jsx - ПОЛНАЯ ВЕРСИЯ С РАБОЧИМИ КУРСАМИ
 import React, { useState, useEffect } from 'react';
-import { useTheme } from '../../Context_TEMP/ThemeContext';
+import { useTheme } from '../../Context/ThemeContext';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './Profile.module.css';
 import api from '../../services/api';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useTheme } from '../../../Context_TEMP/ThemeContext';
+import { useTheme } from '../../../Context/ThemeContext';
 import { Heart } from '../../../assets/Icons';
 import styles from './EmptyState.module.css';
 

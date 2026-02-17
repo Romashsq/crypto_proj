@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './MoreCard.module.css';
-import { useTheme } from '../../../../Context_TEMP/ThemeContext'; 
+import { useTheme } from '../../../../Context/ThemeContext'; 
 
 const MoreCard = ({ icon, title, description, buttonText, link }) => {
   const { theme } = useTheme(); 

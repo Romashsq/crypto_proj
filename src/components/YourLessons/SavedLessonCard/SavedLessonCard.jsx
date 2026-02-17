@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useTheme } from '../../../Context_TEMP/ThemeContext';
+import { useTheme } from '../../../Context/ThemeContext';
 import { useSavedLessons } from '../../../hooks/useSavedLessons';
 import { useToast } from '../../../hooks/useToast';
 import { Heart, Wallet, LockNoOpen, Rocket, Nft, Schedule } from '../../../assets/Icons';

@@ -1,7 +1,7 @@
 // Добавим кнопки навигации в LessonCard
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useTheme } from '../../../../Context_TEMP/ThemeContext';
+import { useTheme } from '../../../../Context/ThemeContext';
 import SaveButton from '../../../Shared/SaveButton/SaveButton';
 import styles from './LessonCard.module.css';
 

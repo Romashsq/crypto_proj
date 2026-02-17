@@ -1,7 +1,7 @@
 // LessonPage.jsx - ENGLISH VERSION WITH FIXED NAVIGATION
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { useTheme } from '../Context_TEMP/ThemeContext';
+import { useTheme } from '../Context/ThemeContext';
 import styles from './LessonPage.module.css';
 import ProgressBar from '../components/Lessons/ProgressBar/ProgressBar';
 import Sidebar from '../components/Shared/Sidebar/Sidebar';
