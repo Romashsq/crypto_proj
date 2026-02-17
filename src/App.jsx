@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 // import { ThemeProvider } from './Context/ThemeContext';
-import { SavedLessonsProvider } from './Context/SavedLessonsContext';
+// import { SavedLessonsProvider } from './Context/SavedLessonsContext';
 import Header from './components/Shared/Header/Header';
 import Footer from './components/Shared/Footer/Footer';
 import ScrollToTop from './components/Shared/ScrollTop/ScrollToTop';
@@ -20,8 +20,8 @@ function App() {
   );
 
   return (
-    <ThemeProvider>
-      <SavedLessonsProvider>
+    // <ThemeProvider>
+    //   <SavedLessonsProvider>
         <div className="app">
           <ScrollToTop />
           {shouldShowLayout && <Header />}
@@ -30,8 +30,8 @@ function App() {
           </main>
           {shouldShowLayout && <Footer />}
         </div>
-      </SavedLessonsProvider>
-    </ThemeProvider>
+    //   </SavedLessonsProvider>
+    // </ThemeProvider>
   );
 }
 
