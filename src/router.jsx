@@ -19,16 +19,16 @@ import Profile from './pages/Profile/Profile';
 const wrapComponent = (Component) => <Component />;
 
 // 👇 СОЗДАЁМ ОБЁРТКУ С ТЕМОЙ
-const AppWithTheme = () => (
-  <ThemeProvider>
-    <App />
-  </ThemeProvider>
-);
+// const AppWithTheme = () => (
+//   <ThemeProvider>
+//     <App />
+//   </ThemeProvider>
+// );
 
 const router = createHashRouter([
   {
     path: '/',
-    element: <AppWithTheme />, // 👈 ИСПОЛЬЗУЕМ ТЕМУ ЗДЕСЬ
+    // element: <AppWithTheme />, // 👈 ИСПОЛЬЗУЕМ ТЕМУ ЗДЕСЬ
     errorElement: <ErrorBoundary />,
     children: [
       {
