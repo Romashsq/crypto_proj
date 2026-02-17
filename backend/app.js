@@ -22,8 +22,9 @@ authController.setStorage({ users, userCourses, userProgress });
 courseController.setStorage({ users, userCourses, userProgress });
 progressController.setStorage({ users, userCourses, userProgress });
 
+// Настройки CORS
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: ['http://localhost:5173', 'https://crypto-proj.onrender.com'],
   credentials: true
 }));
 
@@ -38,8 +39,16 @@ app.use('/api', routes.userRoutes);      // МонгоДБ версия (пок�
 // Раздача статических файлов (фронтенда)
 app.use(express.static(path.join(__dirname, '../dist')));
 
-// Все остальные запросы отдаём index.html
-app.get('/*', (req, res) => {
+// Все остальные запросы отдаём index.html - ИСПРАВЛЕНО!
+app.use('*', (req, res) => {
+  // Если запрос начинается с /api, но не найден - 404
+  if (req.originalUrl.startsWith('/api')) {
+    return res.status(404).json({ 
+      success: false, 
+      error: 'API endpoint not found' 
+    });
+  }
+  // Иначе отдаём фронтенд
   res.sendFile(path.join(__dirname, '../dist', 'index.html'));
 });
 
