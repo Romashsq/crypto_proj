@@ -1,6 +1,6 @@
 import { createHashRouter, RouterProvider } from 'react-router-dom';
 import React from 'react';
-import { ThemeProvider } from './Context/ThemeContext';
+import { ThemeProvider } from './Context/ThemeContext';  // ✅ это правильно
 import App from './App';
 import Home from './pages/Home';
 import Courses from './pages/Courses';
@@ -15,7 +15,6 @@ import SignUp from './pages/Sign/SignUp';
 import Login from './pages/Sign/LogIn'
 import YourLessonsPage from './pages/YourLessonsPage/YourLessonsPage';
 import Profile from './pages/Profile/Profile';
-
 
 const wrapComponent = (Component) => <Component />;
 
@@ -79,7 +78,7 @@ const router = createHashRouter([
       },
       {
         path: '*',
-        element: wrapComponent(Home), 
+        element: wrapComponent(NotFound),  // Лучше показывать NotFound
       }
     ],
   },
