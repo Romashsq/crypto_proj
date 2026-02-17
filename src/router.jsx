@@ -1,6 +1,6 @@
 import { createHashRouter, RouterProvider } from 'react-router-dom';
 import React from 'react';
-import { ThemeProvider } from './Context/ThemeContext';  // ✅ это правильно
+import { ThemeProvider } from './Context/ThemeContext';
 import App from './App';
 import Home from './pages/Home';
 import Courses from './pages/Courses';
