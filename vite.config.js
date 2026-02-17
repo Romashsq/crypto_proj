@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/crypto_proj/',  
+  base: '/',  // <- УБРАЛ /crypto_proj/
   build: {
     outDir: 'dist',  
     sourcemap: false,
@@ -14,7 +14,6 @@ export default defineConfig({
         target: 'http://localhost:5000',
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api/, '/api')
       }
     }
   }
