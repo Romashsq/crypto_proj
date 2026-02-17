@@ -20,8 +20,8 @@ function App() {
   );
 
   return (
-    // <ThemeProvider>
-    //   <SavedLessonsProvider>
+    <ThemeProvider>
+      <SavedLessonsProvider>
         <div className="app">
           <ScrollToTop />
           {shouldShowLayout && <Header />}
@@ -30,8 +30,8 @@ function App() {
           </main>
           {shouldShowLayout && <Footer />}
         </div>
-    //   </SavedLessonsProvider>
-    // </ThemeProvider>
+      </SavedLessonsProvider>
+    </ThemeProvider>
   );
 }
 
