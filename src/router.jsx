@@ -1,6 +1,6 @@
 import { createHashRouter, RouterProvider } from 'react-router-dom';
 import React from 'react';
-import { ThemeProvider } from './Context/ThemeContext';
+import { ThemeProvider } from './Context/ThemeContext'; // импорт есть
 import App from './App';
 import Home from './pages/Home';
 import Courses from './pages/Courses';
@@ -18,10 +18,17 @@ import Profile from './pages/Profile/Profile';
 
 const wrapComponent = (Component) => <Component />;
 
+// 👇 СОЗДАЁМ ОБЁРТКУ С ТЕМОЙ
+const AppWithTheme = () => (
+  <ThemeProvider>
+    <App />
+  </ThemeProvider>
+);
+
 const router = createHashRouter([
   {
     path: '/',
-    element: <App />,
+    element: <AppWithTheme />, // 👈 ИСПОЛЬЗУЕМ ТЕМУ ЗДЕСЬ
     errorElement: <ErrorBoundary />,
     children: [
       {
@@ -78,7 +85,7 @@ const router = createHashRouter([
       },
       {
         path: '*',
-        element: wrapComponent(NotFound),  // Лучше показывать NotFound
+        element: wrapComponent(NotFound),
       }
     ],
   },
