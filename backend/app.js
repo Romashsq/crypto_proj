@@ -40,7 +40,7 @@ app.use('/api', routes.userRoutes);      // МонгоДБ версия (пок�
 app.use(express.static(path.join(__dirname, '../dist')));
 
 // Все остальные запросы отдаём index.html - ИСПРАВЛЕНО!
-app.use('*', (req, res) => {
+app.get('*', (req, res) => {
   // Если запрос начинается с /api, но не найден - 404
   if (req.originalUrl.startsWith('/api')) {
     return res.status(404).json({ 
