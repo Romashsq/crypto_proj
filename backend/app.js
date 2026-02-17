@@ -35,4 +35,12 @@ app.use('/api', routes.courseRoutes);    // курсы (память)
 app.use('/api', routes.progressRoutes);  // прогресс (память)
 app.use('/api', routes.userRoutes);      // МонгоДБ версия (пока не используется)
 
+// Раздача статических файлов (фронтенда)
+app.use(express.static(path.join(__dirname, '../dist')));
+
+// Все остальные запросы отдаём index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist', 'index.html'));
+});
+
 module.exports = app;
