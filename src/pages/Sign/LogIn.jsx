@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './Sign.module.css';
@@ -26,58 +25,58 @@ const LoginPage = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
-    setError('');
-  };
-
-  const validateForm = () => {
-    if (!formData.emailOrUsername.trim()) {
-      return 'Please enter your email or username';
-    }
-    
-    if (!formData.password) {
-      return 'Please enter your password';
-    }
-    
-    return null;
+    if (error) setError('');
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  
-  console.log('🔑 Данные формы:', formData);
-  
-  if (!formData.email) {
-    alert('Введите email или имя пользователя');
-    return;
-  }
-  
-  if (!formData.password) {
-    alert('Введите пароль');
-    return;
-  }
-  
-  try {
-    console.log('🔄 Отправка данных входа...');
+    e.preventDefault();
     
-    const result = await api.login({
-      email: formData.email,
-      password: formData.password
-    });
-    
-    console.log('✅ Ответ сервера:', result);
-    
-    if (result.success) {
-      alert('✅ Вход выполнен успешно!');
-      navigate('/dashboard');
-    } else {
-      alert(`❌ Ошибка: ${result.error || 'Неизвестная ошибка'}`);
+    // Валидация
+    if (!formData.emailOrUsername.trim()) {
+      setError('Please enter your email or username');
+      return;
     }
     
-  } catch (error) {
-    console.error('❌ Ошибка входа:', error);
-    alert(`❌ Ошибка входа: ${error.message}`);
-  }
-};
+    if (!formData.password.trim()) {
+      setError('Please enter your password');
+      return;
+    }
+    
+    setLoading(true);
+    setError('');
+    
+    try {
+      console.log('🔑 Попытка входа:', { 
+        email: formData.emailOrUsername, 
+        password: '***' 
+      });
+      
+      const result = await api.login({
+        email: formData.emailOrUsername,
+        password: formData.password
+      });
+      
+      console.log('✅ Ответ сервера:', result);
+      
+      if (result.success) {
+        // Успешный вход
+        if (formData.rememberMe) {
+          // Токен уже сохраняется в api.js, но можем добавить доп. логику
+          console.log('💾 Сессия будет сохранена');
+        }
+        navigate('/dashboard');
+      } else {
+        // Ошибка от сервера
+        setError(result.error || 'Invalid email or password');
+      }
+      
+    } catch (err) {
+      console.error('❌ Ошибка входа:', err);
+      setError('Connection error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSocialLogin = (provider) => {
     alert(`Social login with ${provider} will be available soon!`);
@@ -175,16 +174,15 @@ const LoginPage = () => {
 
           {/* Remember Me & Forgot Password */}
           <div className={styles.checkboxGroup}>
-            <input
-              type="checkbox"
-              id="rememberMe"
-              name="rememberMe"
-              checked={formData.rememberMe}
-              onChange={handleInputChange}
-              disabled={loading}
-            />
-            <label htmlFor="rememberMe">
-              Remember me
+            <label className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                name="rememberMe"
+                checked={formData.rememberMe}
+                onChange={handleInputChange}
+                disabled={loading}
+              />
+              <span>Remember me</span>
             </label>
             
             <button 
@@ -231,7 +229,7 @@ const LoginPage = () => {
             disabled={loading}
           >
             <i className="fab fa-google"></i>
-            Continue with Google
+            Google
           </button>
           
           <button 
@@ -241,7 +239,7 @@ const LoginPage = () => {
             disabled={loading}
           >
             <i className="fab fa-apple"></i>
-            Continue with Apple
+            Apple
           </button>
           
           <button 
@@ -251,14 +249,14 @@ const LoginPage = () => {
             disabled={loading}
           >
             <i className="fab fa-github"></i>
-            Continue with GitHub
+            GitHub
           </button>
         </div>
 
         {/* Signup Link */}
         <div className={styles.signupLink}>
           Don't have an account? 
-          <Link to="/signup" className={styles.signupLinkText} id="signupLink">
+          <Link to="/signup" className={styles.signupLinkText}>
             Sign Up
           </Link>
         </div>

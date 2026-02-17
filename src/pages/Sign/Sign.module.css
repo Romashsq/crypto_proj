@@ -590,3 +590,21 @@
     margin: 25px 0;
 }
 
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.checkboxLabel input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.darkMode .checkboxLabel {
+  color: #aaa;
+}

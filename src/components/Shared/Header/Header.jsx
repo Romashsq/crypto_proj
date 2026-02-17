@@ -4,15 +4,31 @@ import { useScrollHeader } from '../../../hooks/useScrollHeader';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './Header.module.css';
 import logo from '../../../assets/logo.png';
-import { Moon, Sun, Heart, User } from '../../../assets/Icons'; // Импортируем Heart
-
+import { Moon, Sun, Heart, User } from '../../../assets/Icons';
+import api from '../../../services/api';
 
 const Header = () => {
   const { theme, toggleTheme } = useTheme();
   const isHeaderHidden = useScrollHeader();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    checkAuth();
+  }, [location.pathname]);
+
+  const checkAuth = () => {
+    const auth = api.isAuthenticated();
+    setIsAuthenticated(auth);
+    if (auth) {
+      setUser(api.getCurrentUser());
+    } else {
+      setUser(null);
+    }
+  };
 
   const handleNavigation = (e, anchor = null) => {
     e.preventDefault();
@@ -105,8 +121,21 @@ const Header = () => {
     navigate('/login');
   };
 
+  const handleLogout = () => {
+    api.logout();
+    setIsAuthenticated(false);
+    setUser(null);
+    navigate('/');
+    closeMobileMenu();
+  };
+
   const handleYourLessons = () => {
     navigate('/your-lessons');
+    closeMobileMenu();
+  };
+
+  const handleProfile = () => {
+    navigate('/profile');
     closeMobileMenu();
   };
 
@@ -184,32 +213,34 @@ const Header = () => {
                 <Link to="/security" onClick={closeMobileMenu}>Security</Link>
               </div>
             </li>
-            {/* Добавляем Your Lessons в мобильное меню */}
+            {/* Your Lessons в мобильном меню */}
             <li className={styles.mobileYourLessons}>
               <Link to="/your-lessons" onClick={closeMobileMenu}>
                 <Heart width={16} height={16} />
                 <span>Your Lessons</span>
               </Link>
             </li>
+            {/* Мобильное меню для авторизованных пользователей */}
+            {isAuthenticated && (
+              <>
+                <li className={styles.mobileProfile}>
+                  <Link to="/profile" onClick={closeMobileMenu}>
+                    <User width={16} height={16} />
+                    <span>Profile ({user?.level || 1} lvl)</span>
+                  </Link>
+                </li>
+                <li className={styles.mobileLogout}>
+                  <button onClick={handleLogout} className={styles.mobileLogoutBtn}>
+                    Log out
+                  </button>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
         
         <div className={styles.headerActions}>
-          <button 
-            className={styles.logInBtn}
-            onClick={handleLogIn}
-          >
-            Log In
-          </button>
-          
-
-          <button 
-            className={styles.signUpBtn}
-            onClick={handleSignUp}
-          >
-            Sign up
-          </button>
-
+          {/* Your Lessons - всегда слева */}
           <button 
             className={styles.yourLessonsBtn}
             onClick={handleYourLessons}
@@ -219,32 +250,53 @@ const Header = () => {
             <span>Your Lessons</span>
           </button>
 
+          {isAuthenticated ? (
+            // В системе: Logout + Profile
+            <>
+              <button 
+                className={styles.logoutBtn}
+                onClick={handleLogout}
+                title="Log out"
+              >
+                Log out
+              </button>
 
-          <Link 
-          to="/profile"
-          className={styles.profileButton}
-          aria-label="Go to profile"
-          title="View your profile"
-          >
-          <div className={styles.profileButtonInner}>
-            <div className={styles.profileIcon}>
-              <User width={20} height={20} />
-            </div>
-          </div>
-        </Link>
+              <button 
+                className={styles.profileButton}
+                onClick={handleProfile}
+                aria-label="Go to profile"
+                title={`${user?.username || 'User'} (Level ${user?.level || 1})`}
+              >
+                <User width={20} height={20} />
+              </button>
+            </>
+          ) : (
+            // Не в системе: Log In + Sign Up
+            <>
+              <button 
+                className={styles.logInBtn}
+                onClick={handleLogIn}
+              >
+                Log In
+              </button>
 
-          
+              <button 
+                className={styles.signUpBtn}
+                onClick={handleSignUp}
+              >
+                Sign up
+              </button>
+            </>
+          )}
+
+          {/* Тема - всегда справа */}
           <button 
             className={styles.themeToggle} 
             onClick={toggleTheme}
             aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
             title={`${theme === 'light' ? 'Dark theme' : 'Light theme'}`}
           >
-            {theme === 'light' ? (
-              <Moon width={20} height={20} />
-            ) : (
-              <Sun width={20} height={20} />
-            )}
+            {theme === 'light' ? <Moon width={20} height={20} /> : <Sun width={20} height={20} />}
           </button>
         </div>
       </div>
@@ -253,3 +305,4 @@ const Header = () => {
 };
 
 export default Header;
+

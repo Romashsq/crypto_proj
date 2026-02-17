@@ -1,5 +1,5 @@
 import React from 'react';
-import CoursesCard from '../CoursesCard/CouseCard';
+import CoursesCard from "../CoursesCard/CourseCard";
 import styles from './CoursesGrid.module.css';
 
 const CoursesGrid = ({ courses }) => {

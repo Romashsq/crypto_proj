@@ -1,6 +1,5 @@
 // /frontend/services/api.js - ПОЛНОСТЬЮ ИСПРАВЛЕННАЯ ВЕРСИЯ
-const API_BASE = 'http://localhost:5000/api';
-
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 class ApiService {
   constructor() {
     this.token = localStorage.getItem('auth_token') || null;
@@ -524,21 +523,21 @@ class ApiService {
   }
 
   logout() {
-    console.log('🚪 [API] Выход из системы');
-    this.token = null;
-    this.user = null;
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('user_id');
-    localStorage.removeItem('savedCourses');
-    
-    // Перенаправляем на страницу логина
-    if (window.location.pathname !== '/login') {
-      setTimeout(() => {
-        window.location.href = '/login';
-      }, 100);
-    }
+  console.log('🚪 [API] Выход из системы');
+  this.token = null;
+  this.user = null;
+  localStorage.removeItem('auth_token');
+  localStorage.removeItem('user');
+  localStorage.removeItem('user_id');
+  localStorage.removeItem('savedCourses');
+  
+  // Перенаправляем на главную, а не на логин
+  if (window.location.pathname !== '/crypto_proj/') {
+    setTimeout(() => {
+      window.location.href = '/crypto_proj/'; 
+    }, 100);
   }
+}
 
   setToken(token) {
     this.token = token;

@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   base: '/crypto_proj/',  
   build: {
-    outDir: 'docs',  
+    outDir: 'dist',  
     sourcemap: false,
   },
   server: {

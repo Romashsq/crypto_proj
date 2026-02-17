@@ -31,17 +31,16 @@ const CoursesCard = ({ course }) => {
     
     // Сопоставляем с существующими маршрутами
     const routeMap = {
-      'crypto-fundamentals': '/crypto',
-      'scams-protection': '/scams',
-      'memecoins': '/memecoins',
-      'security-essentials': '/security',
-      'additional-materials': '/additional',
-      'defi-&-staking': '/defi',
-      'crypto': '/crypto',
-      'scams': '/scams',
-      'security': '/security',
-      'memecoins': '/memecoins'
-    };
+  'crypto-fundamentals': '/crypto',
+  'scams-protection': '/scams',
+  'memecoins': '/memecoins',
+  'security-essentials': '/security',
+  'additional-materials': '/additional',
+  'defi-&-staking': '/defi',
+  'crypto': '/crypto',
+  'scams': '/scams',
+  'security': '/security'
+};
     
     return {
       courseId: generatedId,
