@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from '../../../Context/ThemeContext'
+import { useTheme } from '../../../Context_TEMP/ThemeContext'
 import styles from './CourseDetails.module.css';
 
 const CourseDetails = () => {

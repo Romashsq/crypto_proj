@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useTheme } from '../Context/ThemeContext';
+import { useTheme } from '../Context_TEMP/ThemeContext';
 import CourseDetails from '../components/CoursesPage/CourseDetails/CourseDetails';
 import CoursesGrid from '../components/CoursesPage/CoursesGrid/CoursesGrid';
 import Sidebar from '../components/Shared/Sidebar/Sidebar';

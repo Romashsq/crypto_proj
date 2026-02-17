@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useTheme } from '../../../Context/ThemeContext';
+import { useTheme } from '../../../Context_TEMP/ThemeContext';
 import { Link, useNavigate } from 'react-router-dom';
 import LessonCard from './LessonCard/LessonCard';
 import ProgressBar from '../ProgressBar/ProgressBar';

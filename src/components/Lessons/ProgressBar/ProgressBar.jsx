@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from '../../../Context/ThemeContext';
+import { useTheme } from '../../../Context_TEMP/ThemeContext';
 import styles from '../LessonsList/LessonList.module.css'
 
 const ProgressBar = ({ progress = 0 }) => {
