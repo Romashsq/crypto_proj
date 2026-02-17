@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTheme } from '../../../Context/ThemeContext';
 import { useSavedLessons } from '../../../hooks/useSavedLessons';
 import { useToast } from '../../../hooks/useToast';
-import { Heart, Wallet, LockNoOpen, Rocket, Nft, Schedule } from '../../../assets/Icons';
+import { Heart, Wallet, LockNoOpen, Rocket, Nft, Schedule, LockOpen } from '../../../assets/Icons'
 import styles from './SavedLessonCard.module.css';
 
 const SavedLessonCard = ({ lesson }) => {

@@ -4,7 +4,7 @@ const helpers = require('../utils/helper');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'crypto-learning-platform-secret-key-2024';
 
-// Глобальные хранилища (будут переданы из app.js)
+// Глобальные хранилища
 let users, userCourses, userProgress;
 
 // Функция для инициализации хранилищ
@@ -12,6 +12,7 @@ const setStorage = (storage) => {
   users = storage.users;
   userCourses = storage.userCourses;
   userProgress = storage.userProgress;
+  console.log('✅ authController получил хранилище, users.length:', users?.length || 0);
 };
 
 // ============ РЕГИСТРАЦИЯ ============
@@ -152,10 +153,10 @@ const verifyAuth = (req, res) => {
   });
 };
 
-// ============ ПОЛУЧИТЬ ВСЕХ ПОЛЬЗОВАТЕЛЕЙ (НОВЫЙ МЕТОД) ============
+// ============ ПОЛУЧИТЬ ВСЕХ ПОЛЬЗОВАТЕЛЕЙ (ДЛЯ ДЕБАГА) ============
 const getAllUsers = (req, res) => {
   try {
-    // Проверяем секретный ключ (опционально)
+    // Проверяем секретный ключ в заголовке (опционально)
     const adminKey = req.headers['x-admin-key'];
     if (adminKey && adminKey !== 'crypto_admin_2024') {
       return res.status(403).json({ 
@@ -170,7 +171,9 @@ const getAllUsers = (req, res) => {
     res.json({
       success: true,
       count: users.length,
-      users: usersWithoutPasswords
+      users: usersWithoutPasswords,
+      userCourses: userCourses,
+      userProgress: userProgress
     });
   } catch (error) {
     console.error('❌ Ошибка получения пользователей:', error);
@@ -181,7 +184,7 @@ const getAllUsers = (req, res) => {
   }
 };
 
-// ============ ЭКСПОРТЫ (ОБНОВЛЕНЫ) ============
+// ============ ЭКСПОРТЫ ============
 module.exports = {
   setStorage,
   register,
