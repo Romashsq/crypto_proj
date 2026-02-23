@@ -460,79 +460,133 @@
   }
 }
 
+/* ТЕЛЕФОНЫ - БЕЗ КНОПОК, БОЛЬШЕ МЕСТА */
 @media (max-width: 768px) {
   .coursesScrollWrapper {
-    margin: 0 -15px;
-    padding: 0 15px;
-    gap: 15px;
+    margin: 0;
+    padding: 0;
+    gap: 0;
   }
-  
+
+  .coursesScrollContainer {
+    width: 100%;
+    overflow: visible;
+  }
+
   .coursesScroll {
-    gap: 24px;
-    padding: 35px 10px;
+    display: flex;
+    gap: 16px;
+    padding: 20px 15px;  /* Добавил отступы по бокам для первого и последнего */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 0 15px;  /* Отступ при прокрутке */
   }
-  
+
   .courseCard {
-    flex: 0 0 340px;
-    min-height: 520px;
+    flex: 0 0 280px;
+    min-height: auto;
+    height: auto;
+    scroll-snap-align: start;
   }
-  
-  .courseImage {
-    height: 180px;
-    font-size: 56px;
-  }
-  
-  .courseContent {
-    padding: 28px;
-  }
-  
-  .courseContent h3 {
-    font-size: 1.3rem;
-    min-height: 62px;
-  }
-  
+
+  /* Скрываем кнопки */
   .scrollBtn {
+    display: none;
+  }
+
+  /* Остальные стили как были */
+  .courseImage {
+    height: 140px;
+  }
+
+  .courseImage svg {
     width: 48px;
     height: 48px;
-    font-size: 16px;
   }
-}
 
-@media (max-width: 576px) {
-  .sectionTitle {
-    font-size: 2.2rem;
-    margin-bottom: 40px;
-  }
-  
-  .sectionTitle::before,
-  .sectionTitle::after {
-    width: 40px;
-  }
-  
-  .coursesScrollWrapper {
-    margin: 0 -10px;
-    padding: 0 10px;
-    gap: 12px;
-  }
-  
-  .courseCard {
-    flex: 0 0 320px;
-    min-height: 500px;
-  }
-  
-  .courseImage {
-    height: 160px;
-    font-size: 48px;
-  }
-  
   .courseContent {
-    padding: 24px;
+    padding: 20px 16px;
   }
-  
+
+  .categoryTag {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .courseContent h3 {
+    font-size: 1.2rem;
+    min-height: auto;
+    margin-bottom: 12px;
+  }
+
+  .courseContent p {
+    font-size: 0.9rem;
+    height: auto;
+    -webkit-line-clamp: 3;
+    margin-bottom: 16px;
+  }
+
+  .courseMeta {
+    font-size: 0.85rem;
+  }
+
   .enrollButton {
-    padding: 14px 20px;
+    padding: 12px 16px;
     font-size: 0.9rem;
   }
 }
 
+/* МАЛЕНЬКИЕ ТЕЛЕФОНЫ */
+@media (max-width: 480px) {
+  .courseCard {
+    flex: 0 0 240px;
+  }
 
+  .courseImage {
+    height: 120px;
+  }
+
+  .courseImage svg {
+    width: 40px;
+    height: 40px;
+  }
+
+  .courseContent {
+    padding: 16px 12px;
+  }
+
+  .courseContent h3 {
+    font-size: 1.1rem;
+  }
+
+  .courseContent p {
+    font-size: 0.85rem;
+    -webkit-line-clamp: 2;
+  }
+
+  .courseMeta {
+    font-size: 0.8rem;
+  }
+
+  .enrollButton {
+    padding: 10px 14px;
+    font-size: 0.85rem;
+  }
+}
+
+/* ОЧЕНЬ МАЛЕНЬКИЕ */
+@media (max-width: 360px) {
+  .courseCard {
+    flex: 0 0 220px;
+  }
+
+  .courseImage {
+    height: 100px;
+  }
+
+  .courseImage svg {
+    width: 36px;
+    height: 36px;
+  }
+}

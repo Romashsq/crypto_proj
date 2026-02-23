@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import styles from './LearningPath.module.css';
 
-const LearningPath = () => {
+const LearningPath = ({ id }) => {  // ← добавил props
   const sectionRef = useRef(null);
 
   const pathItems = [
@@ -9,25 +10,25 @@ const LearningPath = () => {
       number: 1,
       title: "Crypto Fundamentals",
       description: "Master the basics of major cryptocurrencies and blockchain networks. Understand SOL, BTC, ETH and other key chains.",
-      link: "#crypto-courses"
+      link: "/crypto"
     },
     {
       number: 2,
       title: "Scams Protection",
       description: "Learn to identify and avoid common crypto scams including rug pulls, phishing, and pump & dump schemes.",
-      link: "#scams-courses"
+      link: "/scams"
     },
     {
       number: 3,
       title: "Memecoins",
       description: "Understand the world of memecoins - from creation and trading to market dynamics and community culture.",
-      link: "#memecoins-courses"
+      link: "/memecoins"
     },
     {
       number: 4,
       title: "Security Essentials",
       description: "Protect your assets with advanced security practices and learn how to avoid common security pitfalls.",
-      link: "#security-courses"
+      link: "/security"
     }
   ];
 
@@ -61,7 +62,7 @@ const LearningPath = () => {
     <section 
       ref={sectionRef} 
       className={styles.learningPath} 
-      id="learning-path"
+      id={id}  // ← используем переданный id
     >
       <div className="container">
         <h2 className={styles.sectionTitle}>Your <span>Learning Path</span></h2>
@@ -71,9 +72,9 @@ const LearningPath = () => {
             <div key={index} className={styles.pathItem}>
               <div className={styles.pathContent}>
                 <h3>
-                  <a href={item.link} style={{ color: 'inherit', textDecoration: 'none' }}>
+                  <Link to={item.link} style={{ color: 'inherit', textDecoration: 'none' }}>
                     {item.title}
-                  </a>
+                  </Link>
                 </h3>
                 <p>{item.description}</p>
               </div>

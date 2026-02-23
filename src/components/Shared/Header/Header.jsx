@@ -34,49 +34,30 @@ const Header = () => {
     e.preventDefault();
     
     if (location.pathname === '/') {
+      // Уже на главной - просто скроллим
       if (anchor) {
-        setTimeout(() => {
+        const element = document.getElementById(anchor);
+        if (element) {
+          element.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }
+    } else {
+      // Переходим на главную и скроллим после загрузки
+      navigate('/');
+      setTimeout(() => {
+        if (anchor) {
           const element = document.getElementById(anchor);
           if (element) {
             element.scrollIntoView({ 
               behavior: 'smooth',
               block: 'start'
             });
-            window.location.hash = anchor;
-          }
-        }, 50); 
-      } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        window.location.hash = '';
-      }
-    } else {
-      navigate('/');
-      
-      let attempts = 0;
-      const maxAttempts = 20;
-      
-      const checkAndScroll = () => {
-        attempts++;
-        
-        if (anchor) {
-          const element = document.getElementById(anchor);
-          if (element) {
-            setTimeout(() => {
-              element.scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'start'
-              });
-              window.location.hash = anchor;
-            }, 100); 
-          } else if (attempts < maxAttempts) {
-            setTimeout(checkAndScroll, 100);
-          } else {
-            window.location.hash = anchor;
           }
         }
-      };
-    
-      setTimeout(checkAndScroll, 300);
+      }, 500);
     }
     
     closeMobileMenu();
@@ -86,7 +67,6 @@ const Header = () => {
     e.preventDefault();
     if (location.pathname === '/') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      window.location.hash = '';
     } else {
       navigate('/');
     }
@@ -96,7 +76,6 @@ const Header = () => {
     e.preventDefault();
     if (location.pathname === '/') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      window.location.hash = '';
     } else {
       navigate('/');
     }
@@ -305,4 +284,3 @@ const Header = () => {
 };
 
 export default Header;
-

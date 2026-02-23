@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { useScrollAnimation } from '../../../hooks/useScrollAnimation';
 import { useTheme } from '../../../Context/ThemeContext';
+import { useNavigate } from 'react-router-dom'; // ← добавил
 import styles from './Hero.module.css';
 
 let globalStatsAnimated = false;
@@ -8,6 +9,7 @@ let globalStatsAnimated = false;
 const Hero = () => {
   const sectionRef = useRef(null);
   const { theme } = useTheme();
+  const navigate = useNavigate(); // ← добавил
   
   useScrollAnimation(sectionRef, styles.animated);
 
@@ -60,31 +62,33 @@ const Hero = () => {
     };
   }, []); 
 
-const handleGetStartedClick = (e) => {
-  e.preventDefault();
-  const targetId = e.currentTarget.getAttribute('href');
-  
-  const scrollToTarget = () => {
-    const targetElement = document.querySelector(targetId);
-    if (targetElement) {
-      const rect = targetElement.getBoundingClientRect();
-      const isVisible = rect.top >= 0 && rect.bottom <= window.innerHeight;
-      
-      if (!isVisible) {
-        targetElement.scrollIntoView({ 
+  const handleGetStartedClick = (e) => {
+    e.preventDefault();
+    
+    // Проверяем, на какой странице находимся
+    if (window.location.pathname === '/') {
+      // Уже на главной - скроллим к Learning Path
+      const element = document.getElementById('learning-path');
+      if (element) {
+        element.scrollIntoView({ 
           behavior: 'smooth',
           block: 'start'
         });
       }
-      
-      window.location.hash = targetId.replace('#', '');
     } else {
-      setTimeout(scrollToTarget, 50);
+      // Переходим на главную и скроллим после загрузки
+      navigate('/');
+      setTimeout(() => {
+        const element = document.getElementById('learning-path');
+        if (element) {
+          element.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }, 500);
     }
   };
-  
-  scrollToTarget();
-};
 
   const themeClass = theme === 'light' ? styles.lightMode : '';
 
