@@ -11,6 +11,7 @@ const Header = () => {
   const { theme, toggleTheme } = useTheme();
   const isHeaderHidden = useScrollHeader();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isResourcesOpen, setIsResourcesOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const location = useLocation();
@@ -89,7 +90,13 @@ const Header = () => {
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
+    setIsResourcesOpen(false);
     document.body.style.overflow = '';
+  };
+
+  const toggleResources = (e) => {
+    e.preventDefault();
+    setIsResourcesOpen(prev => !prev);
   };
 
   const handleSignUp = () => {
@@ -172,15 +179,15 @@ const Header = () => {
                 More
               </a>
             </li>
-            <li className={styles.dropdown}>
-              <a href="#">
-                Resources 
-                <svg 
-                  width="12" 
-                  height="12" 
-                  viewBox="0 0 24 24" 
+            <li className={`${styles.dropdown} ${isResourcesOpen ? styles.dropdownOpen : ''}`}>
+              <a href="#" onClick={toggleResources}>
+                Resources
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
                   fill="currentColor"
-                  className={styles.dropdownIcon}
+                  className={`${styles.dropdownIcon} ${isResourcesOpen ? styles.dropdownIconOpen : ''}`}
                 >
                   <path d="M7 10l5 5 5-5z"/>
                 </svg>

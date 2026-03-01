@@ -129,7 +129,8 @@
   background: #1a1a2e;
 }
 
-.dropdown:hover .dropdownContent {
+.dropdown:hover .dropdownContent,
+.dropdownOpen .dropdownContent {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
@@ -149,6 +150,15 @@
 
 .dropdownContent a:hover {
   background: rgba(155, 47, 255, 0.1);
+}
+
+.dropdownIcon {
+  transition: transform 0.3s ease;
+  margin-left: 4px;
+}
+
+.dropdownIconOpen {
+  transform: rotate(180deg);
 }
 
 /* HEADER ACTIONS */
@@ -343,6 +353,17 @@
   color: #f0f0f0;
 }
 
+@keyframes mobileMenuSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* МОБИЛЬНАЯ ВЕРСИЯ */
 @media (max-width: 768px) {
   .header {
@@ -352,38 +373,74 @@
   .nav:not(.active) {
     display: none;
   }
-  
+
   .mobileMenuBtn {
     display: block;
     margin-left: auto;
     margin-right: 10px;
   }
-  
+
   .nav.active {
     position: fixed;
-    top: 0;
+    top: var(--header-height-mobile);
     left: 0;
     width: 100%;
-    height: 100vh;
+    max-height: calc(100vh - var(--header-height-mobile));
     background: #FFFFFF;
-    padding: 80px 20px 30px;
+    padding: 16px 20px 24px;
     z-index: 999;
     overflow-y: auto;
     display: block !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    animation: mobileMenuSlide 0.25s ease;
   }
-  
+
   :global(.dark-mode) .nav.active {
     background: #1a1a2e;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
   }
-  
+
   .nav.active ul {
     flex-direction: column;
-    gap: 20px;
+    gap: 4px;
   }
-  
+
   .nav.active a {
     font-size: 16px;
-    padding: 8px 0;
+    padding: 12px 8px;
+    border-radius: 8px;
+  }
+
+  .nav.active a:hover {
+    background: rgba(155, 47, 255, 0.06);
+  }
+
+  /* Resources dropdown внутри мобильного меню */
+  .nav.active .dropdownContent {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    background: transparent;
+    padding: 0 0 0 16px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .nav.active .dropdownOpen .dropdownContent {
+    max-height: 200px;
+  }
+
+  .nav.active .dropdownContent a {
+    font-size: 15px;
+    padding: 10px 8px;
+    color: #666;
+  }
+
+  :global(.dark-mode) .nav.active .dropdownContent a {
+    color: #aaa;
   }
   
   .headerActions {

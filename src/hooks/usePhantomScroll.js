@@ -60,31 +60,27 @@ export const usePhantomScroll = (ref) => {
 
     // Плавный snap к ближайшей карточке
     const snapToNearestCard = () => {
-      const cards = scrollContainer.querySelectorAll('.courseCard');
+      const cards = Array.from(scrollContainer.children);
       if (cards.length === 0) return;
 
-      const containerCenter = scrollContainer.scrollLeft + scrollContainer.clientWidth / 2;
+      const containerLeft = scrollContainer.getBoundingClientRect().left;
+      const containerScrollLeft = scrollContainer.scrollLeft;
       let nearestCard = null;
       let minDistance = Infinity;
 
       cards.forEach(card => {
         const cardRect = card.getBoundingClientRect();
-        const cardCenter = cardRect.left + cardRect.width / 2 - scrollContainer.getBoundingClientRect().left + scrollContainer.scrollLeft;
-        const distance = Math.abs(containerCenter - cardCenter);
-        
+        const cardLeft = cardRect.left - containerLeft + containerScrollLeft;
+        const distance = Math.abs(containerScrollLeft - cardLeft);
+
         if (distance < minDistance) {
           minDistance = distance;
-          nearestCard = card;
+          nearestCard = { card, cardLeft };
         }
       });
 
       if (nearestCard) {
-        const cardRect = nearestCard.getBoundingClientRect();
-        const cardWidth = cardRect.width;
-        const gap = 28; // Расстояние между карточками
-        const targetScroll = cardRect.left - scrollContainer.getBoundingClientRect().left + scrollContainer.scrollLeft - (scrollContainer.clientWidth - cardWidth) / 2 + gap;
-        
-        smoothScrollTo(targetScroll, SNAP_DURATION);
+        smoothScrollTo(nearestCard.cardLeft, SNAP_DURATION);
       }
     };
 

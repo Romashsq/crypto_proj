@@ -67,8 +67,9 @@ class ApiService {
       console.error(`❌ [API] Ошибка запроса ${endpoint}:`, error.message);
       
       // Если токен истек - очищаем
-      if (error.message.includes('expired') || 
-          error.message.includes('Invalid token') || 
+      if (error.message.includes('expired') ||
+          error.message.includes('Invalid token') ||
+          error.message.includes('Неверный токен') ||
           error.message.includes('Неверный или просроченный токен')) {
         console.log('🔄 [API] Токен истек, очищаем...');
         this.logout();
