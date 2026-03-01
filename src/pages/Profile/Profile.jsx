@@ -6,9 +6,9 @@ import styles from './Profile.module.css';
 import api from '../../services/api';
 import OverallProgress from './OverallProgress';
 
-import { 
-  User, 
-  Heart, 
+import {
+  User,
+  Heart,
   Schedule,
   Shelled,
   Sun,
@@ -20,6 +20,7 @@ import {
   Wallet,
   Tea,
   Ghost,
+  Notes,
 } from '../../assets/Icons';
 
 // Компонент прогресса
@@ -75,7 +76,7 @@ const Profile = () => {
       navigate('/login');
     }
   }, [currentUser, navigate]);
-  
+
   // Состояние для курсов пользователя
   const [userCourses, setUserCourses] = useState([]);
   const [coursesLoading, setCoursesLoading] = useState(false);
@@ -93,6 +94,22 @@ const Profile = () => {
     streak: 0,
     achievements: 0
   });
+
+  // Синхронизируем userData если currentUser появился позже
+  useEffect(() => {
+    if (currentUser) {
+      setUserData(prev => ({
+        ...prev,
+        name: currentUser.fullName || prev.name,
+        username: currentUser.username || prev.username,
+        joinDate: currentUser.createdAt
+          ? new Date(currentUser.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+          : prev.joinDate,
+        level: currentUser.level || prev.level,
+        xp: currentUser.xp || prev.xp,
+      }));
+    }
+  }, []);
 
   // Статистика
   const [stats, setStats] = useState({
@@ -226,7 +243,16 @@ const Profile = () => {
 
   // Функция для перехода к курсу
   const goToCourse = (courseId) => {
-    navigate(`/course/${courseId}`);
+    const routeMap = {
+      'crypto': '/crypto',
+      'crypto-fundamentals': '/crypto',
+      'scams': '/scams',
+      'memecoins': '/memecoins',
+      'security': '/security',
+      'additional': '/courses',
+      'defi': '/courses',
+    };
+    navigate(routeMap[courseId] || '/courses');
   };
 
   // Функция для перехода к курсам
@@ -634,9 +660,9 @@ const Profile = () => {
               ) : (
                 <div className={styles.coursesList}>
                   {userCourses.map((course, index) => (
-                    <div key={index} className={styles.courseItem}>
+                    <div key={index} className={styles.courseItem} onClick={() => goToCourse(course.courseId)} style={{ cursor: 'pointer' }}>
                       <div className={styles.courseIcon}>
-                        {course.courseIcon || '📚'}
+                        <Notes width={28} height={28} />
                       </div>
                       <div className={styles.courseInfo}>
                         <h4 className={styles.courseTitle}>{course.courseTitle || `Course ${course.courseId}`}</h4>

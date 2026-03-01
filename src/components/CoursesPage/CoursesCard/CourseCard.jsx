@@ -1,4 +1,4 @@
-// CoursesCard.jsx - ИСПРАВЛЕННАЯ ВЕРСИЯ
+// CoursesCard.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../services/api';
@@ -9,54 +9,49 @@ const courseStatusCache = {};
 const CoursesCard = ({ course }) => {
   const navigate = useNavigate();
   const hasChecked = useRef(false);
-  
-  if (!course) {
-    return null;
-  }
 
-  // Функция для получения корректного courseId и ссылки
+  if (!course) return null;
+
   const getCourseInfo = () => {
-    // Если в курсе уже есть courseId - используем его
-    if (course.courseId) return { 
-      courseId: course.courseId, 
-      route: course.buttonLink || `/course/${course.courseId}` 
+    if (course.courseId) return {
+      courseId: course.courseId,
+      route: course.buttonLink || `/course/${course.courseId}`
     };
-    
-    // Генерируем courseId из title
-    const generatedId = course.title
-      .toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/&/g, '')
-      .replace(/[^a-z0-9-]/g, '');
-    
-    // Сопоставляем с существующими маршрутами
+
+    // Маппинг title → courseId (должен совпадать с тем что передаёт LessonPage через URL)
+    const titleToIdMap = {
+      'Crypto Fundamentals': 'crypto',
+      'Scams Protection': 'scams',
+      'Memecoins': 'memecoins',
+      'Security Essentials': 'security',
+      'Additional Materials': 'additional',
+      'DeFi & Staking': 'defi',
+    };
+
     const routeMap = {
-  'crypto-fundamentals': '/crypto',
-  'scams-protection': '/scams',
-  'memecoins': '/memecoins',
-  'security-essentials': '/security',
-  'additional-materials': '/additional',
-  'defi-&-staking': '/defi',
-  'crypto': '/crypto',
-  'scams': '/scams',
-  'security': '/security'
-};
-    
-    return {
-      courseId: generatedId,
-      route: routeMap[generatedId] || `/course/${generatedId}`
+      'crypto': '/crypto',
+      'scams': '/scams',
+      'memecoins': '/memecoins',
+      'security': '/security',
+      'additional': '/additional',
+      'defi': '/defi',
     };
+
+    const courseId = titleToIdMap[course.title] || course.title.toLowerCase().replace(/\s+/g, '-');
+    const route = routeMap[courseId] || course.buttonLink || `/course/${courseId}`;
+
+    return { courseId, route };
   };
 
   const { courseId, route } = getCourseInfo();
-  
+
   const safeCourse = {
-    courseId: courseId,
+    courseId,
     title: course.title || 'Без названия',
     icon: course.icon || 'fa-book',
     description: course.description || 'Описание отсутствует',
     totalLessons: course.totalLessons || 6,
-    buttonLink: route, // Используем правильный маршрут
+    buttonLink: route,
     lessons: course.lessons || []
   };
 
@@ -72,7 +67,6 @@ const CoursesCard = ({ course }) => {
 
   useEffect(() => {
     if (hasChecked.current || isLoading) return;
-    
     checkEnrollmentStatus();
   }, [courseId]);
 
@@ -86,10 +80,10 @@ const CoursesCard = ({ course }) => {
     }
 
     setIsLoading(true);
-    
+
     try {
       const response = await api.checkEnrollment(safeCourse.courseId);
-      
+
       if (response.success) {
         courseStatusCache[safeCourse.courseId] = {
           isEnrolled: response.isEnrolled,
@@ -99,9 +93,9 @@ const CoursesCard = ({ course }) => {
             totalLessons: safeCourse.totalLessons
           }
         };
-        
+
         setIsEnrolled(response.isEnrolled);
-        
+
         if (response.progress) {
           setProgress({
             percentage: response.progress.percentage || 0,
@@ -119,14 +113,9 @@ const CoursesCard = ({ course }) => {
   };
 
   const handleEnrollAndNavigate = async () => {
-    console.log('🎯 Запись на курс:', safeCourse.courseId, 'Маршрут:', safeCourse.buttonLink);
-    
-    // Если не авторизован - на логин
     if (!api.isAuthenticated()) {
       setMessage('Войдите в систему для записи на курсы');
-      setTimeout(() => {
-        navigate('/login');
-      }, 1500);
+      setTimeout(() => navigate('/login'), 1500);
       return;
     }
 
@@ -134,43 +123,21 @@ const CoursesCard = ({ course }) => {
     setMessage('Запись на курс...');
 
     try {
-      // Записываемся на курс
       const response = await api.enrollCourse({
         courseId: safeCourse.courseId,
         courseTitle: safeCourse.title,
-        courseIcon: safeCourse.icon,
+        courseIcon: '📚',
         totalLessons: safeCourse.totalLessons
       });
-      
-      if (response.success) {
-        // Обновляем кэш и состояние
+
+      if (response.success || response.isAlreadyEnrolled) {
         courseStatusCache[safeCourse.courseId] = {
           isEnrolled: true,
-          progress: {
-            percentage: 0,
-            completedLessons: 0,
-            totalLessons: safeCourse.totalLessons
-          }
+          progress: { percentage: 0, completedLessons: 0, totalLessons: safeCourse.totalLessons }
         };
-        
         setIsEnrolled(true);
-        
         setMessage('🎉 Вы успешно записались! Перенаправление...');
-        
-        // Переходим на страницу курса после записи
-        setTimeout(() => {
-          navigate(safeCourse.buttonLink);
-        }, 1000);
-        
-      } else if (response.error?.includes('уже записан') || response.isAlreadyEnrolled) {
-        // Если уже записан - просто переходим
-        setIsEnrolled(true);
-        setMessage('Вы уже записаны. Переход...');
-        
-        setTimeout(() => {
-          navigate(safeCourse.buttonLink);
-        }, 1000);
-        
+        setTimeout(() => navigate(safeCourse.buttonLink), 1000);
       } else {
         setMessage(response.error || 'Ошибка записи на курс');
       }
@@ -185,28 +152,21 @@ const CoursesCard = ({ course }) => {
   const handleNavigateToCourse = () => {
     if (!api.isAuthenticated()) {
       setMessage('Войдите в систему для начала курса');
-      setTimeout(() => {
-        navigate('/login');
-      }, 1500);
+      setTimeout(() => navigate('/login'), 1500);
       return;
     }
 
-    console.log('📖 Переход к курсу:', safeCourse.buttonLink);
-    
-    // Если не записан - сначала записываемся
     if (!isEnrolled) {
       handleEnrollAndNavigate();
       return;
     }
-    
-    // Если уже записан - переходим сразу
+
     navigate(safeCourse.buttonLink);
   };
 
   const getButtonText = () => {
     if (enrollLoading) return 'Запись...';
     if (isLoading) return 'Проверка...';
-    
     if (!api.isAuthenticated()) return 'Войти для записи';
     if (!isEnrolled) return 'Записаться и начать';
     if (progress.completedLessons === 0) return 'Начать обучение';
@@ -224,10 +184,8 @@ const CoursesCard = ({ course }) => {
           <h3 className={styles.courseTitle}>{safeCourse.title}</h3>
           <p className={styles.courseDescription}>{safeCourse.description}</p>
         </div>
-        
-        <div className={`${styles.statusBadge} ${
-          isEnrolled ? styles.enrolled : styles.notEnrolled
-        }`}>
+
+        <div className={`${styles.statusBadge} ${isEnrolled ? styles.enrolled : styles.notEnrolled}`}>
           {isEnrolled ? '✓ Записан' : 'Не записан'}
         </div>
       </div>
@@ -235,15 +193,10 @@ const CoursesCard = ({ course }) => {
       {isEnrolled && (
         <div className={styles.courseProgress}>
           <div className={styles.progressBar}>
-            <div 
-              className={styles.progressFill}
-              style={{ width: `${progress.percentage}%` }}
-            ></div>
+            <div className={styles.progressFill} style={{ width: `${progress.percentage}%` }}></div>
           </div>
           <div className={styles.progressInfo}>
-            <span className={styles.progressPercentage}>
-              {progress.percentage}%
-            </span>
+            <span className={styles.progressPercentage}>{progress.percentage}%</span>
             <span className={styles.progressLessons}>
               {progress.completedLessons}/{safeCourse.totalLessons} уроков
             </span>
@@ -253,8 +206,8 @@ const CoursesCard = ({ course }) => {
 
       {message && (
         <div className={`${styles.message} ${
-          message.includes('🎉') || message.includes('Переход') 
-            ? styles.successMessage 
+          message.includes('🎉') || message.includes('Переход')
+            ? styles.successMessage
             : styles.errorMessage
         }`}>
           {message}

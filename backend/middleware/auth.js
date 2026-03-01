@@ -1,32 +1,20 @@
-// backend/middleware/auth.js
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
-const JWT_SECRET = process.env.JWT_SECRET || 'crypto-learning-platform-secret-key-2024';
+module.exports = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.startsWith("Bearer ")
+    ? authHeader.slice(7)
+    : null;
 
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-  
   if (!token) {
-    return res.status(401).json({ 
-      success: false, 
-      error: 'Токен доступа требуется' 
-    });
+    return res.status(401).json({ success: false, error: "Нет токена" });
   }
-  
-  jwt.verify(token, JWT_SECRET, (err, decoded) => {
-    if (err) {
-      console.log('❌ Ошибка верификации токена:', err.message);
-      return res.status(403).json({ 
-        success: false, 
-        error: 'Неверный или просроченный токен' 
-      });
-    }
-    
-    // Проверка существования пользователя будет в контроллерах
-    req.user = decoded;
-    next();
-  });
-};
 
-module.exports = authenticateToken;
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded; 
+    next();
+  } catch (e) {
+    return res.status(401).json({ success: false, error: "Неверный токен" });
+  }
+};

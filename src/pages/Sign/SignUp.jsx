@@ -124,7 +124,7 @@ const SignUpPage = () => {
     
     if (result.success) {
       alert('✅ Регистрация успешна! Добро пожаловать!');
-      navigate('/dashboard');
+      navigate('/profile');
     } else {
       alert(`❌ Ошибка: ${result.error || 'Неизвестная ошибка'}`);
     }

@@ -1,10 +1,18 @@
 // /frontend/components/OverallProgress.jsx - РАБОЧАЯ ВЕРСИЯ
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import styles from './OverallProgress.module.css';
+import { Notes } from '../../assets/Icons';
+
+const courseRouteMap = {
+  'crypto': '/crypto', 'crypto-fundamentals': '/crypto',
+  'scams': '/scams', 'memecoins': '/memecoins',
+  'security': '/security',
+};
 
 const OverallProgress = () => {
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     totalProgress: 0,
     completedCourses: 0,
@@ -179,10 +187,15 @@ const OverallProgress = () => {
           {/* Прогресс каждого курса */}
           <div className={styles.coursesList}>
             {stats.courses.slice(0, 3).map((course) => (
-              <div key={course.courseId} className={styles.courseProgressItem}>
+              <div
+                key={course.courseId}
+                className={styles.courseProgressItem}
+                onClick={() => navigate(courseRouteMap[course.courseId] || '/courses')}
+                style={{ cursor: 'pointer' }}
+              >
                 <div className={styles.courseInfo}>
                   <div className={styles.courseHeader}>
-                    <span className={styles.courseIcon}>{course.courseIcon || '📚'}</span>
+                    <span className={styles.courseIcon}><Notes width={20} height={20} /></span>
                     <h4 className={styles.courseTitle}>
                       {course.courseTitle || course.courseId}
                     </h4>

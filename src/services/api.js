@@ -55,9 +55,10 @@ class ApiService {
         this.setToken(data.token);
       }
       
-      // Сохраняем пользователя если пришел
+      // Сохраняем пользователя если пришел (мержим с существующим, чтобы не терять fullName и др.)
       if (data.user) {
-        this._saveUser(data.user);
+        const existing = this.user || {};
+        this._saveUser({ ...existing, ...data.user });
       }
       
       return data;

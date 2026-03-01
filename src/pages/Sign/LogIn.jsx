@@ -64,7 +64,7 @@ const LoginPage = () => {
           // Токен уже сохраняется в api.js, но можем добавить доп. логику
           console.log('💾 Сессия будет сохранена');
         }
-        navigate('/dashboard');
+        navigate('/profile');
       } else {
         // Ошибка от сервера
         setError(result.error || 'Invalid email or password');

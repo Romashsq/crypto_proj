@@ -1,11 +1,22 @@
-// backend/server.js
-const app = require('./app');
+require("dotenv").config();
+const mongoose = require("mongoose");
+const app = require("./app");
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
+const MONGODB_URI = process.env.MONGODB_URI;
 
-app.listen(PORT, () => {
-  console.log(`✅ Сервер запущен на http://localhost:${PORT}`);
-  console.log('🌐 CORS настроен для: http://localhost:5173');
-  console.log('💾 Данные хранятся в памяти');
-  console.log('🚀 Готов к работе!');
-});
+if (!MONGODB_URI) {
+  console.error("❌ MONGODB_URI не задан в .env");
+  process.exit(1);
+}
+
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => {
+    console.log("✅ MongoDB подключена");
+    app.listen(PORT, () => console.log(`✅ Server http://localhost:${PORT}`));
+  })
+  .catch((err) => {
+    console.error("❌ MongoDB error:", err.message);
+    process.exit(1);
+  });
