@@ -60,3 +60,9 @@ body.dark-mode {
 .dark-mode ::-webkit-scrollbar-thumb {
   background: #555;
 }
+
+/* SVG иконки — белые в тёмной теме */
+.dark-mode img[data-icon="theme"] {
+  filter: invert(1) brightness(2);
+  transition: filter 0.3s ease;
+}

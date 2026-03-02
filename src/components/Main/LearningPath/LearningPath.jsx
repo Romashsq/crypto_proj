@@ -1,31 +1,32 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './LearningPath.module.css';
+import { Wallet, LockNoOpen, Rocket, LockOpen } from '../../../assets/Icons';
 
-const LearningPath = ({ id }) => {  // ← добавил props
+const LearningPath = ({ id }) => {
   const sectionRef = useRef(null);
 
   const pathItems = [
     {
-      number: 1,
+      icon: <Wallet width={30} height={30} />,
       title: "Crypto Fundamentals",
       description: "Master the basics of major cryptocurrencies and blockchain networks. Understand SOL, BTC, ETH and other key chains.",
       link: "/crypto"
     },
     {
-      number: 2,
+      icon: <LockNoOpen width={30} height={30} />,
       title: "Scams Protection",
       description: "Learn to identify and avoid common crypto scams including rug pulls, phishing, and pump & dump schemes.",
       link: "/scams"
     },
     {
-      number: 3,
+      icon: <Rocket width={30} height={30} />,
       title: "Memecoins",
       description: "Understand the world of memecoins - from creation and trading to market dynamics and community culture.",
       link: "/memecoins"
     },
     {
-      number: 4,
+      icon: <LockOpen width={30} height={30} />,
       title: "Security Essentials",
       description: "Protect your assets with advanced security practices and learn how to avoid common security pitfalls.",
       link: "/security"
@@ -78,7 +79,7 @@ const LearningPath = ({ id }) => {  // ← добавил props
                 </h3>
                 <p>{item.description}</p>
               </div>
-              <div className={styles.pathIcon}>{item.number}</div>
+              <div className={styles.pathIcon}>{item.icon}</div>
             </div>
           ))}
         </div>

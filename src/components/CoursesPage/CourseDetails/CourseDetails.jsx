@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTheme } from '../../../Context/ThemeContext'
 import styles from './CourseDetails.module.css';
+import { Rocket } from '../../../assets/Icons';
 
 const CourseDetails = () => {
   const { theme } = useTheme(); 
@@ -16,7 +17,7 @@ const CourseDetails = () => {
     >
       <div className={styles.container}>
         <div className={`${styles.badge} ${theme === 'dark' ? styles.darkBadge : ''}`}>
-          🚀 Start Your Crypto Journey
+          <Rocket width={18} height={18} /> Start Your Crypto Journey
         </div>
         <h1>Crypto Courses</h1>
         <p>

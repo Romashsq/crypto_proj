@@ -15,6 +15,7 @@ import {
   Moon,
   Download,
   LockOpen,
+  LockNoOpen,
   Rocket,
   Nft,
   Wallet,
@@ -22,6 +23,14 @@ import {
   Ghost,
   Notes,
 } from '../../assets/Icons';
+
+const courseIconMap = {
+  'crypto': <Wallet width={28} height={28} />,
+  'crypto-fundamentals': <Wallet width={28} height={28} />,
+  'scams': <LockNoOpen width={28} height={28} />,
+  'memecoins': <Rocket width={28} height={28} />,
+  'security': <LockOpen width={28} height={28} />,
+};
 
 // Компонент прогресса
 const ProgressRing = ({ progress, size = 120, strokeWidth = 10 }) => {
@@ -662,7 +671,7 @@ const Profile = () => {
                   {userCourses.map((course, index) => (
                     <div key={index} className={styles.courseItem} onClick={() => goToCourse(course.courseId)} style={{ cursor: 'pointer' }}>
                       <div className={styles.courseIcon}>
-                        <Notes width={28} height={28} />
+                        {courseIconMap[course.courseId] || <Notes width={28} height={28} />}
                       </div>
                       <div className={styles.courseInfo}>
                         <h4 className={styles.courseTitle}>{course.courseTitle || `Course ${course.courseId}`}</h4>
@@ -672,7 +681,10 @@ const Profile = () => {
                             Enrolled: {formatDate(course.enrolledAt)}
                           </span>
                           <span className={styles.courseStatus}>
-                            {course.isCompleted ? '✅ Completed' : '📚 In Progress'}
+                            {course.isCompleted
+                              ? <><Shelled width={14} height={14} /> Completed</>
+                              : <><Notes width={14} height={14} /> In Progress</>
+                            }
                           </span>
                         </div>
                         <div className={styles.courseProgress}>
@@ -705,7 +717,7 @@ const Profile = () => {
 
           {activeTab === 'achievements' && (
             <div className={styles.emptyTab}>
-              <div className={styles.emptyIcon}>🏆</div>
+              <div className={styles.emptyIcon}><Shelled width={48} height={48} /></div>
               <h3>Achievements</h3>
               <p>Your achievements will appear here as you complete courses and lessons.</p>
             </div>
@@ -713,7 +725,7 @@ const Profile = () => {
 
           {activeTab === 'stats' && (
             <div className={styles.emptyTab}>
-              <div className={styles.emptyIcon}>📊</div>
+              <div className={styles.emptyIcon}><Download width={48} height={48} /></div>
               <h3>Statistics</h3>
               <p>Detailed learning statistics will be available soon.</p>
             </div>
@@ -721,7 +733,7 @@ const Profile = () => {
 
           {activeTab === 'community' && (
             <div className={styles.emptyTab}>
-              <div className={styles.emptyIcon}>👥</div>
+              <div className={styles.emptyIcon}><Ghost width={48} height={48} /></div>
               <h3>Community</h3>
               <p>Connect with other learners and share your progress.</p>
             </div>

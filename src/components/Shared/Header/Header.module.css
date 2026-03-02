@@ -528,6 +528,12 @@
   position: relative;
 }
 
+@media (max-width: 768px) {
+  .mobileMenuBtn {
+    display: block !important;
+  }
+}
+
 .menuIcon {
   display: block;
   position: relative;

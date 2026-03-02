@@ -3,8 +3,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../services/api';
 import styles from './CoursesCard.module.css';
+import { Wallet, LockNoOpen, Rocket, LockOpen, Notes } from '../../../assets/Icons';
 
 const courseStatusCache = {};
+
+const courseIconMap = {
+  crypto: <Wallet width={28} height={28} />,
+  scams: <LockNoOpen width={28} height={28} />,
+  memecoins: <Rocket width={28} height={28} />,
+  security: <LockOpen width={28} height={28} />,
+};
 
 const CoursesCard = ({ course }) => {
   const navigate = useNavigate();
@@ -18,7 +26,6 @@ const CoursesCard = ({ course }) => {
       route: course.buttonLink || `/course/${course.courseId}`
     };
 
-    // Маппинг title → courseId (должен совпадать с тем что передаёт LessonPage через URL)
     const titleToIdMap = {
       'Crypto Fundamentals': 'crypto',
       'Scams Protection': 'scams',
@@ -47,9 +54,8 @@ const CoursesCard = ({ course }) => {
 
   const safeCourse = {
     courseId,
-    title: course.title || 'Без названия',
-    icon: course.icon || 'fa-book',
-    description: course.description || 'Описание отсутствует',
+    title: course.title || 'Untitled',
+    description: course.description || 'No description',
     totalLessons: course.totalLessons || 6,
     buttonLink: route,
     lessons: course.lessons || []
@@ -59,6 +65,7 @@ const CoursesCard = ({ course }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [enrollLoading, setEnrollLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState('');
   const [progress, setProgress] = useState({
     percentage: 0,
     completedLessons: 0,
@@ -104,8 +111,8 @@ const CoursesCard = ({ course }) => {
           });
         }
       }
-    } catch (error) {
-      console.error('❌ Ошибка сети:', error);
+    } catch {
+      // silent
     } finally {
       setIsLoading(false);
       hasChecked.current = true;
@@ -114,13 +121,15 @@ const CoursesCard = ({ course }) => {
 
   const handleEnrollAndNavigate = async () => {
     if (!api.isAuthenticated()) {
-      setMessage('Войдите в систему для записи на курсы');
+      setMessage('Please log in to enroll in courses');
+      setMessageType('error');
       setTimeout(() => navigate('/login'), 1500);
       return;
     }
 
     setEnrollLoading(true);
-    setMessage('Запись на курс...');
+    setMessage('Enrolling...');
+    setMessageType('');
 
     try {
       const response = await api.enrollCourse({
@@ -136,14 +145,16 @@ const CoursesCard = ({ course }) => {
           progress: { percentage: 0, completedLessons: 0, totalLessons: safeCourse.totalLessons }
         };
         setIsEnrolled(true);
-        setMessage('🎉 Вы успешно записались! Перенаправление...');
+        setMessage('Enrolled successfully! Redirecting...');
+        setMessageType('success');
         setTimeout(() => navigate(safeCourse.buttonLink), 1000);
       } else {
-        setMessage(response.error || 'Ошибка записи на курс');
+        setMessage(response.error || 'Failed to enroll');
+        setMessageType('error');
       }
-    } catch (error) {
-      console.error('❌ Исключение при записи:', error);
-      setMessage('Ошибка сети. Проверьте соединение.');
+    } catch {
+      setMessage('Network error. Check your connection.');
+      setMessageType('error');
     } finally {
       setEnrollLoading(false);
     }
@@ -151,7 +162,8 @@ const CoursesCard = ({ course }) => {
 
   const handleNavigateToCourse = () => {
     if (!api.isAuthenticated()) {
-      setMessage('Войдите в систему для начала курса');
+      setMessage('Please log in to start the course');
+      setMessageType('error');
       setTimeout(() => navigate('/login'), 1500);
       return;
     }
@@ -165,20 +177,20 @@ const CoursesCard = ({ course }) => {
   };
 
   const getButtonText = () => {
-    if (enrollLoading) return 'Запись...';
-    if (isLoading) return 'Проверка...';
-    if (!api.isAuthenticated()) return 'Войти для записи';
-    if (!isEnrolled) return 'Записаться и начать';
-    if (progress.completedLessons === 0) return 'Начать обучение';
-    if (progress.completedLessons < progress.totalLessons) return 'Продолжить курс';
-    return 'Повторить курс';
+    if (enrollLoading) return 'Enrolling...';
+    if (isLoading) return 'Loading...';
+    if (!api.isAuthenticated()) return 'Log in to enroll';
+    if (!isEnrolled) return 'Enroll & Start';
+    if (progress.completedLessons === 0) return 'Start Learning';
+    if (progress.completedLessons < progress.totalLessons) return 'Continue Course';
+    return 'Repeat Course';
   };
 
   return (
     <div className={styles.courseCard}>
       <div className={styles.courseHeader}>
         <div className={styles.courseIcon}>
-          <i className={`fas ${safeCourse.icon}`}></i>
+          {courseIconMap[courseId] || <Notes width={28} height={28} />}
         </div>
         <div className={styles.courseInfo}>
           <h3 className={styles.courseTitle}>{safeCourse.title}</h3>
@@ -186,7 +198,7 @@ const CoursesCard = ({ course }) => {
         </div>
 
         <div className={`${styles.statusBadge} ${isEnrolled ? styles.enrolled : styles.notEnrolled}`}>
-          {isEnrolled ? '✓ Записан' : 'Не записан'}
+          {isEnrolled ? '✓ Enrolled' : 'Not enrolled'}
         </div>
       </div>
 
@@ -198,7 +210,7 @@ const CoursesCard = ({ course }) => {
           <div className={styles.progressInfo}>
             <span className={styles.progressPercentage}>{progress.percentage}%</span>
             <span className={styles.progressLessons}>
-              {progress.completedLessons}/{safeCourse.totalLessons} уроков
+              {progress.completedLessons}/{safeCourse.totalLessons} lessons
             </span>
           </div>
         </div>
@@ -206,9 +218,7 @@ const CoursesCard = ({ course }) => {
 
       {message && (
         <div className={`${styles.message} ${
-          message.includes('🎉') || message.includes('Переход')
-            ? styles.successMessage
-            : styles.errorMessage
+          messageType === 'success' ? styles.successMessage : styles.errorMessage
         }`}>
           {message}
         </div>

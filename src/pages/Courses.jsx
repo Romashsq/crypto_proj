@@ -1,156 +1,275 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useTheme } from '../Context/ThemeContext';
-import CourseDetails from '../components/CoursesPage/CourseDetails/CourseDetails';
 import CoursesGrid from '../components/CoursesPage/CoursesGrid/CoursesGrid';
-import Sidebar from '../components/Shared/Sidebar/Sidebar';
-import CoursesSidebarToggle from '../components/CoursesPage/CoursesSidebarToggle/CoursesSidebarToggle';
 import styles from './Courses.module.css';
+import { Wallet, LockNoOpen, Rocket, LockOpen, Notes, Nft, Shelled } from '../assets/Icons';
 
-// Данные курсов
+/* ── Static data ─────────────────────────────────────────── */
 const coursesData = [
   {
+    courseId: 'crypto',
     title: "Crypto Fundamentals",
-    icon: "fa-coins",
     description: "Master major cryptocurrencies: SOL, BTC, ETH, SUI, BASE, BNB. Learn about blockchain networks and their unique features.",
-    progress: 16,
-    completedLessons: 1,
     totalLessons: 6,
-    isStarted: true,
-    buttonText: "Continue Learning",
-    buttonLink: "/crypto", // ИЗМЕНИЛ: было "/course/crypto-fundamentals"
-    lessons: [
-      { number: 1, title: "SOL - Solana Fundamentals", duration: "45 min", status: "active" },
-      { number: 2, title: "BTC - Bitcoin Basics", duration: "35 min", status: "locked" },
-      { number: 3, title: "ETH - Ethereum Ecosystem", duration: "50 min", status: "locked" },
-      { number: 4, title: "SUI - New Generation Blockchain", duration: "30 min", status: "locked" },
-      { number: 5, title: "BASE - Coinbase Layer 2", duration: "25 min", status: "locked" },
-      { number: 6, title: "BNB - Binance Ecosystem", duration: "40 min", status: "locked" },
-    ]
+    buttonLink: "/crypto",
+    tag: "Crypto",
   },
   {
+    courseId: 'scams',
     title: "Scams Protection",
-    icon: "fa-shield-alt",
     description: "Learn to identify and avoid crypto scams: Pump & Dump, Rug Pulls, Phishing, Fake Calls, and Bundle scams.",
-    progress: 0,
-    completedLessons: 0,
     totalLessons: 5,
-    isStarted: false,
-    buttonText: "Start Course",
-    buttonLink: "/scams", // ИЗМЕНИЛ: было "#pump-dump"
-    lessons: [
-      { number: 1, title: "PUMP n DUMP Schemes", duration: "30 min", status: "available" },
-      { number: 2, title: "BUNDLES Scams", duration: "25 min", status: "locked" },
-      { number: 3, title: "RUGPULL Identification", duration: "35 min", status: "locked" },
-      { number: 4, title: "FISHING Attacks", duration: "20 min", status: "locked" },
-      { number: 5, title: "Fake CALLS Protection", duration: "15 min", status: "locked" },
-    ]
+    buttonLink: "/scams",
+    tag: "Security",
   },
   {
+    courseId: 'memecoins',
     title: "Memecoins",
-    icon: "fa-rocket",
     description: "Understand memecoin creation, trading strategies, market dynamics, and community culture.",
-    progress: 0,
-    completedLessons: 0,
     totalLessons: 4,
-    isStarted: false,
-    buttonText: "Start Course",
-    buttonLink: "/memecoins", // ИЗМЕНИЛ: было "#create-memecoins"
-    lessons: [
-      { number: 1, title: "How to Create Memecoins", duration: "40 min", status: "available" },
-      { number: 2, title: "How Memecoins Work", duration: "35 min", status: "locked" },
-      { number: 3, title: "How to Trade Memecoins", duration: "50 min", status: "locked" },
-      { number: 4, title: "Where to Trade Memecoins", duration: "25 min", status: "locked" },
-    ]
+    buttonLink: "/memecoins",
+    tag: "Trading",
   },
   {
+    courseId: 'security',
     title: "Security Essentials",
-    icon: "fa-lock",
     description: "Advanced security practices, wallet protection, and how to avoid being hacked or scammed.",
-    progress: 0,
-    completedLessons: 0,
     totalLessons: 3,
-    isStarted: false,
-    buttonText: "Start Course",
-    buttonLink: "/security", // ИЗМЕНИЛ: было "#avoid-larped"
-    lessons: [
-      { number: 1, title: "How to Avoid Being Larped", duration: "30 min", status: "available" },
-      { number: 2, title: "How to Avoid Being Drowned", duration: "25 min", status: "locked" },
-      { number: 3, title: "Best Security Options", duration: "40 min", status: "locked" },
-    ]
+    buttonLink: "/security",
+    tag: "Security",
   },
   {
+    courseId: 'additional',
     title: "Additional Materials",
-    icon: "fa-book",
     description: "Crypto news, social media guides, slang dictionary, and ongoing market updates.",
-    progress: 0,
-    completedLessons: 0,
     totalLessons: 3,
-    isStarted: false,
-    buttonText: "Start Course",
-    buttonLink: "/additional", // ИЗМЕНИЛ: было "#news" (создашь позже)
-    lessons: [
-      { number: 1, title: "Crypto NEWS Updates", duration: "20 min", status: "available" },
-      { number: 2, title: "SOCIALS Guide", duration: "35 min", status: "locked" },
-      { number: 3, title: "Crypto SLANG Dictionary", duration: "25 min", status: "locked" },
-    ]
+    buttonLink: "/additional",
+    tag: "Bonus",
   },
   {
+    courseId: 'defi',
     title: "DeFi & Staking",
-    icon: "fa-chart-line",
     description: "Learn about decentralized finance, yield farming, liquidity pools, and staking strategies.",
-    progress: 0,
-    completedLessons: 0,
     totalLessons: 4,
-    isStarted: false,
-    buttonText: "Start Course",
-    buttonLink: "/defi", // ИЗМЕНИЛ: было "#defi" (создашь позже)
-    lessons: [
-      { number: 1, title: "What is DeFi?", duration: "45 min", status: "available" },
-      { number: 2, title: "Staking Basics", duration: "30 min", status: "locked" },
-      { number: 3, title: "Yield Farming", duration: "50 min", status: "locked" },
-      { number: 4, title: "Liquidity Pools", duration: "40 min", status: "locked" },
-    ]
-  }
+    buttonLink: "/defi",
+    tag: "DeFi",
+  },
 ];
+
+const FILTERS = ['All', 'Crypto', 'Security', 'Trading', 'DeFi', 'Bonus'];
+
+const totalLessonsCount = coursesData.reduce((sum, c) => sum + c.totalLessons, 0);
+const totalCategories = [...new Set(coursesData.map(c => c.tag))].length;
+
+const heroIcons = [
+  { Icon: Wallet,    top: '22%', left: '7%',   size: 42 },
+  { Icon: LockNoOpen,top: '62%', left: '4%',   size: 34 },
+  { Icon: Rocket,    top: '20%', right: '8%',  size: 38 },
+  { Icon: LockOpen,  top: '66%', right: '6%',  size: 32 },
+  { Icon: Notes,     top: '48%', left: '14%',  size: 30 },
+  { Icon: Nft,       top: '42%', right: '16%', size: 36 },
+];
+
+const features = [
+  {
+    Icon: Shelled,
+    title: "Structured Curriculum",
+    desc: "Step-by-step courses built for beginners with clear outcomes and practical examples.",
+  },
+  {
+    Icon: LockOpen,
+    title: "Safety First",
+    desc: "Learn to protect your assets and spot threats before making your first investment.",
+  },
+  {
+    Icon: Rocket,
+    title: "Real Market Knowledge",
+    desc: "Content from real crypto market experience — not theory, but actionable insight.",
+  },
+  {
+    Icon: Notes,
+    title: "Free to Start",
+    desc: "Begin your journey completely free. No hidden fees, no paywalls on core content.",
+  },
+];
+
+const pathSteps = [
+  { Icon: Wallet,    title: "Crypto Fundamentals", link: "/crypto" },
+  { Icon: LockNoOpen,title: "Scams Protection",    link: "/scams" },
+  { Icon: LockOpen,  title: "Security Essentials", link: "/security" },
+  { Icon: Rocket,    title: "Memecoins",           link: "/memecoins" },
+];
+
+/* ── Component ───────────────────────────────────────────── */
 const Courses = () => {
   const { theme } = useTheme();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [activeFilter, setActiveFilter] = useState('All');
+  const isDark = theme === 'dark';
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth > 1024) {
-        setIsSidebarOpen(false);
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
+  const filteredCourses = activeFilter === 'All'
+    ? coursesData
+    : coursesData.filter(c => c.tag === activeFilter);
 
   return (
-    <div className={`${styles.coursesPage} ${theme === 'dark' ? styles.darkTheme : ''}`}>
-      
-      <CourseDetails />
-      
-      <div className={styles.coursesLayout}>
-        <div className={`${styles.sidebarContainer} ${isSidebarOpen ? styles.open : ''}`}>
-          <Sidebar />
+    <div className={`${styles.coursesPage} ${isDark ? styles.darkMode : ''}`}>
+
+      {/* ─── Hero ─── */}
+      <section className={styles.hero}>
+        <div className={styles.heroBg} />
+
+        <div className={styles.heroFloatingIcons}>
+          {heroIcons.map(({ Icon, size, ...pos }, i) => (
+            <div
+              key={i}
+              className={styles.floatingIcon}
+              style={{ ...pos, animationDelay: `${i * 0.25}s` }}
+            >
+              <Icon width={size} height={size} />
+            </div>
+          ))}
         </div>
-        
-        <div className={styles.mainContent}>
-          <CoursesGrid courses={coursesData} />
+
+        <div className={styles.heroContent}>
+          <div className={styles.heroBadge}>
+            <Notes width={15} height={15} />
+            <span>Learning Hub</span>
+          </div>
+
+          <h1 className={styles.heroTitle}>
+            Explore All{' '}
+            <span className={styles.heroAccent}>Courses</span>
+          </h1>
+
+          <p className={styles.heroSubtitle}>
+            From blockchain basics to advanced trading —
+            master the crypto world step by step
+          </p>
+
+          <div className={styles.heroStats}>
+            <div className={styles.heroStat}>
+              <span className={styles.heroStatNum}>{coursesData.length}</span>
+              <span className={styles.heroStatLabel}>Courses</span>
+            </div>
+            <div className={styles.heroStatDivider} />
+            <div className={styles.heroStat}>
+              <span className={styles.heroStatNum}>{totalLessonsCount}</span>
+              <span className={styles.heroStatLabel}>Lessons</span>
+            </div>
+            <div className={styles.heroStatDivider} />
+            <div className={styles.heroStat}>
+              <span className={styles.heroStatNum}>{totalCategories}</span>
+              <span className={styles.heroStatLabel}>Categories</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Filters ─── */}
+      <div className={styles.filtersWrapper}>
+        <div className={styles.filtersInner}>
+          <div className={styles.filters}>
+            {FILTERS.map(f => (
+              <button
+                key={f}
+                className={`${styles.filterBtn} ${activeFilter === f ? styles.filterBtnActive : ''}`}
+                onClick={() => setActiveFilter(f)}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+          <span className={styles.coursesCount}>
+            {filteredCourses.length} course{filteredCourses.length !== 1 ? 's' : ''}
+          </span>
         </div>
       </div>
 
-      <CoursesSidebarToggle 
-        onToggle={toggleSidebar} 
-        isSidebarOpen={isSidebarOpen}
-      />
-      
+      {/* ─── Course Grid ─── */}
+      <div className={styles.gridSection}>
+        <CoursesGrid courses={filteredCourses} />
+      </div>
+
+      {/* ─── Why FLOW ─── */}
+      <section className={styles.featuresSection}>
+        <div className={styles.innerContainer}>
+          <div className={styles.sectionLabel}>Why FLOW</div>
+          <h2 className={styles.sectionTitle}>
+            Everything You Need to <span className={styles.titleGradient}>Succeed</span>
+          </h2>
+          <p className={styles.sectionSubtitle}>
+            Our platform gives you the tools and knowledge to navigate crypto safely and confidently
+          </p>
+
+          <div className={styles.featuresGrid}>
+            {features.map(({ Icon, title, desc }, i) => (
+              <div key={i} className={styles.featureCard}>
+                <div className={styles.featureIconWrap}>
+                  <Icon width={28} height={28} />
+                </div>
+                <h3 className={styles.featureTitle}>{title}</h3>
+                <p className={styles.featureDesc}>{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Recommended Path ─── */}
+      <section className={styles.pathSection}>
+        <div className={styles.innerContainer}>
+          <div className={styles.sectionLabel}>Recommended Order</div>
+          <h2 className={styles.sectionTitle}>
+            Your <span className={styles.titleGradient}>Learning Path</span>
+          </h2>
+          <p className={styles.sectionSubtitle}>
+            Follow this sequence for the best learning experience
+          </p>
+
+          <div className={styles.pathSteps}>
+            {pathSteps.map(({ Icon, title, link }, i) => (
+              <React.Fragment key={i}>
+                <Link to={link} className={styles.pathStep}>
+                  <div className={styles.pathStepNum}>{i + 1}</div>
+                  <div className={styles.pathStepIcon}>
+                    <Icon width={34} height={34} />
+                  </div>
+                  <span className={styles.pathStepTitle}>{title}</span>
+                </Link>
+
+                {i < pathSteps.length - 1 && (
+                  <div className={styles.pathArrow}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="2"
+                        strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                    </svg>
+                  </div>
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── CTA Banner ─── */}
+      <section className={styles.ctaSection}>
+        <div className={styles.ctaBg} />
+        <div className={styles.ctaContent}>
+          <div className={styles.ctaIconRow}>
+            <Rocket width={44} height={44} />
+          </div>
+          <h2 className={styles.ctaTitle}>
+            Ready to Start Your<br />Crypto Journey?
+          </h2>
+          <p className={styles.ctaSubtitle}>
+            Join thousands of learners mastering blockchain technology and crypto markets
+          </p>
+          <Link to="/signup" className={styles.ctaBtn}>
+            Get Started Free →
+          </Link>
+        </div>
+      </section>
+
     </div>
   );
 };
