@@ -8,6 +8,11 @@ import CryptoCourse from './pages/CoursesCategory/CryptoCourse';
 import ScamsCourse from './pages/CoursesCategory/ScamsCourse';
 import MemecoinsCourse from './pages/CoursesCategory/MemecoinsCourse';
 import SecurityCourse from './pages/CoursesCategory/SecurityCourse';
+import AdditionalCourse from './pages/CoursesCategory/AdditionalCourse';
+import DefiCourse from './pages/CoursesCategory/DefiCourse';
+import Community from './pages/Community/Community';
+import About from './pages/About/About';
+import FAQ from './pages/FAQ/FAQ';
 import NotFound from './pages/NotFound';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import LessonPage from './pages/LessonPage';
@@ -82,6 +87,26 @@ const router = createHashRouter([
       {
         path: 'profile',
         element: <Profile />
+      },
+      {
+        path: 'additional',
+        element: wrapComponent(AdditionalCourse),
+      },
+      {
+        path: 'defi',
+        element: wrapComponent(DefiCourse),
+      },
+      {
+        path: 'community',
+        element: wrapComponent(Community),
+      },
+      {
+        path: 'about',
+        element: wrapComponent(About),
+      },
+      {
+        path: 'faq',
+        element: wrapComponent(FAQ),
       },
       {
         path: '*',

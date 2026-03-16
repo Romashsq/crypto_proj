@@ -195,26 +195,93 @@
 
 /* Адаптив */
 @media (max-width: 768px) {
+  .footer {
+    padding: 40px 0 24px;
+  }
+
   .topSection {
     flex-direction: column;
-    gap: 30px;
+    gap: 28px;
+    margin-bottom: 32px;
   }
-  
+
   .links {
-    gap: 40px;
+    gap: 28px;
+    flex-wrap: wrap;
   }
-  
+
   .column {
-    min-width: 150px;
+    min-width: 140px;
   }
-  
+
   .bottomSection {
     flex-direction: column;
     text-align: center;
+    gap: 12px;
   }
-  
+
   .legal {
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .brandName {
+    font-size: 20px;
+  }
+
+  .description {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 32px 0 20px;
+  }
+
+  .topSection {
+    gap: 20px;
+  }
+
+  .links {
+    gap: 20px;
+  }
+
+  .column h3 {
+    font-size: 15px;
+    margin-bottom: 12px;
+  }
+
+  .column li {
+    margin-bottom: 8px;
+  }
+
+  .social {
+    gap: 10px;
+  }
+
+  .socialLink {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+
+  .copyright,
+  .legal a {
+    font-size: 12px;
+  }
+
+  .legal {
+    gap: 12px;
+  }
+
+  .backToTop {
+    bottom: 16px;
+    right: 16px;
+    width: 42px;
+    height: 42px;
+    font-size: 16px;
   }
 }
 

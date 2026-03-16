@@ -478,40 +478,94 @@
   }
 }
 
+/* На планшете — скрываем текст "Your Lessons", оставляем только иконку */
+@media (max-width: 640px) {
+  .yourLessonsBtn span {
+    display: none;
+  }
+
+  .yourLessonsBtn {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 8px;
+  }
+
+  .logoutBtn span {
+    display: none;
+  }
+
+  .logoutBtn {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    justify-content: center;
+  }
+}
+
 @media (max-width: 480px) {
   .header {
     padding: 10px 0;
   }
-  
+
   .logo {
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
   }
-  
+
   .headerActions {
-    gap: 6px;
+    gap: 5px;
   }
-  
-  .signUpBtn,
-  .logInBtn,
-  .logoutBtn {
-    padding: 5px 10px;
+
+  .signUpBtn {
+    padding: 6px 12px;
     font-size: 12px;
   }
-  
+
+  .logInBtn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .yourLessonsBtn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .logoutBtn {
+    width: 34px;
+    height: 34px;
+  }
+
   .profileButton {
     height: 34px;
     width: 34px;
   }
-  
-  .yourLessonsBtn {
-    padding: 5px 10px;
-    font-size: 12px;
-  }
-  
+
   .themeToggle {
     width: 34px;
     height: 34px;
+  }
+}
+
+@media (max-width: 360px) {
+  .headerActions {
+    gap: 4px;
+  }
+
+  .signUpBtn,
+  .logInBtn {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+
+  .yourLessonsBtn,
+  .logoutBtn,
+  .profileButton,
+  .themeToggle {
+    width: 32px;
+    height: 32px;
   }
 }
 

@@ -128,7 +128,7 @@
 /* Сетка уроков */
 .lessonsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(350px, 100%), 1fr));
   gap: 25px;
   margin-top: 30px;
 }
@@ -233,16 +233,82 @@
 }
 
 @media (max-width: 480px) {
+  .pageWrapper {
+    padding-top: 80px;
+  }
+
   .container {
-    padding: 0 15px 40px;
+    padding: 0 12px 32px;
   }
-  
+
   .pageTitle {
-    font-size: 1.8rem;
+    font-size: 1.7rem;
   }
-  
+
+  .pageSubtitle {
+    font-size: 1rem;
+  }
+
+  .headerContent {
+    margin-bottom: 24px;
+  }
+
+  .statCard {
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .statIcon {
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+
+  .statNumber {
+    font-size: 1.7rem;
+  }
+
+  .statLabel {
+    font-size: 0.85rem;
+  }
+
+  .lessonsGrid {
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .actionsSection {
+    margin-top: 40px;
+    padding-top: 28px;
+  }
+
   .exploreCoursesBtn {
     width: 100%;
     justify-content: center;
+    font-size: 1rem;
+    padding: 14px 24px;
+  }
+}
+
+@media (max-width: 360px) {
+  .pageTitle {
+    font-size: 1.5rem;
+  }
+
+  .statCard {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .statIcon {
+    width: 38px;
+    height: 38px;
+    font-size: 1rem;
+  }
+
+  .statNumber {
+    font-size: 1.5rem;
   }
 }

@@ -90,22 +90,22 @@ const NotFound = () => {
         <div className={styles.quickLinks}>
           <h3>Popular Pages:</h3>
           <div className={styles.linkGrid}>
-            <Link to="/courses/crypto" className={styles.quickLink}>
+            <Link to="/crypto" className={styles.quickLink}>
               <i className="fas fa-coins"></i>
               <span>Crypto Fundamentals</span>
             </Link>
-            
-            <Link to="/courses/security" className={styles.quickLink}>
+
+            <Link to="/security" className={styles.quickLink}>
               <i className="fas fa-shield-alt"></i>
               <span>Security Essentials</span>
             </Link>
-            
+
             <Link to="/your-lessons" className={styles.quickLink}>
               <i className="fas fa-bookmark"></i>
               <span>Your Lessons</span>
             </Link>
-            
-            <Link to="/dashboard" className={styles.quickLink}>
+
+            <Link to="/profile" className={styles.quickLink}>
               <i className="fas fa-chart-line"></i>
               <span>Progress Dashboard</span>
             </Link>

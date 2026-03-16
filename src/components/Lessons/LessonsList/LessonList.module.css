@@ -535,30 +535,90 @@
 }
 
 @media (max-width: 480px) {
+  .lessonsContainer {
+    padding: 10px;
+  }
+
   .courseHeader {
-    padding: 30px 0 25px;
+    padding: 24px 0 20px;
+    margin-bottom: 20px;
   }
-  
+
   .courseTitle {
-    font-size: 1.6rem;
-  }
-  
-  .stat {
-    width: 100%;
-    max-width: 250px;
-  }
-  
-  .progressPercentage {
     font-size: 1.5rem;
   }
-  
+
+  .backButton {
+    padding: 10px 18px;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+  }
+
+  .stat {
+    width: 100%;
+    max-width: 240px;
+    padding: 10px 16px;
+    gap: 6px;
+  }
+
+  .stat span {
+    font-size: 1rem;
+  }
+
+  .progressSection {
+    padding: 16px;
+  }
+
+  .progressPercentage {
+    font-size: 1.4rem;
+    padding: 6px 16px;
+  }
+
   .progressLabels {
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
   }
-  
+
+  .progressStats {
+    padding: 16px;
+    gap: 16px;
+    margin-top: 20px;
+  }
+
   .statNumber {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+  }
+
+  .actionsContainer {
+    padding: 16px;
+    margin-top: 28px;
+    gap: 12px;
+  }
+
+  .backToCourses,
+  .resetButton {
+    padding: 12px 20px;
+    font-size: 0.9rem;
+  }
+
+  .continueButton {
+    width: 100%;
+    max-width: 100%;
+    padding: 14px 20px;
+  }
+}
+
+@media (max-width: 360px) {
+  .courseTitle {
+    font-size: 1.3rem;
+  }
+
+  .statNumber {
+    font-size: 1.4rem;
+  }
+
+  .progressPercentage {
+    font-size: 1.2rem;
   }
 }
 

@@ -90,13 +90,39 @@
 @media (max-width: 768px) {
   .container {
     padding: 15px;
+    gap: 0;
   }
-  
+
   .courseHeader h1 {
     font-size: 2rem;
   }
-  
+
   .courseHeader p {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+
+  .courseHeader {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+  }
+
+  .courseHeader h1 {
+    font-size: 1.6rem;
+  }
+
+  .courseHeader p {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .courseHeader h1 {
+    font-size: 1.4rem;
   }
 }

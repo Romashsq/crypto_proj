@@ -311,11 +311,9 @@ class ApiService {
     localStorage.removeItem('user_id');
     localStorage.removeItem('savedCourses');
 
-    if (window.location.pathname !== '/crypto_proj/') {
-      setTimeout(() => {
-        window.location.href = '/crypto_proj/';
-      }, 100);
-    }
+    setTimeout(() => {
+      window.location.hash = '#/login';
+    }, 100);
   }
 
   setToken(token) {

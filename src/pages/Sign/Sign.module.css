@@ -463,48 +463,110 @@
 }
 
 /* Адаптивность */
+@media (max-width: 640px) {
+    .signupContainer {
+        padding: 32px 24px;
+        border-radius: 16px;
+    }
+}
+
 @media (max-width: 480px) {
     .signupPage {
-        padding: 15px;
+        padding: 12px;
+        align-items: flex-start;
+        padding-top: 72px;
     }
-    
+
     .backHomeBtn {
-        top: 15px;
-        left: 15px;
+        top: 14px;
+        left: 14px;
         padding: 8px 12px;
+        font-size: 12px;
+        gap: 6px;
+    }
+
+    .themeToggleBtn {
+        width: 38px;
+        height: 38px;
+        top: 14px;
+        right: 14px;
+    }
+
+    .signupContainer {
+        padding: 24px 16px;
+        border-radius: 14px;
+        margin-top: 0;
+    }
+
+    .signupLogo {
+        margin-bottom: 20px;
+    }
+
+    .logoIcon {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+
+    .signupLogo h1 {
+        font-size: 22px;
+    }
+
+    .signupLogo p {
         font-size: 13px;
     }
-    
-    .backHomeBtn span {
-        display: none;
+
+    .formGroup {
+        margin-bottom: 16px;
     }
-    
-    .themeToggleBtn {
-        width: 40px;
-        height: 40px;
-        top: 15px;
-        right: 15px;
-    }
-    
-    .signupContainer {
-        padding: 30px 20px;
-    }
-    
-    .signupLogo h1 {
-        font-size: 24px;
-    }
-    
-    .signupLogo p {
+
+    .formInput {
+        padding: 12px 40px 12px 14px;
         font-size: 14px;
     }
-    
+
+    .signupForm {
+        margin-top: 20px;
+    }
+
+    .signupBtn {
+        padding: 14px;
+        font-size: 15px;
+    }
+
     .socialBtn {
-        padding: 13px;
+        padding: 12px;
         font-size: 14px;
     }
-    .logInBtn {
-    display: none;
-  }
+
+    .loginLink,
+    .signupLink {
+        font-size: 14px;
+    }
+
+    .checkboxGroup {
+        margin: 18px 0;
+    }
+}
+
+@media (max-width: 360px) {
+    .signupPage {
+        padding: 10px;
+        padding-top: 68px;
+    }
+
+    .signupContainer {
+        padding: 20px 14px;
+    }
+
+    .signupLogo h1 {
+        font-size: 20px;
+    }
+
+    .formInput {
+        padding: 10px 36px 10px 12px;
+        font-size: 13px;
+    }
 }
 
 .forgotPasswordBtn {
