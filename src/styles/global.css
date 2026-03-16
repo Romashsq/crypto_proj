@@ -20,11 +20,22 @@
   font-family: 'Inter', 'Segoe UI', sans-serif;
 }
 
+html {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 body {
   background-color: var(--white);
   color: var(--text-dark);
   overflow-x: hidden;
+  max-width: 100%;
   transition: var(--transition);
+}
+
+#root {
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 body.dark-mode {
